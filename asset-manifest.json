@@ -1,16 +1,16 @@
 {
   "files": {
     "main.css": "/boss/static/css/main.96474bac.css",
-    "main.js": "/boss/static/js/main.b987c5ad.js",
+    "main.js": "/boss/static/js/main.b59a98a4.js",
     "static/js/787.98072ccc.chunk.js": "/boss/static/js/787.98072ccc.chunk.js",
     "static/media/plouzane-1758197.jpg": "/boss/static/media/plouzane-1758197.3b17ba8d96784e99f7a7.jpg",
     "index.html": "/boss/index.html",
     "main.96474bac.css.map": "/boss/static/css/main.96474bac.css.map",
-    "main.b987c5ad.js.map": "/boss/static/js/main.b987c5ad.js.map",
+    "main.b59a98a4.js.map": "/boss/static/js/main.b59a98a4.js.map",
     "787.98072ccc.chunk.js.map": "/boss/static/js/787.98072ccc.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.96474bac.css",
-    "static/js/main.b987c5ad.js"
+    "static/js/main.b59a98a4.js"
   ]
 }
