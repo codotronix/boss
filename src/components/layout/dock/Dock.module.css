@@ -1,0 +1,18 @@
+.root {
+    position: fixed;
+    bottom: 5px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+}
+.inner {
+    background: #000;
+    height: 80px;
+    max-width: 80vw;
+    border-radius: 9px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 12px;
+}

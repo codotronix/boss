@@ -1,0 +1,11 @@
+{
+    "apps": [
+        "launch_pad",
+        "bin",
+        "b_notes",
+        "b_chat",
+        "settings",
+        "folders",
+        "calendars"
+    ]
+}

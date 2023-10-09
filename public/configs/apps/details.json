@@ -1,0 +1,30 @@
+{
+    "launch_pad": {
+        "name": "Launch Pad",
+        "iconClass": "fa-solid fa-cubes-stacked"
+    },
+    "bin": {
+        "name": "Bin",
+        "iconClass": "fa-solid fa-trash"
+    },
+    "b_notes": {
+        "name": "B-Notes",
+        "iconClass": "fa-solid fa-file-lines"
+    },
+    "b_chat": {
+        "name": "B-Chat",
+        "iconClass": "fa-solid fa-comments"
+    },
+    "settings": {
+        "name": "Settings",
+        "iconClass": "fa-solid fa-gear"
+    },
+    "folders": {
+        "name": "Folders",
+        "iconClass": "fa-regular fa-folder-open"
+    },
+    "calendars": {
+        "name": "Calendar",
+        "iconClass": "fa-regular fa-calendar-days"
+    }
+}

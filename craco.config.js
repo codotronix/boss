@@ -5,12 +5,12 @@ module.exports = {
     webpack: {
         configure: {
             output: {
-                publicPath: "http://localhost:3000/",
+                // publicPath: "https://codotronix.github.io/boss/",
             },
             entry: './src/index.js',
             plugins: [
                 // new ModuleFederationPlugin({
-                //   name: "app2",
+                //   name: "boss",
                 //   // library: { type: "var", name: "app1" },
                 //   filename: "remoteEntry.js",
                 //   remotes: {

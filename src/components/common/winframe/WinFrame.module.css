@@ -1,0 +1,54 @@
+:root {
+    --winframe-namebar-bg: rgb(0 0 0 / 65%);
+    --winframe-namebar-fg: #eee;
+    --winframe-menubar-bg: rgb(0 0 0 / 45%);
+    --winframe-menubar-fg: #eee;
+}
+.root {
+    position: absolute;
+    /* border: 1px solid var(--winframe-namebar-bg); */
+    box-shadow: 1px 2px 6px 1px #000;
+    height: 300px;
+    width: 70vw;
+    top: 0;
+    left: 0;
+    border-radius: 4px;
+    overflow: auto;
+}
+.bar {
+    height: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+}
+.namebar {
+    background-color: var(--winframe-namebar-bg);
+    color: var(--winframe-namebar-fg);
+    position: relative;
+}
+.namebar .btns {
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+.namebar .btns i {
+    height: 24px;
+    width: 30px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+}
+.namebar .btns i:hover {
+    background-color: rgb(255 255 255 / 9%);
+}
+.menubar {
+    background-color: var(--winframe-menubar-bg);
+    color: var(--winframe-menubar-fg);
+    justify-content: left;
+    font-size: 13px;
+}
+
+.menu {
+    margin-left: 10px;
+}

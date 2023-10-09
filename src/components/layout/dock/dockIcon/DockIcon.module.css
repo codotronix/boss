@@ -1,0 +1,16 @@
+.root {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 60px;
+    height: 60px;
+    /* border: 1px solid #ddd; */
+    margin: 0px 3px;
+}
+.ico {
+    font-size: 38px;
+    color: #1b8ffa;
+}
+.ico:hover {
+    transform: scale(1.3);
+}
