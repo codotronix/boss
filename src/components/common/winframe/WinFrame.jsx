@@ -19,14 +19,14 @@ export const WINDOW_SIZES = {
 // height taken by the headers
 const NON_BODY_HEIGHTS = 50
 
-const initWinState = {
+const getInitWinState = () => ({
     top: 10 + Math.floor(Math.random()*200),
     left: 10 + Math.floor(Math.random()*100),
     width: Math.max( 300, Math.floor(window.innerWidth * .7) ),
     height: 300 + NON_BODY_HEIGHTS,
     size_status: WINDOW_SIZES.DEFAULT,
     commandToApp: ''    // commands that need to send to the app inside this winFrame 
-}
+})
 
 const WIN_ACTION_TYPES = {
     MAXIMIZE: 'MAXIMIZE',
@@ -51,7 +51,7 @@ const reducer = (state, action) => {
         case WIN_ACTION_TYPES.UNMAXIMIZE: {
             return {
                 ...state,
-                ...initWinState
+                ...getInitWinState()
             }
         }
         default: {
@@ -63,7 +63,7 @@ const reducer = (state, action) => {
 const WinFrame = props => {
     // const { render } = props
     const { appProps, AppComponent } = props
-    const [winState, dispatchCommand] = useReducer(reducer, initWinState)
+    const [winState, dispatchCommand] = useReducer(reducer, getInitWinState())
 
     const dynamicStyles = {
         top: winState.top,

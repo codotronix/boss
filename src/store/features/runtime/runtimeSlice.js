@@ -7,7 +7,7 @@ import { APPS_DETAILS } from "../apps/APPS_DETAILS"
 // as do not have the run-with-windos-start functionality yet
 let _runtimeIdCounter = 1
 const initialState = [
-    { appId: "RUNTIME", runtimeId: 1, killable: false }
+    { appId: "RUNTIME", runtimeId: 1, crucial: true }
 ]
 
 export const runtimeSlice = createSlice({
@@ -33,6 +33,17 @@ export const runtimeSlice = createSlice({
                     }
                 ]
             }
+            return state
+        },
+        terminate: (state, action) => {
+            const { runtimeId } = action.payload
+            state = state.filter(a => !(a.runtimeId === runtimeId && !a.crucial))
+            return state
         }
     }
 })
+
+// Action creators are generated for each case reducer function
+export const { run, terminate } = runtimeSlice.actions
+
+export default runtimeSlice.reducer
