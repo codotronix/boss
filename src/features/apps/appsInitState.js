@@ -17,6 +17,12 @@ export const appsInitState = {
         iconClass: "fa-solid fa-gear",
         docked: true
     },
+    "welcomeApp": {
+        appId: "welcomeApp",
+        name: "Welcome App",
+        iconClass: "fa-solid fa-face-smile",
+        docked: true
+    },
     "bin": {
         appId: "bin",
         name: "Bin",
