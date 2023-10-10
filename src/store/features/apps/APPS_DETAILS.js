@@ -1,4 +1,4 @@
-export const appsInitState = {
+export const APPS_DETAILS = {
     "launch_pad": {
         appId: "launch_pad",
         name: "Launch Pad",

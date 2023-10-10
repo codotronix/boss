@@ -1,9 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { appsInitState } from "./appsInitState";
+import { APPS_DETAILS } from "./APPS_DETAILS";
 
 export const appsSlice = createSlice({
     name: 'apps',
-    initialState: appsInitState,
+    initialState: APPS_DETAILS,
     reducers: {
         
     }
