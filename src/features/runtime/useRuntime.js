@@ -1,13 +1,14 @@
 import { useDispatch } from "react-redux";
-import { run as runApp, terminate } from "../store/features/runtime/runtimeSlice";
+import { runApp, terminateApp } from "./runtimeSlice";
 
 function useRuntime() {
     const dispatch = useDispatch()
 
     const run = (appId, ...args) => dispatch(runApp({ appId, args }))
+    const terminate = runtimeId => dispatch(terminateApp(runtimeId))
 
     return {
-        run
+        run, terminate
     }
 }
 

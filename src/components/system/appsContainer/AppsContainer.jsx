@@ -7,14 +7,14 @@ const mapAppIdxComp = {
 }
 
 const AppsContainer = () => {
-    const runningApps = useSelector(state => state.runtime)
+    const runningApps = Object.values(useSelector(state => state.runtime))
     console.log('runningApps = ', runningApps)
     return (
         <div>
             {
                 runningApps.map(a => {
                     const Comp = mapAppIdxComp[a.appId]
-                    if(Comp) return <Comp key={a.runtimeId} args={a.args} />
+                    if(Comp) return <Comp key={a.runtimeId} runtimeInfo={a} />
                     else return null
                 })
             }

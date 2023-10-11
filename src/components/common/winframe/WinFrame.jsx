@@ -1,6 +1,8 @@
 import { useReducer } from 'react'
 import clsx from 'clsx'
 import styles from './WinFrame.module.css'
+import { APPS_DETAILS } from '../../../const/APPS_DETAILS'
+import useRuntime from '../../../features/runtime/useRuntime'
 
 const menus = {
     File: [],
@@ -62,7 +64,12 @@ const reducer = (state, action) => {
 
 const WinFrame = props => {
     // const { render } = props
-    const { appProps, AppComponent } = props
+    const { appProps, AppComponent, ...restProps } = props
+    const { runtimeInfo } = appProps
+    const appName = APPS_DETAILS[runtimeInfo.appId].name
+    const runtime = useRuntime()
+
+    console.log('WinFrame props = ', appProps, restProps)
     const [winState, dispatchCommand] = useReducer(reducer, getInitWinState())
 
     const dynamicStyles = {
@@ -79,10 +86,17 @@ const WinFrame = props => {
         dispatchCommand({ type: WIN_ACTION_TYPES.UNMAXIMIZE })
     }
 
+    const close = () => {
+        const r = window.confirm("Do you really want to close ?")
+        if(r) {
+            runtime.terminate(runtimeInfo.runtimeId)
+        }
+    }
+
     return (
         <div className={styles.root} style={dynamicStyles}>
             <div className={clsx(styles.bar, styles.namebar)}>
-                <div>WinFrame</div>
+                <div>{ appName || 'Application' }</div>
                 <div className={styles.btns}>
                     { 
                         winState.size_status !== WINDOW_SIZES.MAXIMIZED &&
@@ -94,7 +108,7 @@ const WinFrame = props => {
                             <i className="fa-solid fa-down-left-and-up-right-to-center" onClick={unmaximize}></i>
                     }
                     <i className="fa-solid fa-window-minimize"></i>
-                    <i className="fa-solid fa-xmark"></i>
+                    <i className="fa-solid fa-xmark" onClick={close}></i>
                 </div>
             </div>
             <div className={clsx(styles.bar, styles.menubar)}>
@@ -109,7 +123,7 @@ const WinFrame = props => {
             {/* THE BODY */}
             <div style={{ height: (winState.height - NON_BODY_HEIGHTS) }}>
                 {/* { render( {command: winState.commandToApp} ) } */}
-                <AppComponent />
+                <AppComponent {...appProps} />
             </div>
         </div>
     )

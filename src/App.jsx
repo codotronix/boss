@@ -1,4 +1,4 @@
-import Dock from './components/layout/dock/Dock';
+import Dock from './components/system/dock/Dock';
 import AppsContainer from './components/system/appsContainer/AppsContainer';
 // import { WinFrame } from './components/common';
 // import { WelcomeApp } from './components/applications';

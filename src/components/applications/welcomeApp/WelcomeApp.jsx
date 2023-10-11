@@ -2,7 +2,7 @@ import { WinFrame } from "../../common";
 import styles from './WelcomeApp.module.css'
 
 const WelcomeApp = (props) => {
-    console.log(props)
+    console.log('WelcomeApp props = ', props)
     return (
         <div className={styles.root}>
             <i className="fa-solid fa-face-smile"></i>

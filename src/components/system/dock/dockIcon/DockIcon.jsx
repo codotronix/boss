@@ -1,7 +1,7 @@
 import clsx from 'clsx'
 import styles from "./DockIcon.module.css"
 // import { useRun } from '../../../../hooks/useRuntime'
-import useRuntime from '../../../../hooks/useRuntime'
+import useRuntime from '../../../../features/runtime/useRuntime'
 
 const DockIcon = props => {
     const { appId, name, iconClass } = props
