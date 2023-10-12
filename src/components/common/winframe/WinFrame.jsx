@@ -52,9 +52,16 @@ const WinFrame = props => {
     const runtime = useRuntime()
     const [ defaultWinStyles, setDefaultWinStyles ] = useState(getWinStyles(WINDOW_SIZES.DEFAULT))
 
-    const winStyles = runtimeInfo.winSize === WINDOW_SIZES.MAXIMIZED ? MAXIMIZE_STYLES : defaultWinStyles
+    let winStyles = runtimeInfo.winSize === WINDOW_SIZES.MAXIMIZED ? MAXIMIZE_STYLES : defaultWinStyles
     
-
+    if(runtimeInfo.winSize === WINDOW_SIZES.MINIMIZED) {
+        winStyles = {
+            ...winStyles,
+            top: window.innerHeight - 100,
+            left: 200,
+            transform: 'scale(0)'
+        }
+    }
 
     // const winStyles = getWinStyles(runtimeInfo.winSize)
 
@@ -75,7 +82,11 @@ const WinFrame = props => {
 
     return (
         <div 
-            className={clsx(styles.root, (runtimeInfo.winSize===WINDOW_SIZES.MINIMIZED) && styles.minimized )} 
+            className={clsx(
+                styles.root, 
+                (runtimeInfo.winSize===WINDOW_SIZES.MINIMIZED) && styles.minimized, 
+                (runtimeInfo.winSize===WINDOW_SIZES.DEFAULT) && styles.defaultSized
+                )} 
             style={winStyles}
         >
 

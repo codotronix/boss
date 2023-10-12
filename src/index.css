@@ -13,7 +13,6 @@ body {
   background: url('./assets/img/wallpapers/plouzane-1758197.jpg') 0 0 #222;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+.hidden {
+  display: none !important;
 }

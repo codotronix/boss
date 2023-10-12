@@ -1,0 +1,37 @@
+.root {
+    position: absolute;
+    bottom: 75px;
+    right: 0;
+    background: #000;
+    color: #1b8ffa;
+    border-radius: 9px;
+    user-select: none;
+    overflow: auto;
+}
+.inner {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    min-width: 200px;
+}
+.inner li {
+    display: grid;
+    grid-template-columns: 1fr 35px;
+}
+.inner li .appName {
+    padding: 10px 20px;
+}
+.inner li .appName:hover {
+    background: rgb(255 255 255 / 12%);
+}
+.inner li > * {
+    display: flex;
+    align-items: center;
+}
+.inner li .closeIco {
+    justify-content: center;
+}
+.inner li .closeIco:hover {
+    color: red;
+    background: rgb(255 255 255 / 12%);
+}
