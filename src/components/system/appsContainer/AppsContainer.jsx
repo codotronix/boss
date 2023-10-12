@@ -9,6 +9,17 @@ const mapAppIdxComp = {
 const AppsContainer = () => {
     const runningApps = Object.values(useSelector(state => state.runtime))
     console.log('runningApps = ', runningApps)
+
+    // const onMouseMove = e => {
+    //     // console.log('onMouseMove = ', e)
+    // }
+    // const onMouseDown = e => {
+    //     console.log('onMouseDown = ', e)
+    // }
+    // const onMouseUp = e => {
+    //     console.log('onMouseUp = ', e)
+    // }
+
     return (
         <div>
             {
@@ -18,7 +29,6 @@ const AppsContainer = () => {
                     else return null
                 })
             }
-            
         </div>
     )
 }

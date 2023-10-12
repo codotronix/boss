@@ -34,11 +34,21 @@
     background-color: var(--winframe-namebar-bg);
     color: var(--winframe-namebar-fg);
     position: relative;
+    /* display: flex;
+    justify-content: space-between; */
 }
 .namebar .btns {
     position: absolute;
     right: 0;
     top: 0;
+}
+.namebar .dragIco {
+    position: absolute;
+    left: 0;
+    top: 0;
+    padding: 5px 10px;
+    background: rgb(255 255 255 / 25%);
+    cursor: grabbing;
 }
 .namebar .btns i {
     height: 24px;

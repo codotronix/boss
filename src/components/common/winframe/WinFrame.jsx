@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
+import _ from 'lodash'
 import clsx from 'clsx'
 import styles from './WinFrame.module.css'
-import { APPS_DETAILS, APP_DISPLAY_TYPE } from '../../../const/APPS_DETAILS'
+import { APPS_DETAILS } from '../../../const/APPS_DETAILS'
 import useRuntime from '../../../features/runtime/useRuntime'
 import { WINDOW_SIZES } from '../../../const/WINDOW'
 
@@ -14,6 +15,7 @@ const menus = {
 }
 
 const NON_BODY_HEIGHTS = 50
+let isDragging = false  // window is being dragged
 
 const getWinStyles = (winSize) => {
     // if(winSize === WINDOW_SIZES.DEFAULT || winSize === WINDOW_SIZES.MINIMIZED) {
@@ -50,25 +52,50 @@ const WinFrame = props => {
     const { runtimeInfo } = appProps
     const appName = APPS_DETAILS[runtimeInfo.appId].name
     const runtime = useRuntime()
-    const [ defaultWinStyles, setDefaultWinStyles ] = useState(getWinStyles(WINDOW_SIZES.DEFAULT))
+    // persist value in useRef
+    const initStyleRef = useRef(getWinStyles(WINDOW_SIZES.DEFAULT))
+    // console.log(initStyleRef)
+    const [winStyles, setWinStyles] = useState(initStyleRef.current)
 
-    let winStyles = runtimeInfo.winSize === WINDOW_SIZES.MAXIMIZED ? getMaximizedStyles() : defaultWinStyles
-    
-    // when MINIMIZED
-    if(runtimeInfo.winSize === WINDOW_SIZES.MINIMIZED) {
-        winStyles = {
-            ...winStyles,
-            top: window.innerHeight - 100,
-            left: 200,
-            transform: 'scale(0)'
+    // Update styles based on Window Maximize / Minimize / Default
+    useEffect(() => {
+        if(isDragging) return
+        let newWinStyle = {...initStyleRef.current}
+        if(runtimeInfo.winSize === WINDOW_SIZES.MAXIMIZED) {
+            newWinStyle = getMaximizedStyles()
         }
+
+        if(runtimeInfo.winSize === WINDOW_SIZES.MINIMIZED) {
+            newWinStyle = {
+                ...newWinStyle,
+                top: window.innerHeight - 100,
+                left: 200,
+                transform: 'scale(0)'
+            }
+        }
+
+        setWinStyles(newWinStyle)
+    }, 
+    [runtimeInfo.winSize])
+
+    const onDragStart = () => {
+        isDragging = true
+    }
+    const onDrag = _.throttle((left, top) => {
+        setWinStyles(s => ({
+            ...s, left, top
+        }))
+    }, 50)
+
+    const onDragEnd = (left, top) => {
+        setWinStyles(s => ({
+             ...s, left, top 
+            })
+        )
+        isDragging = false
     }
 
-    // const winStyles = getWinStyles(runtimeInfo.winSize)
-
-
-
-    console.log('WinFrame props = ', appProps, restProps)
+    // console.log('WinFrame props = ', appProps, restProps)
 
     const maximize = () => runtime.mize(runtimeInfo.runtimeId, WINDOW_SIZES.MAXIMIZED)
     const minimize = () => runtime.mize(runtimeInfo.runtimeId, WINDOW_SIZES.MINIMIZED)
@@ -92,6 +119,13 @@ const WinFrame = props => {
         >
 
             <div className={clsx(styles.bar, styles.namebar)}>
+                <i 
+                    className={clsx("fa-regular fa-hand", styles.dragIco)}
+                    draggable="true" 
+                    onDrag={e => onDrag(e.pageX, e.pageY)}
+                    onDragStart={onDragStart}
+                    onDragEnd={e => onDragEnd(e.pageX, e.pageY)}
+                ></i>
                 <div>{ appName || 'Application' }</div>
                 <div className={styles.btns}>
                     { 
