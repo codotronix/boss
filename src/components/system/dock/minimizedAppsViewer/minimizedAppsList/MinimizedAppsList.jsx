@@ -2,7 +2,7 @@ import clsx from 'clsx'
 import styles from './MinimizedAppsList.module.css'
 import { APPS_DETAILS } from '../../../../../const/APPS_DETAILS'
 import { WINDOW_SIZES } from '../../../../../const/WINDOW'
-import useRuntime from '../../../../../features/runtime/useRuntime'
+import useRuntime from '../../../../../features/procs/useRuntime'
 
 const MinimizedAppsList = props => {
     const { visible, setVisible, minimizedApps } = props
@@ -11,6 +11,7 @@ const MinimizedAppsList = props => {
     const onAppClick = (runtimeId) => {
         setVisible(false)
         runtime.mize(runtimeId, WINDOW_SIZES.MAXIMIZED)
+        runtime.raiseWindow(runtimeId)
     }
 
     const onAppClose = (runtimeId) => {

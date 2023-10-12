@@ -3,7 +3,7 @@ import _ from 'lodash'
 import clsx from 'clsx'
 import styles from './WinFrame.module.css'
 import { APPS_DETAILS } from '../../../const/APPS_DETAILS'
-import useRuntime from '../../../features/runtime/useRuntime'
+import useRuntime from '../../../features/procs/useRuntime'
 import { WINDOW_SIZES } from '../../../const/WINDOW'
 
 const menus = {
@@ -15,7 +15,8 @@ const menus = {
 }
 
 const NON_BODY_HEIGHTS = 50
-let isDragging = false  // window is being dragged
+// let isDragging = false  // window is being dragged
+let dragPrevPos = null   // { top: val, left: val }
 
 const getWinStyles = (winSize) => {
     // if(winSize === WINDOW_SIZES.DEFAULT || winSize === WINDOW_SIZES.MINIMIZED) {
@@ -59,7 +60,7 @@ const WinFrame = props => {
 
     // Update styles based on Window Maximize / Minimize / Default
     useEffect(() => {
-        if(isDragging) return
+        // if(isDragging) return
         let newWinStyle = {...initStyleRef.current}
         if(runtimeInfo.winSize === WINDOW_SIZES.MAXIMIZED) {
             newWinStyle = getMaximizedStyles()
@@ -78,21 +79,50 @@ const WinFrame = props => {
     }, 
     [runtimeInfo.winSize])
 
-    const onDragStart = () => {
-        isDragging = true
+    const raiseWindowOnTop = () => runtime.raiseWindow(runtimeInfo.runtimeId)
+
+    const onDragStart = (left, top) => {
+        // isDragging = true
+        dragPrevPos = { left, top }
+        raiseWindowOnTop()
     }
+
     const onDrag = _.throttle((left, top) => {
+        if(left===0 && top===0) return
+
+        let leftDiff = left - dragPrevPos.left
+        let topDiff = top - dragPrevPos.top
+
+        // adjust position according to the diff
         setWinStyles(s => ({
-            ...s, left, top
+            ...s, 
+            left: s.left + leftDiff,
+            top: s.top + topDiff
         }))
-    }, 50)
+
+        // set new previous drag position
+        dragPrevPos = { left, top }
+    }, 0)
 
     const onDragEnd = (left, top) => {
-        setWinStyles(s => ({
-             ...s, left, top 
-            })
-        )
-        isDragging = false
+        // if(left===0 && top===0) return
+        // if(!dragPrevPos) return
+
+        // // get the diff of dragging
+        // let leftDiff = left - dragPrevPos.left
+        // let topDiff = top - dragPrevPos.top
+
+        // // adjust position according to the diff
+        // setWinStyles(s => ({
+        //     ...s, 
+        //     left: s.left + leftDiff,
+        //     top: s.top + topDiff
+        // }))
+
+        // Update this styles/position as default styles/position
+        initStyleRef.current = winStyles
+        dragPrevPos = null
+        // isDragging = false
     }
 
     // console.log('WinFrame props = ', appProps, restProps)
@@ -108,24 +138,32 @@ const WinFrame = props => {
         }
     }
 
+    
+
     return (
         <div 
             className={clsx(
                 styles.root, 
                 (runtimeInfo.winSize===WINDOW_SIZES.MINIMIZED) && styles.minimized, 
                 (runtimeInfo.winSize===WINDOW_SIZES.DEFAULT) && styles.defaultSized
-                )} 
-            style={winStyles}
+                )}
+            style={{ ...winStyles, zIndex: runtimeInfo.zIndex }}
+            onClick={raiseWindowOnTop}
         >
 
             <div className={clsx(styles.bar, styles.namebar)}>
-                <i 
-                    className={clsx("fa-regular fa-hand", styles.dragIco)}
-                    draggable="true" 
-                    onDrag={e => onDrag(e.pageX, e.pageY)}
-                    onDragStart={onDragStart}
-                    onDragEnd={e => onDragEnd(e.pageX, e.pageY)}
-                ></i>
+                {
+                    // Dragging available only in WINDOW_SIZES.DEFAULT
+                    runtimeInfo.winSize===WINDOW_SIZES.DEFAULT &&
+                    <i 
+                        className={clsx("fa-regular fa-hand", styles.dragIco)}
+                        draggable="true"
+                        onDrag={e => onDrag(e.pageX, e.pageY)}
+                        onDragStart={e => onDragStart(e.pageX, e.pageY)}
+                        onDragEnd={e => onDragEnd(e.pageX, e.pageY)}
+                    ></i>
+                }
+
                 <div>{ appName || 'Application' }</div>
                 <div className={styles.btns}>
                     { 

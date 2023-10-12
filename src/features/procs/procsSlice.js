@@ -10,18 +10,19 @@ let _runtimeIdCounter = 1
 
 
 /**
- * @typedef {Object} RuntimeObject
+ * @typedef {Object} ProcsObject // running processes
  * @property {number} runtimeId - The unique runtime Id
  * @property {string} appId - The uniq app Id per app from APPS_DETAILS
  * @property {boolean} crucial - Killable or Not?
  * @property {string} winSize - 'MINIMIZED' / 'MAXIMIZED' / 'DEFAULT'
+ * @property {number} zIndex - css zIndex - visual stacking of windows, highest on top
  */
 
 const initialState = {
     1: { appId: "RUNTIME", runtimeId: 1, crucial: true, }
 }
 
-export const runtimeSlice = createSlice({
+export const procsSlice = createSlice({
     name: 'runtime',
     initialState,
     reducers: {
@@ -38,7 +39,7 @@ export const runtimeSlice = createSlice({
             if(runningInstancesCount === 0 || !allowedInstances || allowedInstances > runningInstancesCount) {
                 // let's create a new runtime object
                 const runtimeId = ++_runtimeIdCounter
-                const newRuntimeObj = { appId, runtimeId, args }
+                const newRuntimeObj = { appId, runtimeId, args, zIndex: getMaxZIndex(state) + 1 }
                 // give a default winSize if window type app
                 if(appDetail.displayType === APP_DISPLAY_TYPE.WINDOW) {
                     newRuntimeObj.winSize = WINDOW_SIZES.DEFAULT
@@ -88,11 +89,21 @@ export const runtimeSlice = createSlice({
                 console.log('The display type of this app is ', appDetail.displayType)
             }
             return state
+        },
+        raiseWindow: (state, action) => {
+            const runtimeId = action.payload
+            state[runtimeId].zIndex = getMaxZIndex(state) + 1
         }
     }
 })
 
 // Action creators are generated for each case reducer function
-export const { runApp, terminateApp, mizeApp } = runtimeSlice.actions
+export const { runApp, terminateApp, mizeApp, raiseWindow } = procsSlice.actions
 
-export default runtimeSlice.reducer
+export default procsSlice.reducer
+
+
+// COMMON HELPER FUNCTIONS
+export function getMaxZIndex (state) {
+    return Math.max(...Object.values(state).map(r => r.zIndex || 0))
+}

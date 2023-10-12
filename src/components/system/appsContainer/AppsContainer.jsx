@@ -7,7 +7,7 @@ const mapAppIdxComp = {
 }
 
 const AppsContainer = () => {
-    const runningApps = Object.values(useSelector(state => state.runtime))
+    const runningApps = Object.values(useSelector(state => state.procs))
     console.log('runningApps = ', runningApps)
 
     // const onMouseMove = e => {

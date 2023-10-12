@@ -8,8 +8,8 @@ import MinimizedAppsList from './minimizedAppsList/MinimizedAppsList'
 
 const MinimizedAppsViewer = props => {
     const [ minimizeListVisible, setMinimizeListVisible ] = useState(false)
-    const runtime = useSelector(state => state.runtime)
-    const minimizedApps = Object.values(runtime).filter(r => r.winSize === WINDOW_SIZES.MINIMIZED)
+    const runningApps = useSelector(state => state.procs)
+    const minimizedApps = Object.values(runningApps).filter(r => r.winSize === WINDOW_SIZES.MINIMIZED)
 
     // useEffect(() => {
     //     console.log(thisElRef.current)
