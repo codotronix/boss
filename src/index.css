@@ -13,6 +13,5 @@ body {
   background: url('./assets/img/wallpapers/plouzane-1758197.jpg') 0 0 #222;
 }
 
-.hidden {
-  display: none !important;
-}
+.hidden { display: none !important; }
+.p-10 { padding: 10px !important; }

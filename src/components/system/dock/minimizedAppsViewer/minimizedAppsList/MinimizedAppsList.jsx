@@ -14,13 +14,17 @@ const MinimizedAppsList = props => {
     }
 
     const onAppClose = (runtimeId) => {
-        setVisible(false)
+        // setVisible(false)
         runtime.terminate(runtimeId)
     }
 
     return (
         <div className={clsx(styles.root, !visible && 'hidden')}>
             <ul className={styles.inner}>
+                { 
+                    (!minimizedApps || minimizedApps.length === 0) && 
+                    <li className='p-10'>No minimized apps</li>
+                }
                 {
                     minimizedApps && minimizedApps.map(a => 
                     <li key={a.runtimeId}>
