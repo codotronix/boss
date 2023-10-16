@@ -92,7 +92,9 @@ export const procsSlice = createSlice({
         },
         raiseWindow: (state, action) => {
             const runtimeId = action.payload
-            state[runtimeId].zIndex = getMaxZIndex(state) + 1
+            if(runtimeId in state) {
+                state[runtimeId].zIndex = getMaxZIndex(state) + 1
+            }
         }
     }
 })

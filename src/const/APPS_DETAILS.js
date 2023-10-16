@@ -32,6 +32,13 @@ export const APPS_DETAILS = {
         docked: true,
         displayType: APP_DISPLAY_TYPE.WINDOW
     },
+    "b_calc": {
+        appId: "b_calc",
+        name: "B-Calc",
+        iconClass: "fa-solid fa-calculator",
+        docked: true,
+        displayType: APP_DISPLAY_TYPE.WINDOW
+    },
     "bin": {
         appId: "bin",
         name: "Bin",

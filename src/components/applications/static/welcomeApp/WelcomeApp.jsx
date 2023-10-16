@@ -1,4 +1,4 @@
-import { WinFrame } from "../../common";
+import { WinFrame } from "../../../common";
 import styles from './WelcomeApp.module.css'
 
 const WelcomeApp = (props) => {
