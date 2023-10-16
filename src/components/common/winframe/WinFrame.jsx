@@ -19,9 +19,6 @@ const NON_BODY_HEIGHTS = 50
 let dragPrevPos = null   // { top: val, left: val }
 
 const getWinStyles = (winSize) => {
-    // if(winSize === WINDOW_SIZES.DEFAULT || winSize === WINDOW_SIZES.MINIMIZED) {
-        
-    // }
     if(winSize === WINDOW_SIZES.MAXIMIZED) {
         return () => ({
             top: 0,
@@ -113,27 +110,10 @@ const WinFrame = props => {
     }, 0)
 
     const onDragEnd = (left, top) => {
-        // if(left===0 && top===0) return
-        // if(!dragPrevPos) return
-
-        // // get the diff of dragging
-        // let leftDiff = left - dragPrevPos.left
-        // let topDiff = top - dragPrevPos.top
-
-        // // adjust position according to the diff
-        // setWinStyles(s => ({
-        //     ...s, 
-        //     left: s.left + leftDiff,
-        //     top: s.top + topDiff
-        // }))
-
         // Update this styles/position as default styles/position
         initStyleRef.current = winStyles
         dragPrevPos = null
-        // isDragging = false
     }
-
-    // console.log('WinFrame props = ', appProps, restProps)
 
     const maximize = () => runtime.mize(runtimeInfo.runtimeId, WINDOW_SIZES.MAXIMIZED)
     const minimize = () => runtime.mize(runtimeInfo.runtimeId, WINDOW_SIZES.MINIMIZED)
