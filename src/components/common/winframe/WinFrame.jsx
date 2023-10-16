@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef, Suspense } from 'react'
-import _ from 'lodash'
 import clsx from 'clsx'
 import styles from './WinFrame.module.css'
 import { APPS_DETAILS } from '../../../const/APPS_DETAILS'
 import useRuntime from '../../../features/procs/useRuntime'
+import useDrag from './useDrag'
 import { WINDOW_SIZES } from '../../../const/WINDOW'
 
 const menus = {
@@ -15,8 +15,6 @@ const menus = {
 }
 
 const NON_BODY_HEIGHTS = 50
-// let isDragging = false  // window is being dragged
-let dragPrevPos = null   // { top: val, left: val }
 
 const getWinStyles = (winSize) => {
     if(winSize === WINDOW_SIZES.MAXIMIZED) {
@@ -63,6 +61,16 @@ const WinFrame = props => {
     // console.log(initStyleRef)
     const [winStyles, setWinStyles] = useState(initStyleRef.current)
 
+    // use the useDrag custom hook for Dragging and repositioning
+    const { posDiff, onDragStart: _onDragStart, onDrag, onDragEnd } = useDrag()
+
+    // use the useDrag custom hook for Resizing WinFrame
+    // alias all the names to avoid conflict with the normal drag to reposition
+    const { posDiff: sizeDiff, 
+            onDragStart: onResizeStart, 
+            onDrag: onResize, 
+            onDragEnd: onResizeEnd } = useDrag()
+
     // Update styles based on Window Maximize / Minimize / Default
     useEffect(() => {
         // if(isDragging) return
@@ -84,35 +92,34 @@ const WinFrame = props => {
     }, 
     [runtimeInfo.winSize])
 
+    // Whenever there is a positionDiff due to dargging
+    useEffect(() => {
+        // update the new position
+        setWinStyles(s => ({
+            ...s, 
+            left: s.left + posDiff.leftDiff,
+            top: s.top + posDiff.topDiff
+        }))
+    }, 
+    [posDiff])
+
+
+    // Whenever WinFrame is resized using the resize handle at bottom right
+    useEffect(() => {
+        // update the new position
+        setWinStyles(s => ({
+            ...s, 
+            width: s.width + sizeDiff.leftDiff,
+            height: s.height + sizeDiff.topDiff
+        }))
+    }, 
+    [sizeDiff])
+
     const raiseWindowOnTop = () => runtime.raiseWindow(runtimeInfo.runtimeId)
 
     const onDragStart = (left, top) => {
-        // isDragging = true
-        dragPrevPos = { left, top }
+        _onDragStart(left, top)
         raiseWindowOnTop()
-    }
-
-    const onDrag = _.throttle((left, top) => {
-        if(left===0 && top===0) return
-
-        let leftDiff = left - dragPrevPos.left
-        let topDiff = top - dragPrevPos.top
-
-        // adjust position according to the diff
-        setWinStyles(s => ({
-            ...s, 
-            left: s.left + leftDiff,
-            top: s.top + topDiff
-        }))
-
-        // set new previous drag position
-        dragPrevPos = { left, top }
-    }, 0)
-
-    const onDragEnd = (left, top) => {
-        // Update this styles/position as default styles/position
-        initStyleRef.current = winStyles
-        dragPrevPos = null
     }
 
     const maximize = () => runtime.mize(runtimeInfo.runtimeId, WINDOW_SIZES.MAXIMIZED)
@@ -184,6 +191,14 @@ const WinFrame = props => {
                     <AppComponent {...appProps} />
                 </Suspense>
             </div>
+
+            <i 
+                className={clsx("fa-solid fa-braille", styles.repositionHandle)}
+                draggable="true"
+                onDrag={e => onResize(e.pageX, e.pageY)}
+                onDragStart={e => onResizeStart(e.pageX, e.pageY)}
+                onDragEnd={e => onResizeEnd(e.pageX, e.pageY)}
+            ></i>
         </div>
     )
 }

@@ -87,3 +87,13 @@
     color: #fff;
     font-size: 22px;
 }
+
+.repositionHandle {
+    position: absolute;
+    bottom: -6px;
+    right: -6px;
+    transform: rotate(-45deg);
+    font-size: 18px;
+    color: rgb(128 128 128 / 56%);
+    cursor: se-resize;
+}
