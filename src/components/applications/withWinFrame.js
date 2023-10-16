@@ -1,6 +1,5 @@
 import { WinFrame } from "../common"
-import React, { Suspense } from "react"
-import { LoadingBasic } from "../common/loadings"
+import React from "react"
 
 // This is a HOC function
 // which will take the core / original component
@@ -8,15 +7,10 @@ import { LoadingBasic } from "../common/loadings"
 function withWinFrame (AppComponent) {
 
     // Step 1: Create a Wrapped Component 
-    const WinFrameWrappedAppComponent = props => {
-        return (
-            // Suspense Components could be remotely loaded 
-            // via Webpack Module Federation - Micro-frontend
-            <Suspense fallback={<LoadingBasic />}>
-                <WinFrame appProps={props} AppComponent={AppComponent} />
-            </Suspense>
-        )
-    }
+    
+    const WinFrameWrappedAppComponent = props => 
+        <WinFrame appProps={props} AppComponent={AppComponent} />
+
 
     // Step 2: Return the Wrapped Component
     return WinFrameWrappedAppComponent

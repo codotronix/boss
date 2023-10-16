@@ -70,3 +70,19 @@
 .menu {
     margin-left: 10px;
 }
+
+.body {
+    background: rgb(255 255 255 / 90%);
+    color: #000;
+}
+
+.loadingComp {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgb(0 0 0 / 70%);
+    color: #fff;
+    font-size: 22px;
+}

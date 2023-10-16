@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, Suspense } from 'react'
 import _ from 'lodash'
 import clsx from 'clsx'
 import styles from './WinFrame.module.css'
@@ -46,6 +46,14 @@ const getMaximizedStyles = () => ({
     width: window.innerWidth,
     height: window.innerHeight
 })
+
+const LoadingScreen = ({ appName }) => {
+    return (
+        <div className={styles.loadingComp}>
+            {appName || 'The App'} is Loading ...
+        </div>
+    )
+}
 
 const WinFrame = props => {
     // const { render } = props
@@ -138,8 +146,6 @@ const WinFrame = props => {
         }
     }
 
-    
-
     return (
         <div 
             className={clsx(
@@ -189,9 +195,14 @@ const WinFrame = props => {
             </div>
 
             {/* THE BODY */}
-            <div style={{ height: (winStyles.height - NON_BODY_HEIGHTS) }}>
-                {/* { render( {command: winState.commandToApp} ) } */}
-                <AppComponent {...appProps} />
+            <div style={{ height: (winStyles.height - NON_BODY_HEIGHTS) }} className={styles.body}>
+                {/* 
+                    // Suspense Components could be remotely loaded 
+                    // via Webpack Module Federation - Micro-frontend
+                 */}
+                <Suspense fallback={<LoadingScreen appName={appName} />}>
+                    <AppComponent {...appProps} />
+                </Suspense>
             </div>
         </div>
     )
