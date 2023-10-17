@@ -13,7 +13,7 @@
     top: 0;
     left: 0;
     border-radius: 4px;
-    overflow: auto;
+    overflow: hidden;
     transition: all 100ms ease-in;
     max-width: 100vw;
     max-height: 100vh;
@@ -90,9 +90,9 @@
 
 .repositionHandle {
     position: absolute;
-    bottom: -6px;
-    right: -6px;
-    transform: rotate(-45deg);
+    bottom: 0;
+    right: 0;
+    /* transform: rotate(-45deg); */
     font-size: 18px;
     color: rgb(128 128 128 / 56%);
     cursor: se-resize;

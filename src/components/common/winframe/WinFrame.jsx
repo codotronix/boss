@@ -60,9 +60,10 @@ const WinFrame = props => {
     const initStyleRef = useRef(getWinStyles(WINDOW_SIZES.DEFAULT))
     // console.log(initStyleRef)
     const [winStyles, setWinStyles] = useState(initStyleRef.current)
+    const thisWinRef = useRef()
 
     // use the useDrag custom hook for Dragging and repositioning
-    const { posDiff, onDragStart: _onDragStart, onDrag, onDragEnd } = useDrag()
+    const { posDiff, onDragStart: _onDragStart, onDrag, onDragEnd } = useDrag(thisWinRef.current)
 
     // use the useDrag custom hook for Resizing WinFrame
     // alias all the names to avoid conflict with the normal drag to reposition
@@ -117,8 +118,8 @@ const WinFrame = props => {
 
     const raiseWindowOnTop = () => runtime.raiseWindow(runtimeInfo.runtimeId)
 
-    const onDragStart = (left, top) => {
-        _onDragStart(left, top)
+    const onDragStart = (left, top, e) => {
+        _onDragStart(left, top, e)
         raiseWindowOnTop()
     }
 
@@ -142,20 +143,23 @@ const WinFrame = props => {
                 )}
             style={{ ...winStyles, zIndex: runtimeInfo.zIndex }}
             onClick={raiseWindowOnTop}
+            ref={thisWinRef}
         >
 
-            <div className={clsx(styles.bar, styles.namebar)}>
-                {
+            <div 
+                className={clsx(styles.bar, styles.namebar)}
+                draggable="true"
+                onDrag={e => onDrag(e.pageX, e.pageY)}
+                onDragStart={e => onDragStart(e.pageX, e.pageY, e)}
+                onDragEnd={e => onDragEnd(e.pageX, e.pageY)}
+            >
+                {/* {
                     // Dragging available only in WINDOW_SIZES.DEFAULT
                     runtimeInfo.winSize===WINDOW_SIZES.DEFAULT &&
                     <i 
                         className={clsx("fa-regular fa-hand", styles.dragIco)}
-                        draggable="true"
-                        onDrag={e => onDrag(e.pageX, e.pageY)}
-                        onDragStart={e => onDragStart(e.pageX, e.pageY)}
-                        onDragEnd={e => onDragEnd(e.pageX, e.pageY)}
                     ></i>
-                }
+                } */}
 
                 <div>{ appName || 'Application' }</div>
                 <div className={styles.btns}>
@@ -191,9 +195,9 @@ const WinFrame = props => {
                     <AppComponent {...appProps} />
                 </Suspense>
             </div>
-
+            
             <i 
-                className={clsx("fa-solid fa-braille", styles.repositionHandle)}
+                className={clsx("fa-solid fa-arrow-up-right-dots", styles.repositionHandle)}
                 draggable="true"
                 onDrag={e => onResize(e.pageX, e.pageY)}
                 onDragStart={e => onResizeStart(e.pageX, e.pageY)}
