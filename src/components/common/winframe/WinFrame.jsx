@@ -5,13 +5,19 @@ import { APPS_DETAILS } from '../../../const/APPS_DETAILS'
 import useRuntime from '../../../features/procs/useRuntime'
 import useDrag from './useDrag'
 import { WINDOW_SIZES } from '../../../const/WINDOW'
+import Menubar from './Menubar'
 
 const menus = {
-    File: [],
-    Menu2: [],
-    Menu3: [],
-    Menu4: [],
-    Menu5: [],
+    File: [ 
+        { id: "new_window", name: "New Window" },
+        { id: "close_window", name: "Close Window" } 
+    ],
+    Menu2: [ 
+        { id: "sub1", name: "Sub Menu 1" },
+        { id: "sub2", name: "Sub Menu 2" },
+        { id: "sub3", name: "Sub Menu 3" },
+        { id: "sub4", name: "Sub Menu 4" }
+    ]
 }
 
 const NON_BODY_HEIGHTS = 50
@@ -153,14 +159,6 @@ const WinFrame = props => {
                 onDragStart={e => onDragStart(e.pageX, e.pageY, e)}
                 onDragEnd={e => onDragEnd(e.pageX, e.pageY)}
             >
-                {/* {
-                    // Dragging available only in WINDOW_SIZES.DEFAULT
-                    runtimeInfo.winSize===WINDOW_SIZES.DEFAULT &&
-                    <i 
-                        className={clsx("fa-regular fa-hand", styles.dragIco)}
-                    ></i>
-                } */}
-
                 <div>{ appName || 'Application' }</div>
                 <div className={styles.btns}>
                     { 
@@ -176,14 +174,8 @@ const WinFrame = props => {
                     <i className="fa-solid fa-xmark" onClick={close}></i>
                 </div>
             </div>
-            <div className={clsx(styles.bar, styles.menubar)}>
-                {
-                    Object.keys(menus).map(m => 
-                    <div key={m} className={styles.menu}>
-                        {m}
-                    </div>)
-                }
-            </div>
+            
+            <Menubar menus={menus} />
 
             {/* THE BODY */}
             <div style={{ height: (winStyles.height - NON_BODY_HEIGHTS) }} className={styles.body}>
