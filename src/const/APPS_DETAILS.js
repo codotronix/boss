@@ -5,12 +5,13 @@ export const APP_DISPLAY_TYPE = {
 }
 
 export const APPS_DETAILS = {
-    "launch_pad": {
-        appId: "launch_pad",
-        name: "Launch Pad",
+    "apps_viewer": {
+        appId: "apps_viewer",
+        name: "All Apps",
         iconClass: "fa-solid fa-cubes-stacked",
         docked: true,
-        displayType: APP_DISPLAY_TYPE.WINDOW
+        displayType: APP_DISPLAY_TYPE.WINDOW,
+        allowedInstances: 1
     },
     "folders": {
         appId: "folders",

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, Suspense } from 'react'
+import { useState, useEffect, useRef, Suspense, useCallback } from 'react'
 import clsx from 'clsx'
 import styles from './WinFrame.module.css'
 import { APPS_DETAILS } from '../../../const/APPS_DETAILS'
@@ -7,7 +7,7 @@ import useDrag from './useDrag'
 import { WINDOW_SIZES } from '../../../const/WINDOW'
 import Menubar from './Menubar'
 
-const menus = {
+const initMenu = {
     File: [ 
         { id: "new_window", name: "New Window" },
         { id: "close_window", name: "Close Window" } 
@@ -67,6 +67,7 @@ const WinFrame = props => {
     // console.log(initStyleRef)
     const [winStyles, setWinStyles] = useState(initStyleRef.current)
     const thisWinRef = useRef()
+    const [menu, setMenu] = useState(initMenu)
 
     // use the useDrag custom hook for Dragging and repositioning
     const { posDiff, onDragStart: _onDragStart, onDrag, onDragEnd } = useDrag(thisWinRef.current)
@@ -122,7 +123,12 @@ const WinFrame = props => {
     }, 
     [sizeDiff])
 
-    const raiseWindowOnTop = () => runtime.raiseWindow(runtimeInfo.runtimeId)
+    const raiseWindowOnTop = useCallback(() => runtime.raiseWindow(runtimeInfo.runtimeId), [])
+
+    useEffect(() => {
+        raiseWindowOnTop()
+    }, 
+    [raiseWindowOnTop])
 
     const onDragStart = (left, top, e) => {
         _onDragStart(left, top, e)
@@ -137,6 +143,19 @@ const WinFrame = props => {
         const r = window.confirm("Do you really want to close ?")
         if(r) {
             runtime.terminate(runtimeInfo.runtimeId)
+        }
+    }
+
+    /**
+     * 
+     * @param {Object} MenuConfig | { hideMenu: boolean, menu: { id1: subMenuArr1, id: subMenuArr2 }
+     */
+    const configMenu = MenuConfig => {
+        // hide the menu?
+        if(MenuConfig.hideMenu) setMenu(null)
+        // else merge the menu
+        else {
+
         }
     }
 
@@ -175,7 +194,7 @@ const WinFrame = props => {
                 </div>
             </div>
             
-            <Menubar menus={menus} />
+            <Menubar menu={menu} />
 
             {/* THE BODY */}
             <div style={{ height: (winStyles.height - NON_BODY_HEIGHTS) }} className={styles.body}>
@@ -184,7 +203,10 @@ const WinFrame = props => {
                     // via Webpack Module Federation - Micro-frontend
                  */}
                 <Suspense fallback={<LoadingScreen appName={appName} />}>
-                    <AppComponent {...appProps} />
+                    <AppComponent 
+                        {...appProps} 
+                        configMenu={configMenu}
+                    />
                 </Suspense>
             </div>
             

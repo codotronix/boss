@@ -1,0 +1,30 @@
+.root {
+    height: 100%;
+    width: 100%;
+    overflow: auto;
+    padding: 20px;
+}
+.inner {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 15px;
+}
+.app {
+    flex-direction: column;
+    padding: 5px;
+    border-radius: 4px;
+}
+.app:hover {
+    background: var(--winframe-menu-hover-dark-bg);
+}
+.app .figSlot {
+    height: 70px;
+}
+.app .figSlot .appIco {
+    font-size: 40px;
+}
+.app .appName {
+    margin-top: 5px;
+    height: 20px;
+    white-space: nowrap;
+}

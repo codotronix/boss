@@ -3,6 +3,9 @@
 *::before {
   box-sizing: border-box;
 }
+:root {
+  --winframe-menu-hover-dark-bg: rgb(0 0 0 / 10%);
+}
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -15,3 +18,9 @@ body {
 
 .hidden { display: none !important; }
 .p-10 { padding: 10px !important; }
+.transparent-bg { background-color: transparent !important; }
+.flex-c {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
