@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, Suspense, useCallback } from 'react'
+import { useState, useEffect, useRef, Suspense } from 'react'
 import clsx from 'clsx'
 import styles from './WinFrame.module.css'
 import { APPS_DETAILS } from '../../../const/APPS_DETAILS'
@@ -123,12 +123,7 @@ const WinFrame = props => {
     }, 
     [sizeDiff])
 
-    const raiseWindowOnTop = useCallback(() => runtime.raiseWindow(runtimeInfo.runtimeId), [])
-
-    useEffect(() => {
-        raiseWindowOnTop()
-    }, 
-    [raiseWindowOnTop])
+    const raiseWindowOnTop = () => runtime.raiseWindow(runtimeInfo.runtimeId)
 
     const onDragStart = (left, top, e) => {
         _onDragStart(left, top, e)

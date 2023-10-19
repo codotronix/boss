@@ -20,7 +20,8 @@ function useDrag (el) {
     const onDragStart = (left, top, e) => {
         dragPrevPos.current = { left, top }
         if(el) {
-            e.dataTransfer.setDragImage(el, 0, 0)
+            const leftShift = left - parseInt(el.style.left)
+            e.dataTransfer.setDragImage(el, leftShift, 0)
         }
     }
 

@@ -9,7 +9,8 @@ import { WINDOW_SIZES } from "../../../../const/WINDOW";
 
 const AppsViewer = props => {
     const { configMenu, runtimeInfo } = props
-    const [apps, setApps] = useState(Object.values(APPS_DETAILS))
+    // Filter out AppsView 
+    const [apps, setApps] = useState(Object.values(APPS_DETAILS).filter(a => a.appId!== runtimeInfo.appId) )
     const runtime = useRuntime()
 
     useEffect(() => {
