@@ -4,7 +4,6 @@ import styles from "./AppsViewer.module.css"
 import clsx from "clsx"
 import { useEffect, useState } from "react";
 import useRuntime from "../../../../features/procs/useRuntime";
-import { WINDOW_SIZES } from "../../../../const/WINDOW";
 
 
 const AppsViewer = props => {
@@ -16,10 +15,19 @@ const AppsViewer = props => {
     useEffect(() => {
         // Disable menu by calling the configMenu
         configMenu({ hideMenu: true })
-    }, [])
+    },
+    [configMenu])
     
 
-    const runApp = appId => runtime.run(appId)
+    const runApp = appId => {
+        // Delay the load / load asyncronously
+        // so that this windows click event does not
+        // put it on the new app
+        // The new app should be on Top of this
+        window.setTimeout(() => {
+            runtime.run(appId)
+        }, 0)
+    }
 
     return (
         <div className={styles.root}>

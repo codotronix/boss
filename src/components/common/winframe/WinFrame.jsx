@@ -6,19 +6,7 @@ import useRuntime from '../../../features/procs/useRuntime'
 import useDrag from './useDrag'
 import { WINDOW_SIZES } from '../../../const/WINDOW'
 import Menubar from './Menubar'
-
-const initMenu = {
-    File: [ 
-        { id: "new_window", name: "New Window" },
-        { id: "close_window", name: "Close Window" } 
-    ],
-    Menu2: [ 
-        { id: "sub1", name: "Sub Menu 1" },
-        { id: "sub2", name: "Sub Menu 2" },
-        { id: "sub3", name: "Sub Menu 3" },
-        { id: "sub4", name: "Sub Menu 4" }
-    ]
-}
+import { DEFAULT_MENU, MENU_COMMANDS } from './MENU_CONST'
 
 const NON_BODY_HEIGHTS = 50
 
@@ -67,7 +55,8 @@ const WinFrame = props => {
     // console.log(initStyleRef)
     const [winStyles, setWinStyles] = useState(initStyleRef.current)
     const thisWinRef = useRef()
-    const [menu, setMenu] = useState(initMenu)
+    const [menu, setMenu] = useState(DEFAULT_MENU)
+    const [menuCommand, setMenuCommand] = useState('')
 
     // use the useDrag custom hook for Dragging and repositioning
     const { posDiff, onDragStart: _onDragStart, onDrag, onDragEnd } = useDrag(thisWinRef.current)
@@ -122,6 +111,21 @@ const WinFrame = props => {
         }))
     }, 
     [sizeDiff])
+
+    const handleMenuCommand = cmd => {
+        switch(cmd) {
+            case MENU_COMMANDS.NEW_WINDOW:
+                window.setTimeout(() => {
+                    runtime.run(runtimeInfo.appId)
+                }, 0)
+                break
+            case MENU_COMMANDS.CLOSE_WINDOW:
+                runtime.terminate(runtimeInfo.runtimeId)
+                break
+            default:
+                setMenuCommand(cmd)
+        }
+    }
 
     const raiseWindowOnTop = () => runtime.raiseWindow(runtimeInfo.runtimeId)
 
@@ -189,7 +193,7 @@ const WinFrame = props => {
                 </div>
             </div>
             
-            <Menubar menu={menu} />
+            <Menubar menu={menu} handleMenuCommand={handleMenuCommand} />
 
             {/* THE BODY */}
             <div style={{ height: (winStyles.height - NON_BODY_HEIGHTS) }} className={styles.body}>
@@ -201,6 +205,7 @@ const WinFrame = props => {
                     <AppComponent 
                         {...appProps} 
                         configMenu={configMenu}
+                        menuCommand={menuCommand}
                     />
                 </Suspense>
             </div>

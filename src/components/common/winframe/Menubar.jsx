@@ -3,7 +3,7 @@ import clsx from 'clsx'
 import { useState } from 'react'
 
 const Menubar = props => {
-    const { menu } = props
+    const { menu, handleMenuCommand } = props
     const [ visibleSubMenuId, setVisibleSubMenuId ] = useState('')
 
     const toggleSubMenu = id => {
@@ -20,7 +20,8 @@ const Menubar = props => {
                     <ul className={styles.subMenu}>
                     {   
                         // Loop over the Submenu
-                        menu[m].map(sm => <li key={sm.id}>
+                        menu[m].map(sm => 
+                        <li key={sm.command} onClick={() => handleMenuCommand(sm.command)} >
                             { sm.name }
                         </li>)
                     }

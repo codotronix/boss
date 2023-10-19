@@ -10,7 +10,7 @@ let _runtimeIdCounter = 1
 
 
 /**
- * @typedef {Object} ProcsObject // running processes
+ * @typedef {Object} Process or RuntimeObject or ProcsObject // running processes
  * @property {number} runtimeId - The unique runtime Id
  * @property {string} appId - The uniq app Id per app from APPS_DETAILS
  * @property {boolean} crucial - Killable or Not?
@@ -48,6 +48,23 @@ export const procsSlice = createSlice({
                 return {
                     ...state,
                     [runtimeId]: newRuntimeObj
+                }
+            }
+            // if the app is already running
+            // but is minimized
+            // MAXIMIZE it
+            else if(allowedInstances === 1) {
+                // find the runtimeObject i.e. the process
+                let proc = null
+                for(let p of Object.values(state)) {
+                    if(p.appId === appId) {
+                        proc = p
+                        break
+                    }
+                }
+
+                if(proc && proc.winSize === WINDOW_SIZES.MINIMIZED) {
+                    proc.winSize = WINDOW_SIZES.MAXIMIZED
                 }
             }
             return state
