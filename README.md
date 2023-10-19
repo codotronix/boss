@@ -9,8 +9,8 @@ This is basically a hobby project using the following web technologies
 - `Craco` to override the webpack configs hidden by `CRA` 
 
 
-## Index
-- [List of External Apps](https://github.com/codotronix/bcalc)
+## Menu
+- [List of External Apps](https://github.com/codotronix/boss/tree/development#list-of-external-apps)
 
 
 ## List of External Apps
