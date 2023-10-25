@@ -43,7 +43,7 @@ export const APPS_DETAILS = {
         name: "Timer",
         iconClass: "fa-solid fa-stopwatch-20",
         displayType: APP_DISPLAY_TYPE.WINDOW,
-        docked: true
+        // docked: true
     },
     "bin": {
         appId: "bin",
