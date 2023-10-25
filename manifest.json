@@ -1,6 +1,6 @@
 {
-  "short_name": "BOSS",
-  "name": "Basic OS Simulator",
+  "short_name": "B.O.S.S.",
+  "name": "B.O.S.S. - Basic OS Simulator",
   "icons": [
     {
       "src": "favicon.ico",
@@ -8,12 +8,12 @@
       "type": "image/x-icon"
     },
     {
-      "src": "logo192.png",
+      "src": "favicon/android-chrome-192x192.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "logo512.png",
+      "src": "favicon/android-chrome-512x512.png",
       "type": "image/png",
       "sizes": "512x512"
     }
@@ -21,5 +21,5 @@
   "start_url": ".",
   "display": "standalone",
   "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "background_color": "#000000"
 }
