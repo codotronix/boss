@@ -13,6 +13,7 @@
     flex-direction: column;
     padding: 5px;
     border-radius: 4px;
+    user-select: none;
 }
 .app:hover {
     background: var(--winframe-menu-hover-dark-bg);
