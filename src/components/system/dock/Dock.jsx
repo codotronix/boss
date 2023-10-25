@@ -18,14 +18,18 @@ const Dock = props => {
 
     return (
         <div className={styles.root} style={{ zIndex }} onClick={onClick}>
+
             <div className={styles.inner}>
+                <div className={styles.scrollable_holder}>
                 {
                     dockedApps && dockedApps.map(da => <DockIcon 
                         key={da.appId} {...da}
                     />)
                 }
+                </div>
                 <MinimizedAppsViewer />
             </div>
+            
         </div>
     )
 }
