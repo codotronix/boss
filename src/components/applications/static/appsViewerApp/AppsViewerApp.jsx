@@ -36,7 +36,8 @@ const AppsViewerApp = props => {
                 apps.map(a => 
                 <div 
                     key={a.appId} className={clsx(styles.app, 'flex-c')}
-                    onClick={() => runApp(a.appId)}
+                    // onClick={() => runApp(a.appId)}
+                    onDoubleClick={() => runApp(a.appId)}
                 >
                     <div className={clsx(styles.figSlot, 'flex-c')}>
                     { a.iconClass && <i className={clsx(a.iconClass, styles.appIco)}></i> }
