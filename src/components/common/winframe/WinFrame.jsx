@@ -139,10 +139,10 @@ const WinFrame = props => {
     const unmaximize = () => runtime.mize(runtimeInfo.runtimeId, WINDOW_SIZES.DEFAULT)
     
     const close = () => {
-        const r = window.confirm("Do you really want to close ?")
-        if(r) {
+        // const r = window.confirm("Do you really want to close ?")
+        // if(r) {
             runtime.terminate(runtimeInfo.runtimeId)
-        }
+        // }
     }
 
     /**

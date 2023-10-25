@@ -10,6 +10,7 @@ This is basically a hobby project using the following web technologies
 
 
 ## Menu
+- [How to docs / Developer guide](./docs/How-tos.md)
 - [List of External Apps](https://github.com/codotronix/boss/tree/development#list-of-external-apps)
 
 

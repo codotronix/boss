@@ -1,9 +1,11 @@
 import WelcomeApp from "./static/welcomeApp/WelcomeApp";
 import BCalc from "./dynamic/bcalc/BCalc"
-import AppsViewer from "./static/appViewer/AppsViewer";
+import AppsViewerApp from "./static/appsViewerApp/AppsViewerApp"
+import TimerApp from "./static/timerApp/TimerApp";
 
 export {
-    AppsViewer,
+    AppsViewerApp,
     BCalc,
     WelcomeApp,
+    TimerApp,
 }

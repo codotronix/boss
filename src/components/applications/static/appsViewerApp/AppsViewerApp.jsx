@@ -1,12 +1,12 @@
 import { APPS_DETAILS } from "../../../../const/APPS_DETAILS";
 import withWinFrame from "../../withWinFrame";
-import styles from "./AppsViewer.module.css"
+import styles from "./AppsViewerApp.module.css"
 import clsx from "clsx"
 import { useEffect, useState } from "react";
 import useRuntime from "../../../../features/procs/useRuntime";
 
 
-const AppsViewer = props => {
+const AppsViewerApp = props => {
     const { configMenu, runtimeInfo } = props
     // Filter out AppsView 
     const [apps, setApps] = useState(Object.values(APPS_DETAILS).filter(a => a.appId!== runtimeInfo.appId) )
@@ -50,7 +50,7 @@ const AppsViewer = props => {
     )
 }
 
-export default withWinFrame(AppsViewer)
+export default withWinFrame(AppsViewerApp)
 
 
 

@@ -38,6 +38,13 @@ export const APPS_DETAILS = {
         iconClass: "fa-solid fa-calculator",
         displayType: APP_DISPLAY_TYPE.WINDOW
     },
+    "timer_app": {
+        appId: "timer_app",
+        name: "Timer",
+        iconClass: "fa-solid fa-stopwatch-20",
+        displayType: APP_DISPLAY_TYPE.WINDOW,
+        docked: true
+    },
     "bin": {
         appId: "bin",
         name: "Bin",
