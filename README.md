@@ -11,7 +11,7 @@ This is basically a hobby project using the following web technologies
 
 ## Menu
 - [How to docs / Developer guides](./docs/How-tos.md)
-- [External Apps / MFEs](https://github.com/codotronix/boss/tree/development#list-of-external-apps)
+- [External Apps / MFEs](#external-apps--micro-frontends)
 
 
 ## External Apps / Micro-Frontends
