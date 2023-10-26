@@ -1,19 +1,19 @@
 {
   "files": {
-    "main.js": "/boss/static/js/main.8236f31b.js",
-    "static/css/510.bc162bc2.chunk.css": "/boss/static/css/510.bc162bc2.chunk.css",
-    "static/js/510.24b3e9c9.chunk.js": "/boss/static/js/510.24b3e9c9.chunk.js",
+    "main.js": "/boss/static/js/main.63553b44.js",
+    "static/css/510.1b615730.chunk.css": "/boss/static/css/510.1b615730.chunk.css",
+    "static/js/510.0dfca779.chunk.js": "/boss/static/js/510.0dfca779.chunk.js",
     "static/js/787.98072ccc.chunk.js": "/boss/static/js/787.98072ccc.chunk.js",
-    "static/js/624.8d5ab9e0.chunk.js": "/boss/static/js/624.8d5ab9e0.chunk.js",
+    "static/js/582.b9c8e1d0.chunk.js": "/boss/static/js/582.b9c8e1d0.chunk.js",
     "static/media/plouzane-1758197.jpg": "/boss/static/media/plouzane-1758197.3b17ba8d96784e99f7a7.jpg",
     "index.html": "/boss/index.html",
-    "main.8236f31b.js.map": "/boss/static/js/main.8236f31b.js.map",
-    "510.bc162bc2.chunk.css.map": "/boss/static/css/510.bc162bc2.chunk.css.map",
-    "510.24b3e9c9.chunk.js.map": "/boss/static/js/510.24b3e9c9.chunk.js.map",
+    "main.63553b44.js.map": "/boss/static/js/main.63553b44.js.map",
+    "510.1b615730.chunk.css.map": "/boss/static/css/510.1b615730.chunk.css.map",
+    "510.0dfca779.chunk.js.map": "/boss/static/js/510.0dfca779.chunk.js.map",
     "787.98072ccc.chunk.js.map": "/boss/static/js/787.98072ccc.chunk.js.map",
-    "624.8d5ab9e0.chunk.js.map": "/boss/static/js/624.8d5ab9e0.chunk.js.map"
+    "582.b9c8e1d0.chunk.js.map": "/boss/static/js/582.b9c8e1d0.chunk.js.map"
   },
   "entrypoints": [
-    "static/js/main.8236f31b.js"
+    "static/js/main.63553b44.js"
   ]
 }
