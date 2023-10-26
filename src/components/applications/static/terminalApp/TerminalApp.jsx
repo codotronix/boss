@@ -44,11 +44,17 @@ const TerminalApp = props => {
             // don't process empty line
             if(currentCmd.length === 0) return
 
-            const result = process(currentCmd) // result = { msg, code, ctx }
-            const newHistoryTxt = historyTxt 
-                                + colorify(currentLine, 'lightgreen')
-                                + colorify(result.msg, 'lightskyblue')
-            setHistoryTxt(newHistoryTxt)
+            if(currentCmd === 'cls' || currentCmd === 'clear') {
+                setHistoryTxt('')
+            }
+            else {
+                const result = process(currentCmd) // result = { msg, code, ctx }
+                const newHistoryTxt = historyTxt 
+                                    + colorify(currentLine, 'lightgreen')
+                                    + colorify(result.msg, 'lightskyblue')
+                setHistoryTxt(newHistoryTxt)
+            }
+            
             setCurrentLine(prompt)
 
             // save this command in history for later retrieval
