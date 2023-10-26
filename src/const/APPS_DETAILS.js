@@ -5,20 +5,22 @@ export const APP_DISPLAY_TYPE = {
 }
 
 export const APPS_DETAILS = {
-    "apps_viewer": {
-        appId: "apps_viewer",
-        name: "All Apps",
+    "appsviewer": {
+        appId: "appsviewer",
+        name: "Apps",
         iconClass: "fa-solid fa-cubes-stacked",
         docked: true,
         displayType: APP_DISPLAY_TYPE.WINDOW,
-        allowedInstances: 1
+        allowedInstances: 1,
+        keywords: ['apps', 'all apps']
     },
     "folders": {
         appId: "folders",
         name: "Folders",
         iconClass: "fa-regular fa-folder-open",
         docked: true,
-        displayType: APP_DISPLAY_TYPE.WINDOW
+        displayType: APP_DISPLAY_TYPE.WINDOW,
+        keywords: ['finder', 'files', 'folders', 'explorer']
     },
     "settings": {
         appId: "settings",
@@ -27,20 +29,29 @@ export const APPS_DETAILS = {
         docked: true,
         allowedInstances: 1
     },
-    "welcomeApp": {
-        appId: "welcomeApp",
-        name: "Welcome App",
+    "welcomeapp": {
+        appId: "welcomeapp",
+        name: "Welcome",
         iconClass: "fa-solid fa-face-smile",
         displayType: APP_DISPLAY_TYPE.WINDOW
     },
-    "b_calc": {
-        appId: "b_calc",
+    "bcalc": {
+        appId: "bcalc",
         name: "B-Calc",
         iconClass: "fa-solid fa-calculator",
-        displayType: APP_DISPLAY_TYPE.WINDOW
+        displayType: APP_DISPLAY_TYPE.WINDOW,
+        keywords: ['bcalc', 'calc', 'calculator', 'math']
     },
-    "timer_app": {
-        appId: "timer_app",
+    "terminal": {
+        appId: "terminal",
+        name: "Terminal",
+        iconClass: "fa-solid fa-terminal",
+        docked: true,
+        displayType: APP_DISPLAY_TYPE.WINDOW,
+        keywords: ['terminal', 'cmd', 'command line', 'command-line', 'dos', 'emulator', 'shell']
+    },
+    "timer": {
+        appId: "timer",
         name: "Timer",
         iconClass: "fa-solid fa-stopwatch-20",
         displayType: APP_DISPLAY_TYPE.WINDOW,
@@ -53,14 +64,14 @@ export const APPS_DETAILS = {
         docked: true,
         displayType: APP_DISPLAY_TYPE.WINDOW
     },
-    "b_notes": {
-        appId: "b_notes",
+    "bnotes": {
+        appId: "bnotes",
         name: "B-Notes",
         iconClass: "fa-solid fa-file-lines",
         displayType: APP_DISPLAY_TYPE.WINDOW
     },
-    "b_chat": {
-        appId: "b_chat",
+    "bchat": {
+        appId: "bchat",
         name: "B-Chat",
         iconClass: "fa-solid fa-comments",
         displayType: APP_DISPLAY_TYPE.WINDOW

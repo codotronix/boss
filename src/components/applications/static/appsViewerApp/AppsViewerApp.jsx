@@ -9,7 +9,7 @@ import useRuntime from "../../../../features/procs/useRuntime";
 const AppsViewerApp = props => {
     const { configMenu, runtimeInfo } = props
     // Filter out AppsView 
-    const [apps, setApps] = useState(Object.values(APPS_DETAILS).filter(a => a.appId!== runtimeInfo.appId) )
+    const [apps] = useState(Object.values(APPS_DETAILS).filter(a => a.appId!== runtimeInfo.appId) )
     const runtime = useRuntime()
 
     useEffect(() => {

@@ -9,8 +9,9 @@ This is basically a hobby project using the following web technologies
 - `Craco` to override the webpack configs hidden by `CRA` 
 
 
-## Menu
+## Index
 - [How to docs / Developer guides](./docs/How-tos.md)
+- [UPcoming plans of Development](./docs/Upcoming.md)
 - [External Apps / MFEs](#external-apps--micro-frontends)
 
 

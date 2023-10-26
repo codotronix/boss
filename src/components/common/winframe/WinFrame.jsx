@@ -46,7 +46,7 @@ const LoadingScreen = ({ appName }) => {
 
 const WinFrame = props => {
     // const { render } = props
-    const { appProps, AppComponent, ...restProps } = props
+    const { appProps, AppComponent } = props
     const { runtimeInfo } = appProps
     const appName = APPS_DETAILS[runtimeInfo.appId].name
     const runtime = useRuntime()

@@ -2,9 +2,9 @@ import { WelcomeApp, BCalc, AppsViewerApp, TimerApp, SettingsApp
 } from '../components/applications'
 
 export const MAP_APP_ID_TO_COMPONENT = {
-    "apps_viewer": AppsViewerApp,
+    "appsviewer": AppsViewerApp,
     'settings': SettingsApp,
-    'welcomeApp': WelcomeApp,
-    'b_calc': BCalc,
-    'timer_app': TimerApp,
+    'welcomeapp': WelcomeApp,
+    'bcalc': BCalc,
+    'timer': TimerApp,
 }

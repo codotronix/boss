@@ -14,6 +14,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background: url('./assets/img/wallpapers/plouzane-1758197.jpg') 0 0 #222;
+  overflow: hidden;
 }
 
 .hidden { display: none !important; }
