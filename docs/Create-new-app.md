@@ -4,7 +4,7 @@
 ## Step 1: Create the App / Component
 
 - Just write the app as any other react component. 
-- Make sure the outer html div has a style of `height and width set to 100%` so that the app can resize itself with the outer window (WinFrame) where it will be loaded.
+- Make sure the outer html div has a style of `width: 100%` and `min-height: 100%` so that the app can resize itself with the outer window (WinFrame) where it will be loaded.
 
 
 ## Step 2: Export withWinFrame()

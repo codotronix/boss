@@ -2,6 +2,7 @@
 *::after,
 *::before {
   box-sizing: border-box;
+  font-size: inherit;
 }
 :root {
   --winframe-menu-hover-dark-bg: rgb(0 0 0 / 10%);
@@ -15,6 +16,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background: url('./assets/img/wallpapers/plouzane-1758197.jpg') 0 0 #222;
   overflow: hidden;
+  font-size: 16px;
 }
 
 .hidden { display: none !important; }

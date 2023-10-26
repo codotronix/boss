@@ -17,4 +17,4 @@
 
 - Export the core app component. 
 
-- Make sure the root html element in the app has css property of `width: 100%` and `height: 100%`, so that it can fill the `WinFrame` window where it is loaded
+- Make sure the root html element in the app has css property of `width: 100%` and `min-height: 100%`, so that it can fill the `WinFrame` window where it is loaded
