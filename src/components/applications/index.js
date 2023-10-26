@@ -3,9 +3,10 @@ import BCalc from "./dynamic/bcalc/BCalc"
 import AppsViewerApp from "./static/appsViewerApp/AppsViewerApp"
 import TimerApp from "./static/timerApp/TimerApp";
 import SettingsApp from "./static/settingsApp/SettingsApp";
+import TerminalApp from "./static/terminalApp/TerminalApp";
 
 export {
-    AppsViewerApp, SettingsApp,
+    AppsViewerApp, SettingsApp, TerminalApp,
     BCalc,
     WelcomeApp,
     TimerApp,
