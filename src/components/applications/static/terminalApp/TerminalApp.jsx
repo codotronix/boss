@@ -1,7 +1,7 @@
 import withWinFrame from "../../withWinFrame"
 import styles from "./TerminalApp.module.css"
 import { useState, useRef, useEffect } from "react"
-import { process } from "../../../../services/forTerminal/processor"
+import { useProcessor } from "../../../../services/forTerminal/useProcessor"
 import { colorify } from "../../../../services/forTerminal/formatter"
 
 const TerminalApp = props => {
@@ -11,13 +11,20 @@ const TerminalApp = props => {
     const [cmdHistory, setCmdHistory] = useState([])
     const [cmdHistoryIndex, setCmdHistoryIndex] = useState(0)
     const currentLineRef = useRef()
-
+    const ctxRef = useRef({})   // context for current terminal
+    const process = useProcessor(ctxRef.current)
 
     // Focus 
     useEffect(() => {
         const el = currentLineRef.current
         el.focus()
         el.selectionStart = el.selectionEnd = el.value.length;
+    }, 
+    [])
+
+    // Initialize the context for current terminal
+    useEffect(() => {
+        ctxRef.current = { currentFolderId: '' }    // '' for root folder
     }, 
     [])
     
@@ -48,7 +55,10 @@ const TerminalApp = props => {
                 setHistoryTxt('')
             }
             else {
-                const result = process(currentCmd) // result = { msg, code, ctx }
+                // PROCESS THE COMMAND
+                console.log(ctxRef.current)
+                const result = process(currentCmd, ctxRef.current) // result = { msg, code, ctx }
+
                 const newHistoryTxt = historyTxt 
                                     + colorify(currentLine, 'lightgreen')
                                     + colorify(result.msg, 'lightskyblue')
