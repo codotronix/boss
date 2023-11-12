@@ -19,7 +19,7 @@ export function useFsCommands () {
     // Return the present working directory
     function pwd (ctx, args) {
         // console.log(ctx)
-        const path = fs.getPathNamesTill(ctx.currentFolderId).join('/') + '/'
+        const path = fs.getPathTill(ctx.currentFolderId)
         return [path, 0]
     }
 
@@ -51,14 +51,21 @@ export function useFsCommands () {
         let path = args[0]
         if(!path) return ['', 0]
 
-        
-        let fileInfo = fs.getFileInfo(path)
-        if(!fileInfo) {
-            fileInfo = fs.getFileInfo(pwd(ctx) + path)
+        // if the path needs to start from current location
+        if(path[0] !== '.' && path[0] !== '/') {
+            path = pwd(ctx)[0] + path
         }
+
+        let fileInfo = fs.getFileInfo(path)
+
         console.log(fileInfo)
         if(fileInfo && fileInfo.fileType === FILE_TYPE.FOLDER) {
             ctx.currentFolderId = fileInfo.Id 
+        }
+        else {
+            return [
+                `"${path}" is not a folder to move into`
+            ]
         }
 
         console.log(ctx)

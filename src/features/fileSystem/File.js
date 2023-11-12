@@ -9,7 +9,7 @@ import { FILE_TYPE } from "../../const/FILE_CONST";
 
 export function File (name, parentId, fileType, owner) {
     return {
-        Id : uuidv4(),
+        id : uuidv4(),
         name, parentId, fileType, owner,
         date_creation : Date.now(),
         date_modification : Date.now(),

@@ -24,7 +24,7 @@ const TerminalApp = props => {
 
     // Initialize the context for current terminal
     useEffect(() => {
-        ctxRef.current = { currentFolderId: '' }    // '' for root folder
+        ctxRef.current = { currentFolderId: '/' }    // '' for root folder
     }, 
     [])
     

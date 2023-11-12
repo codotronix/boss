@@ -9,11 +9,11 @@ export const useFileSystem = () => {
     const createDir = (name, parentId, owner) => _create(_files, dispatch, name, parentId, FILE_TYPE.FOLDER, owner)
     const createFolder = createDir
     const getChildrenNames = parentId => _getChildrenNames(_files, parentId)
-    const getPathNamesTill = fileId => _getPathNamesTill(_files, fileId)
+    const getPathTill = fileId => _getPathTill(_files, fileId)
     const getFileInfo = absPath => _getFileInfo(_files, absPath)
 
     return {
-        createFile, createDir, createFolder, getChildrenNames, getPathNamesTill, getFileInfo
+        createFile, createDir, createFolder, getChildrenNames, getPathTill, getFileInfo
     }
 }
 
@@ -27,7 +27,16 @@ function _create (_files, dispatch, name, parentId, fileType, owner) {
     return ''
 }
 
-function _getPathNamesTill(_files, fileId) {
+
+/**
+ * Returns string path NAMES starting from root to the given fileId
+ * Note: it returns the file/folder names, not the ids
+ * Please see the unit tests to understand more
+ * @param {*} _files | File Tree JSON
+ * @param {String} fileId | A FileID or FolderID
+ * @returns 
+ */
+export function _getPathTill(_files, fileId) {
     let pathSegments = []
 
     // go up the parent ladder
@@ -37,19 +46,40 @@ function _getPathNamesTill(_files, fileId) {
         fileId = _files[fileId].parentId
     }
 
-    // // push the Root
-    // pathSegments.push('')
+    return pathSegments.reverse().join("/").replace('//', '/')
+}
+
+/**
+ * Returns an array of fileId and fileName till the root
+ * [ { id: "/", name: "/" } , { id1, name1 }, { id2, name2 }, ..., { givenId, nameN } ]
+ * See unit test to understand test cases
+ * @param {JSON} _files | File Tree JSON
+ * @param {String} fileId | A FileID or FolderID
+ * @returns 
+ */
+export function _getPathArrTill(_files, fileId) {
+    let pathSegments = []
+
+    // go up the parent ladder
+    while(fileId in _files) {
+        // we need the names, not the IDs
+        let pathObj = { id: fileId, name: _files[fileId].name }
+        pathSegments.push(pathObj)
+        fileId = _files[fileId].parentId
+    }
 
     return pathSegments.reverse()
 }
 
+// return all children nodes for a given parent
 function _getChildren(_files, parentId) {
     let children = []
     if(parentId === '') {
         children = Object.values(_files).filter(f => f.parentId === parentId)
     }
     else if (parentId in _files) {
-        children = _files[parentId].children || []
+        let childrenIds = _files[parentId].children || []
+        children = childrenIds.map(cId => _files[cId])
     }
     return children
 }
@@ -62,8 +92,8 @@ function _getFileInfo (_files, absPath) {
     // get the file/folder names array
     let pathNames = absPath.split('/').filter(f => f.trim().length>0)
 
-    // initial scope of search is the top level files
-    let filesInLevel = _getChildren(_files, '')
+    // initial scope of search is the root level files
+    let filesInLevel = _getChildren(_files, '/')
 
     let lastFile = null
 
@@ -89,3 +119,7 @@ function _getFileInfo (_files, absPath) {
 
     return lastFile
 } 
+
+function _normalizePath (path) {
+
+}
