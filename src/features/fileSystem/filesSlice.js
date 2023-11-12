@@ -44,9 +44,6 @@ export default filesSlice.reducer
  * @returns 
  */
 export function _create(state, name, parentId, fileType, owner) {
-    // Create new New File Object
-    const newFile = File(name, parentId, fileType, owner)
-
     // Invalid parentId
     // Or parentId is not a folder
     if(!(parentId in state) || state[parentId].fileType !== FILE_TYPE.FOLDER) {
@@ -57,6 +54,9 @@ export function _create(state, name, parentId, fileType, owner) {
     if(state[parentId].children.map(fid => state[fid].name).includes(name)) {
         return state
     }
+    
+    // Create new New File Object
+    const newFile = File(name, parentId, fileType, owner)
 
     // add this new File to the state
     const newState = {

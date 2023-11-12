@@ -18,9 +18,15 @@ export const useFileSystem = () => {
 }
 
 function _create (_files, dispatch, name, parentId, fileType, owner) {
-    // check if same fileName already present for the parent
-    if(Object.values(_files).filter(f => f.parentId === parentId).map(f => f.name).includes(name)) {
-        return `File name "${name}" already exists`
+    // Invalid parentId
+    // Or parentId is not a folder
+    if(!(parentId in _files) || _files[parentId].fileType !== FILE_TYPE.FOLDER) {
+        return `Can not create file/folder in the given location`
+    }
+
+    // Check for duplicate file names
+    if(_files[parentId].children.map(fid => _files[fid].name).includes(name)) {
+        return `File/folder name "${name}" already exists`
     }
 
     dispatch(create({ name, parentId, fileType, owner }))
