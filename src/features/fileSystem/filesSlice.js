@@ -1,9 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { File } from "./File";
 import { FILE_TYPE } from "../../const/FILE_CONST";
+import ls from "../../services/localStorage";
+const KEY_FILE_TREE = 'BOSS/FILE-TREE'
 
 // Initially there will be only THE-ROOT (/)
-const initialState = {
+const initialState = ls.get(KEY_FILE_TREE) || {
     "/": {
         id: "/",
         name: "/",
@@ -12,6 +14,9 @@ const initialState = {
         children: []
     }
 } 
+
+ls.set(KEY_FILE_TREE, initialState)
+
 // { id1: File1, id2: File2 ... }
 
 // NOT TO BE USED DIRECTLY
@@ -23,7 +28,9 @@ export const filesSlice = createSlice({
         // create file / folder
         create: (state, action) => {
             const { name, parentId, fileType, owner } = action.payload 
-            return _create(state, name, parentId, fileType, owner)
+            const newState = _create(state, name, parentId, fileType, owner)
+            ls.set(KEY_FILE_TREE, newState)
+            return newState
         },
     }
 })
@@ -54,7 +61,7 @@ export function _create(state, name, parentId, fileType, owner) {
     if(state[parentId].children.map(fid => state[fid].name).includes(name)) {
         return state
     }
-    
+
     // Create new New File Object
     const newFile = File(name, parentId, fileType, owner)
 

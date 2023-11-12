@@ -3,6 +3,7 @@ import styles from "./TerminalApp.module.css"
 import { useState, useRef, useEffect } from "react"
 import { useProcessor } from "../../../../services/forTerminal/useProcessor"
 import { colorify } from "../../../../services/forTerminal/formatter"
+import { useFileSystem } from "../../../../features/fileSystem/useFileSystem"
 
 const TerminalApp = props => {
     const [prompt, setPrompt] = useState('$ > ')
@@ -13,6 +14,15 @@ const TerminalApp = props => {
     const currentLineRef = useRef()
     const ctxRef = useRef({})   // context for current terminal
     const process = useProcessor(ctxRef.current)
+    const fileSystem = useFileSystem()
+
+    // const updatePrompt = useCallback(() => {
+    //     console.log('inside updatePrompt')
+    //     const pwd = fileSystem.getPathTill(ctxRef.current.currentFolderId)
+    //     console.log(pwd)
+    //     setPrompt(`$ [${pwd}] > `)
+    // }, 
+    // [fileSystem])
 
     // Focus 
     useEffect(() => {
@@ -25,8 +35,17 @@ const TerminalApp = props => {
     // Initialize the context for current terminal
     useEffect(() => {
         ctxRef.current = { currentFolderId: '/' }    // '' for root folder
+        // updatePrompt()
     }, 
     [])
+
+    // Watch the currentFolderId
+    // useEffect(() => {
+    //     const pwd = fileSystem.getPathTill(ctxRef.current.currentFolderId)
+    //     console.log(pwd)
+    //     setPrompt(`$ [${pwd}] > `)
+    // }, 
+    // [ctxRef.current.currentFolderId, fileSystem.getPathTill])
     
     // User is writing
     const onChange = e => {
