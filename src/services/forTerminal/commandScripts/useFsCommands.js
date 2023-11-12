@@ -53,14 +53,14 @@ export function useFsCommands () {
 
         // if the path needs to start from current location
         if(path[0] !== '.' && path[0] !== '/') {
-            path = pwd(ctx)[0] + path
+            path = pwd(ctx)[0] + '/' + path
         }
 
         let fileInfo = fs.getFileInfo(path)
 
         console.log(fileInfo)
         if(fileInfo && fileInfo.fileType === FILE_TYPE.FOLDER) {
-            ctx.currentFolderId = fileInfo.Id 
+            ctx.currentFolderId = fileInfo.id 
         }
         else {
             return [

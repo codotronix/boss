@@ -77,8 +77,13 @@ export function _getPathArrTill(_files, fileId) {
     return pathSegments.reverse()
 }
 
-// return all children nodes for a given parent
-function _getChildren(_files, parentId) {
+/**
+ * Return array of children nodes for a given parentId
+ * @param {JSON} _files | File Tree JSON
+ * @param {String} fileId | A FileID or FolderID
+ * @returns Array<FileNodes> 
+ */
+export function _getChildren(_files, parentId) {
     let children = []
     if(parentId === '') {
         children = Object.values(_files).filter(f => f.parentId === parentId)
@@ -90,19 +95,39 @@ function _getChildren(_files, parentId) {
     return children
 }
 
-function _getChildrenNames(_files, parentId) {
+/**
+ * Return strings of names of all the children
+ * @param {JSON} _files | File Tree JSON
+ * @param {String} fileId | A FileID or FolderID
+ * @returns Array<String> 
+ * @returns 
+ */
+export function _getChildrenNames(_files, parentId) {
     return _getChildren(_files, parentId).map(f => f.name)
 }
 
-function _getFileInfo (_files, absPath) {
+/**
+ * Returns the file node at the given absolute path or return null
+ * @param {JSON} _files | File Tree JSON
+ * @param {String} absPath | Absolute path starting with / 
+ * @returns FileNode
+ */
+export function _getFileInfo (_files, absPath) {
+    absPath = _normalizePath(absPath)
+
+    // if root itself
+    if(absPath === '/') return _files["/"]
+
     // get the file/folder names array
     let pathNames = absPath.split('/').filter(f => f.trim().length>0)
 
     // initial scope of search is the root level files
     let filesInLevel = _getChildren(_files, '/')
 
+    // the final resulting file
     let lastFile = null
 
+    // loop thru the path names one by one
     for(let fname of pathNames) {
         let isFound = false
         for(let file of filesInLevel) {
@@ -110,7 +135,7 @@ function _getFileInfo (_files, absPath) {
             if(file.name === fname) {
                 isFound = true 
                 lastFile = file
-                filesInLevel = file.children
+                filesInLevel = _getChildren(_files, file.id)
                 break
             }
         }
@@ -120,12 +145,21 @@ function _getFileInfo (_files, absPath) {
             return null 
         }
     }
-
-
-
     return lastFile
 } 
 
-function _normalizePath (path) {
-
+/**
+ * Normalize a given stringpath
+ * 1. Reduce multiple slashes ///// to single /
+ * @param {String} path 
+ * @returns 
+ */
+export function _normalizePath (path) {
+    // multiple //// should be reduced to single /
+    let s = path[0]
+    for(let i=1; i<path.length; ++i) {
+        if(path[i] === path[i-1] && path[i] === '/') continue;
+        else s += path[i]
+    }
+    return s
 }
