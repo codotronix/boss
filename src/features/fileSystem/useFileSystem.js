@@ -8,12 +8,20 @@ export const useFileSystem = () => {
     const createFile = (name, parentId, owner) => _create(_files, dispatch, name, parentId, FILE_TYPE.FILE, owner)
     const createDir = (name, parentId, owner) => _create(_files, dispatch, name, parentId, FILE_TYPE.FOLDER, owner)
     const createFolder = createDir
+    const getParentId = fileID => _getParentId(_files, fileID)
+    const getChildren = parentId => _getChildren(_files, parentId)
     const getChildrenNames = parentId => _getChildrenNames(_files, parentId)
+    /**
+     * Get path names till the given file id
+     * @param {*} fileId 
+     * @returns 
+     */
     const getPathTill = fileId => _getPathTill(_files, fileId)
     const getFileInfo = absPath => _getFileInfo(_files, absPath)
 
     return {
-        createFile, createDir, createFolder, getChildrenNames, getPathTill, getFileInfo
+        createFile, createDir, createFolder, getParentId, getChildren, getChildrenNames, 
+        getPathTill, getFileInfo
     }
 }
 
@@ -33,6 +41,10 @@ function _create (_files, dispatch, name, parentId, fileType, owner) {
     return ''
 }
 
+export function _getParentId(_files, fileId) {
+    if(fileId === '/') return "/"
+    else return _files[fileId].parentId
+}
 
 /**
  * Returns string path NAMES starting from root to the given fileId
