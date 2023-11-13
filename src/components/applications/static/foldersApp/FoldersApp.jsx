@@ -5,7 +5,13 @@ import styles from './FoldersApp.module.css'
 import { FILE_TYPE } from "../../../../const/FILE_CONST"
 // import clsx from 'clsx'
 
+// const COMMANDS = {
+//     NEW_FILE: 'NEW_FILE',
+//     NEW_FOLDER: 'NEW_FOLDER'
+// }
+
 const FoldersApp = props => {
+    // const { configMenu, menuCommand } = props
     const fs = useFileSystem()
     const [currentFolderId, setCurrentFolderId] = useState("/") // open in root
     const [currentFiles, setCurrentFiles] = useState(fs.getChildren(currentFolderId))
@@ -30,6 +36,39 @@ const FoldersApp = props => {
         setCurrentFiles(fs.getChildren(parentId))
     }
 
+    // Configure the menu
+    // useEffect(() => {
+    //     configMenu({
+    //         menu: {
+    //             File: { 
+    //                 2: { name: 'New File', command: COMMANDS.NEW_FILE },
+    //                 3: { name: 'New Folder', command: COMMANDS.NEW_FOLDER },
+    //             }
+    //         }
+    //     })
+    // }, 
+    // [configMenu])
+
+    // const createNewFile = useCallback(() => {
+    //     const name = prompt('Enter name for the new file...')
+    //     fs.createFile(name, currentFolderId)
+    // }, 
+    // [fs, currentFolderId])
+
+    // const createNewFolder = useCallback(() => {
+    //     const name = prompt('Enter name for the new folder...')
+    //     fs.createFolder(name, currentFolderId)
+    // }, 
+    // [fs, currentFolderId])
+
+    // Watch the menuCommand
+    // Whenever user clicks on the menu, it will get triggered
+    // useEffect(() => {
+    //     if(menuCommand === COMMANDS.NEW_FILE) createNewFile()
+    //     else if(menuCommand === COMMANDS.NEW_FOLDER) createNewFolder()
+    // }, 
+    // [menuCommand, createNewFile, createNewFolder])
+
     return (
         <div className={styles.root}>
 
@@ -39,7 +78,7 @@ const FoldersApp = props => {
                 </div>
                 <div className={styles.btns}>
                     <i className="fa-solid fa-rotate-right" onClick={refresh}></i>
-                    <i class="fa-solid fa-arrow-up" onClick={goToParentFolder}></i>
+                    <i className="fa-solid fa-arrow-up" onClick={goToParentFolder}></i>
                 </div>
                 
             </div>
@@ -51,7 +90,7 @@ const FoldersApp = props => {
                         <div key={f.id} className={styles.fbox} onDoubleClick={() => open(f.id, f.fileType)}>
                             <span className={styles.ffIco}>
                                 { f.fileType === FILE_TYPE.FILE && <i className="fa-solid fa-file-lines"></i> }
-                                { f.fileType === FILE_TYPE.FOLDER && <i class="fa-regular fa-folder-open"></i> }
+                                { f.fileType === FILE_TYPE.FOLDER && <i className="fa-regular fa-folder-open"></i> }
                             </span>
                             <div className={styles.fname}>
                                 {trimNDot(f.name, 100)}

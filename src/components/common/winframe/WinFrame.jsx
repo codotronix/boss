@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, Suspense } from 'react'
+import { useState, useEffect, useRef, Suspense, useCallback } from 'react'
 import clsx from 'clsx'
 import styles from './WinFrame.module.css'
 import { APPS_DETAILS } from '../../../const/APPS_DETAILS'
@@ -147,16 +147,49 @@ const WinFrame = props => {
 
     /**
      * 
-     * @param {Object} MenuConfig | { hideMenu: boolean, menu: { id1: subMenuArr1, id: subMenuArr2 }
+     * @param {Object} MenuConfig | { 
+     *  hideMenu: boolean, 
+     *  replace?: boolean, // default is false, i.e. merge
+     *  menu: { id1: subMenuArr1, id: subMenuArr2 }
      */
-    const configMenu = MenuConfig => {
+    const configMenu = useCallback(MenuConfig => {
         // hide the menu?
         if(MenuConfig.hideMenu) setMenu(null)
-        // else merge the menu
-        else {
-
+        
+        else if(MenuConfig.replace) {
+            setMenu(MenuConfig.menu)
         }
-    }
+
+        // else merge
+        else {
+            console.log('called...')
+            // if there is an incoming menu
+            // merge it
+            if(MenuConfig.menu) {
+                setMenu(menu => {
+                    let newMenu = {
+                        ...menu
+                    }
+    
+                    for(let m in MenuConfig.menu) {
+                        // if that menu already exists
+                        // merge
+                        if(m in newMenu) {
+                            newMenu[m] = {...newMenu[m], ...MenuConfig.menu[m]}
+                        }
+                        // else just copy it
+                        else {
+                            newMenu[m] = MenuConfig.menu[m]
+                        }
+                    }
+
+                    console.log(newMenu)
+                    return newMenu
+                })
+            }
+        }
+    }, 
+    [])
 
     return (
         <div 

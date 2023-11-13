@@ -11,7 +11,21 @@ const initialState = ls.get(KEY_FILE_TREE) || {
         name: "/",
         fileType: FILE_TYPE.FOLDER, 
         parentId: null,
+        children: ['documents', 'file0']
+    },
+    "documents": {
+        id: "documents",
+        name: "Documents",
+        fileType: FILE_TYPE.FOLDER, 
+        parentId: '/',
         children: []
+    },
+    "file0": {
+        id: "file0",
+        name: "Hello Boss",
+        fileType: FILE_TYPE.FILE, 
+        parentId: '/',
+        content: "Hello Boss.\nThis is a text file"
     }
 } 
 
@@ -51,6 +65,11 @@ export default filesSlice.reducer
  * @returns 
  */
 export function _create(state, name, parentId, fileType, owner) {
+    // File name invalid?
+    const VALID_NAME_REGEX = /^[a-zA-Z0-9-._ ]{1,}$/
+    if(!name.trim() || !VALID_NAME_REGEX.test(name)) {
+        return state
+    }
     // Invalid parentId
     // Or parentId is not a folder
     if(!(parentId in state) || state[parentId].fileType !== FILE_TYPE.FOLDER) {
