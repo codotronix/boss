@@ -3,10 +3,10 @@ import styles from "./TerminalApp.module.css"
 import { useState, useRef, useEffect } from "react"
 import { useProcessor } from "../../../../services/forTerminal/useProcessor"
 import { colorify } from "../../../../services/forTerminal/formatter"
-import { useFileSystem } from "../../../../features/fileSystem/useFileSystem"
+// import { useFileSystem } from "../../../../features/fileSystem/useFileSystem"
 
 const TerminalApp = props => {
-    const [prompt, setPrompt] = useState('$ > ')
+    const [prompt] = useState('$ > ')   // setPrompt is removed as it is ununsed
     const [historyTxt, setHistoryTxt] = useState(colorify('Welcome to the B.O.S.S. terminal', 'lightyellow'))
     const [currentLine, setCurrentLine] = useState(prompt)
     const [cmdHistory, setCmdHistory] = useState([])
@@ -14,7 +14,7 @@ const TerminalApp = props => {
     const currentLineRef = useRef()
     const ctxRef = useRef({})   // context for current terminal
     const process = useProcessor(ctxRef.current)
-    const fileSystem = useFileSystem()
+    // const fileSystem = useFileSystem()
 
     // const updatePrompt = useCallback(() => {
     //     console.log('inside updatePrompt')
