@@ -2,6 +2,10 @@
 *::after,
 *::before {
   box-sizing: border-box;
+  font-size: inherit;
+}
+:root {
+  --winframe-menu-hover-dark-bg: rgb(0 0 0 / 10%);
 }
 body {
   margin: 0;
@@ -11,7 +15,15 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background: url('./assets/img/wallpapers/plouzane-1758197.jpg') 0 0 #222;
+  overflow: hidden;
+  font-size: 16px;
 }
 
 .hidden { display: none !important; }
 .p-10 { padding: 10px !important; }
+.transparent-bg { background-color: transparent !important; }
+.flex-c {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

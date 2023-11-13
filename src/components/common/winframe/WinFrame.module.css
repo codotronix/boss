@@ -3,6 +3,7 @@
     --winframe-namebar-fg: #eee;
     --winframe-menubar-bg: rgb(38 37 37 / 90%);
     --winframe-menubar-fg: #eee;
+    --winframe-menu-hover-light-bg: rgb(255 255 255 / 25%)
 }
 .root {
     position: absolute;
@@ -13,7 +14,7 @@
     top: 0;
     left: 0;
     border-radius: 4px;
-    overflow: auto;
+    overflow: hidden;
     transition: all 100ms ease-in;
     max-width: 100vw;
     max-height: 100vh;
@@ -47,7 +48,7 @@
     left: 0;
     top: 0;
     padding: 5px 10px;
-    background: rgb(255 255 255 / 25%);
+    background: var(--winframe-menu-hover-light-bg);
     cursor: grabbing;
 }
 .namebar .btns i {
@@ -58,7 +59,7 @@
     align-items: center;
 }
 .namebar .btns i:hover {
-    background-color: rgb(255 255 255 / 9%);
+    background-color: var(--winframe-menu-hover-light-bg);
 }
 .menubar {
     background-color: var(--winframe-menubar-bg);
@@ -69,6 +70,47 @@
 
 .menu {
     margin-left: 10px;
+    position: relative;
+    cursor: pointer;
+    height: 100%;
+}
+.menu .menuName {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    padding: 0 5px;
+    user-select: none;
+}
+.menu .subMenu {
+    position: absolute;
+    background-color: var(--winframe-menubar-bg);
+    color: var(--winframe-menubar-fg);
+    padding: 2px 0 8px 0;
+    margin: 0;
+    left: 0;
+    top: 20px;
+    list-style: none;
+    /* display: none; */
+    transform: scale(0);
+    transform-origin: top left;
+    transition: all 300ms ease-in;
+}
+.menu.visible .subMenu {
+    /* display: block; */
+    transform: scale(1);
+}
+.menu .subMenu li {
+    display: block;
+    padding: 7px 15px;
+    display: block;
+    padding: 7px 15px;
+    white-space: nowrap;
+    cursor: pointer;
+    margin-top: 3px;
+}
+.menu .subMenu li:hover {
+    background: var(--winframe-menu-hover-light-bg);
 }
 
 .body {
@@ -86,4 +128,14 @@
     background: rgb(0 0 0 / 70%);
     color: #fff;
     font-size: 22px;
+}
+
+.repositionHandle {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    /* transform: rotate(-45deg); */
+    font-size: 18px;
+    color: rgb(128 128 128 / 56%);
+    cursor: se-resize;
 }

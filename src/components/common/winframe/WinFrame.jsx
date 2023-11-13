@@ -1,22 +1,14 @@
 import { useState, useEffect, useRef, Suspense } from 'react'
-import _ from 'lodash'
 import clsx from 'clsx'
 import styles from './WinFrame.module.css'
 import { APPS_DETAILS } from '../../../const/APPS_DETAILS'
 import useRuntime from '../../../features/procs/useRuntime'
+import useDrag from './useDrag'
 import { WINDOW_SIZES } from '../../../const/WINDOW'
-
-const menus = {
-    File: [],
-    Menu2: [],
-    Menu3: [],
-    Menu4: [],
-    Menu5: [],
-}
+import Menubar from './Menubar'
+import { DEFAULT_MENU, MENU_COMMANDS } from './MENU_CONST'
 
 const NON_BODY_HEIGHTS = 50
-// let isDragging = false  // window is being dragged
-let dragPrevPos = null   // { top: val, left: val }
 
 const getWinStyles = (winSize) => {
     if(winSize === WINDOW_SIZES.MAXIMIZED) {
@@ -54,7 +46,7 @@ const LoadingScreen = ({ appName }) => {
 
 const WinFrame = props => {
     // const { render } = props
-    const { appProps, AppComponent, ...restProps } = props
+    const { appProps, AppComponent } = props
     const { runtimeInfo } = appProps
     const appName = APPS_DETAILS[runtimeInfo.appId].name
     const runtime = useRuntime()
@@ -62,6 +54,19 @@ const WinFrame = props => {
     const initStyleRef = useRef(getWinStyles(WINDOW_SIZES.DEFAULT))
     // console.log(initStyleRef)
     const [winStyles, setWinStyles] = useState(initStyleRef.current)
+    const thisWinRef = useRef()
+    const [menu, setMenu] = useState(DEFAULT_MENU)
+    const [menuCommand, setMenuCommand] = useState('')
+
+    // use the useDrag custom hook for Dragging and repositioning
+    const { posDiff, onDragStart: _onDragStart, onDrag, onDragEnd } = useDrag(thisWinRef.current)
+
+    // use the useDrag custom hook for Resizing WinFrame
+    // alias all the names to avoid conflict with the normal drag to reposition
+    const { posDiff: sizeDiff, 
+            onDragStart: onResizeStart, 
+            onDrag: onResize, 
+            onDragEnd: onResizeEnd } = useDrag()
 
     // Update styles based on Window Maximize / Minimize / Default
     useEffect(() => {
@@ -84,35 +89,49 @@ const WinFrame = props => {
     }, 
     [runtimeInfo.winSize])
 
-    const raiseWindowOnTop = () => runtime.raiseWindow(runtimeInfo.runtimeId)
-
-    const onDragStart = (left, top) => {
-        // isDragging = true
-        dragPrevPos = { left, top }
-        raiseWindowOnTop()
-    }
-
-    const onDrag = _.throttle((left, top) => {
-        if(left===0 && top===0) return
-
-        let leftDiff = left - dragPrevPos.left
-        let topDiff = top - dragPrevPos.top
-
-        // adjust position according to the diff
+    // Whenever there is a positionDiff due to dargging
+    useEffect(() => {
+        // update the new position
         setWinStyles(s => ({
             ...s, 
-            left: s.left + leftDiff,
-            top: s.top + topDiff
+            left: s.left + posDiff.leftDiff,
+            top: s.top + posDiff.topDiff
         }))
+    }, 
+    [posDiff])
 
-        // set new previous drag position
-        dragPrevPos = { left, top }
-    }, 0)
 
-    const onDragEnd = (left, top) => {
-        // Update this styles/position as default styles/position
-        initStyleRef.current = winStyles
-        dragPrevPos = null
+    // Whenever WinFrame is resized using the resize handle at bottom right
+    useEffect(() => {
+        // update the new position
+        setWinStyles(s => ({
+            ...s, 
+            width: s.width + sizeDiff.leftDiff,
+            height: s.height + sizeDiff.topDiff
+        }))
+    }, 
+    [sizeDiff])
+
+    const handleMenuCommand = cmd => {
+        switch(cmd) {
+            case MENU_COMMANDS.NEW_WINDOW:
+                window.setTimeout(() => {
+                    runtime.run(runtimeInfo.appId)
+                }, 0)
+                break
+            case MENU_COMMANDS.CLOSE_WINDOW:
+                runtime.terminate(runtimeInfo.runtimeId)
+                break
+            default:
+                setMenuCommand(cmd)
+        }
+    }
+
+    const raiseWindowOnTop = () => runtime.raiseWindow(runtimeInfo.runtimeId)
+
+    const onDragStart = (left, top, e) => {
+        _onDragStart(left, top, e)
+        raiseWindowOnTop()
     }
 
     const maximize = () => runtime.mize(runtimeInfo.runtimeId, WINDOW_SIZES.MAXIMIZED)
@@ -120,9 +139,22 @@ const WinFrame = props => {
     const unmaximize = () => runtime.mize(runtimeInfo.runtimeId, WINDOW_SIZES.DEFAULT)
     
     const close = () => {
-        const r = window.confirm("Do you really want to close ?")
-        if(r) {
+        // const r = window.confirm("Do you really want to close ?")
+        // if(r) {
             runtime.terminate(runtimeInfo.runtimeId)
+        // }
+    }
+
+    /**
+     * 
+     * @param {Object} MenuConfig | { hideMenu: boolean, menu: { id1: subMenuArr1, id: subMenuArr2 }
+     */
+    const configMenu = MenuConfig => {
+        // hide the menu?
+        if(MenuConfig.hideMenu) setMenu(null)
+        // else merge the menu
+        else {
+
         }
     }
 
@@ -135,21 +167,16 @@ const WinFrame = props => {
                 )}
             style={{ ...winStyles, zIndex: runtimeInfo.zIndex }}
             onClick={raiseWindowOnTop}
+            ref={thisWinRef}
         >
 
-            <div className={clsx(styles.bar, styles.namebar)}>
-                {
-                    // Dragging available only in WINDOW_SIZES.DEFAULT
-                    runtimeInfo.winSize===WINDOW_SIZES.DEFAULT &&
-                    <i 
-                        className={clsx("fa-regular fa-hand", styles.dragIco)}
-                        draggable="true"
-                        onDrag={e => onDrag(e.pageX, e.pageY)}
-                        onDragStart={e => onDragStart(e.pageX, e.pageY)}
-                        onDragEnd={e => onDragEnd(e.pageX, e.pageY)}
-                    ></i>
-                }
-
+            <div 
+                className={clsx(styles.bar, styles.namebar)}
+                draggable="true"
+                onDrag={e => onDrag(e.pageX, e.pageY)}
+                onDragStart={e => onDragStart(e.pageX, e.pageY, e)}
+                onDragEnd={e => onDragEnd(e.pageX, e.pageY)}
+            >
                 <div>{ appName || 'Application' }</div>
                 <div className={styles.btns}>
                     { 
@@ -165,14 +192,8 @@ const WinFrame = props => {
                     <i className="fa-solid fa-xmark" onClick={close}></i>
                 </div>
             </div>
-            <div className={clsx(styles.bar, styles.menubar)}>
-                {
-                    Object.keys(menus).map(m => 
-                    <div key={m} className={styles.menu}>
-                        {m}
-                    </div>)
-                }
-            </div>
+            
+            <Menubar menu={menu} handleMenuCommand={handleMenuCommand} />
 
             {/* THE BODY */}
             <div style={{ height: (winStyles.height - NON_BODY_HEIGHTS) }} className={styles.body}>
@@ -181,9 +202,21 @@ const WinFrame = props => {
                     // via Webpack Module Federation - Micro-frontend
                  */}
                 <Suspense fallback={<LoadingScreen appName={appName} />}>
-                    <AppComponent {...appProps} />
+                    <AppComponent 
+                        {...appProps} 
+                        configMenu={configMenu}
+                        menuCommand={menuCommand}
+                    />
                 </Suspense>
             </div>
+            
+            <i 
+                className={clsx("fa-solid fa-arrow-up-right-dots", styles.repositionHandle)}
+                draggable="true"
+                onDrag={e => onResize(e.pageX, e.pageY)}
+                onDragStart={e => onResizeStart(e.pageX, e.pageY)}
+                onDragEnd={e => onResizeEnd(e.pageX, e.pageY)}
+            ></i>
         </div>
     )
 }
