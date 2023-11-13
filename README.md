@@ -1,4 +1,5 @@
 [![CircleCI](https://dl.circleci.com/status-badge/img/gh/codotronix/boss/tree/main.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/codotronix/boss/tree/main)
+[![codecov](https://codecov.io/gh/codotronix/boss/graph/badge.svg?token=9mqSytQHhR)](https://codecov.io/gh/codotronix/boss)
 
 # BOSS
 BOSS - <u>B</u>asic OS <u>S</u>imulation
