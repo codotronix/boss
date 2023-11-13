@@ -10,9 +10,10 @@ This is basically a hobby project using the following web technologies
 
 
 ## Index
-- [How to docs / Developer guides](./docs/How-tos.md)
-- [UPcoming plans of Development](./docs/Upcoming.md)
+- [How to docs / Developer guides](./docs/developer-guides/How-tos.md)
+- [Upcoming plans of Development](./docs/Upcoming.md)
 - [External Apps / MFEs](#external-apps--micro-frontends)
+- [User Guides / B.O.S.S. Manuals](./docs/user-guides/index.md)
 
 
 ## External Apps / Micro-Frontends
