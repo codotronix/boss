@@ -21,23 +21,23 @@ const { configMenu } = props
 - When the App Component loads, in the useEffect add new menu items, here is an example
 ```
 // Configure the menu
-    useEffect(() => {
-        configMenu({
-            replace?: boolean // default is merge, i.e. replace: false
-            menu: {
-                File: { 
-                    2: { name: 'New File', command: COMMANDS.NEW_FILE },
-                    3: { name: 'New Folder', command: COMMANDS.NEW_FOLDER },
-                },
-                View: {
-                    1: { name: 'List View', command: 'List View' },
-                    2: { name: 'Grid View', command: 'Grid View' },
-                    3: { name: 'Icon View', command: 'Icon View' },
-                }
+useEffect(() => {
+    configMenu({
+        replace?: boolean // default is merge, i.e. replace: false
+        menu: {
+            File: { 
+                2: { name: 'New File', command: COMMANDS.NEW_FILE },
+                3: { name: 'New Folder', command: COMMANDS.NEW_FOLDER },
+            },
+            View: {
+                1: { name: 'List View', command: 'List View' },
+                2: { name: 'Grid View', command: 'Grid View' },
+                3: { name: 'Icon View', command: 'Icon View' },
             }
-        })
-    }, 
-    [configMenu])
+        }
+    })
+}, 
+[configMenu])
 ```
 
 On each submenu, name is the string to be shown to the user and command is an unique string that will be passed as `menuCommand` prop to the App whenever user clicks on that menu
