@@ -4,6 +4,7 @@ import { useFileSystem } from "../../../../features/fileSystem/useFileSystem"
 import styles from './FoldersApp.module.css'
 import { FILE_TYPE } from "../../../../const/FILE_CONST"
 import { useCMDHandler } from "../../../common/winframe/useCMDHandler"
+import File from "./file/File"
 // import clsx from 'clsx'
 
 const COMMANDS = {
@@ -14,7 +15,6 @@ const COMMANDS = {
 const FoldersApp = props => {
     const { configMenu, menuCommand } = props
     const fs = useFileSystem()
-    // const createFile = useMemo(() => fs.createFile, [fs.createFile])
     const [currentFolderId, setCurrentFolderId] = useState("/") // open in root
     const [currentFiles, setCurrentFiles] = useState(fs.getChildren(currentFolderId))
     
@@ -40,8 +40,6 @@ const FoldersApp = props => {
 
 
     // const cmdRef = useRef('')
-    
-    const trimNDot = (s, n) => s.length > n ? (s.substring(0,n) + '...') : s
 
     const open = (fId, fileType) => {
         // If it's a folder, get inside
@@ -74,23 +72,6 @@ const FoldersApp = props => {
     }, 
     [configMenu])
 
-    // // Watch the menuCommand
-    // // Whenever user clicks on the menu, it will get triggered
-    // useEffect(() => {
-    //     // already handled value?
-    //     if(menuCommand !== cmdRef.current) {
-    //         if(menuCommand === COMMANDS.NEW_FILE) {
-    //             console.log('Create new file')
-    //             const cnt = Math.floor(Math.random()*999) 
-    //             fs.createFile(`File_${cnt}`, currentFolderId)
-    //         }
-
-    //         cmdRef.current = menuCommand
-    //     }
-        
-    // }, 
-    // [menuCommand, currentFolderId, fs])
-
     return (
         <div className={styles.root}>
 
@@ -109,15 +90,8 @@ const FoldersApp = props => {
                 <div className={styles.inner}>
                     {
                         currentFiles && currentFiles.map(f => 
-                        <div key={f.id} className={styles.fbox} onDoubleClick={() => open(f.id, f.fileType)}>
-                            <span className={styles.ffIco}>
-                                { f.fileType === FILE_TYPE.FILE && <i className="fa-solid fa-file-lines"></i> }
-                                { f.fileType === FILE_TYPE.FOLDER && <i className="fa-regular fa-folder-open"></i> }
-                            </span>
-                            <div className={styles.fname}>
-                                {trimNDot(f.name, 100)}
-                            </div>
-                        </div>)
+                            <File key={f.id} file={f} open={open} />
+                        )
                     }
                 </div>
             </div>

@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { File } from "./File";
 import { FILE_TYPE } from "../../const/FILE_CONST";
 import ls from "../../services/localStorage";
+import { isFileNameValid } from "../../services/utils";
 const KEY_FILE_TREE = 'BOSS/FILE-TREE'
 
 // Initially there will be only THE-ROOT (/)
@@ -46,10 +47,17 @@ export const filesSlice = createSlice({
             ls.set(KEY_FILE_TREE, newState)
             return newState
         },
+        // rename a file/fodler
+        rename: (state, action) => {
+            const { fileId, newName } = action.payload 
+            const newState = _rename(state, fileId, newName)
+            ls.set(KEY_FILE_TREE, newState)
+            return newState
+        }
     }
 })
 
-export const { create } = filesSlice.actions
+export const { create, rename } = filesSlice.actions
 export default filesSlice.reducer
 
 
@@ -66,8 +74,7 @@ export default filesSlice.reducer
  */
 export function _create(state, name, parentId, fileType, owner) {
     // File name invalid?
-    const VALID_NAME_REGEX = /^[a-zA-Z0-9-._ ]{1,}$/
-    if(!name.trim() || !VALID_NAME_REGEX.test(name)) {
+    if(!name.trim() || !isFileNameValid(name)) {
         return state
     }
     // Invalid parentId
@@ -99,5 +106,35 @@ export function _create(state, name, parentId, fileType, owner) {
     }
 
     // return this new state
+    return newState
+}
+
+export function _rename(state, fileId, newName) {
+    // File name invalid?
+    if(!newName.trim() || !isFileNameValid(newName)) {
+        return state
+    }
+    // Invalid fileId
+    if(!(fileId in state)) {
+        return state
+    }
+
+    // Check for duplicate file names
+    // Amongst the Siblings
+    const parentId = state[fileId].parentId
+    if(state[parentId].children.map(fid => state[fid].name).includes(newName)) {
+        return state
+    }
+
+    // Create a new State
+    // with the name changed for the given fileId
+    const newState = {
+        ...state,
+        [fileId]: {
+            ...state[fileId],
+            name: newName
+        }
+    }
+
     return newState
 }

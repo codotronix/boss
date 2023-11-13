@@ -31,23 +31,3 @@
     gap: 15px;
     padding: 20px 30px;
 }
-.fbox {
-    height: 100px;
-    /* border: 1px solid #eee; */
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    border-radius: 9px;
-}
-.fbox:hover {
-    box-shadow: 0px 0px 7px 0px #e3e1e1;
-}
-.fbox .ffIco {
-    font-size: 40px;
-    color: yellowgreen;
-    margin-bottom: 7px;
-}
-.fbox .fname {
-    padding: 2px 5px;
-}
