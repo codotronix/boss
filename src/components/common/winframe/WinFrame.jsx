@@ -125,6 +125,11 @@ const WinFrame = props => {
             default:
                 setMenuCommand(cmd)
         }
+
+        // reset command
+        setTimeout(() => {
+            setMenuCommand('')
+        }, 0)
     }
 
     const raiseWindowOnTop = () => runtime.raiseWindow(runtimeInfo.runtimeId)

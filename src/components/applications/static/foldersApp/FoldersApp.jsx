@@ -1,20 +1,45 @@
 import withWinFrame from "../../withWinFrame"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useFileSystem } from "../../../../features/fileSystem/useFileSystem"
 import styles from './FoldersApp.module.css'
 import { FILE_TYPE } from "../../../../const/FILE_CONST"
+import { useCMDHandler } from "../../../common/winframe/useCMDHandler"
 // import clsx from 'clsx'
 
-// const COMMANDS = {
-//     NEW_FILE: 'NEW_FILE',
-//     NEW_FOLDER: 'NEW_FOLDER'
-// }
+const COMMANDS = {
+    NEW_FILE: 'NEW_FILE',
+    NEW_FOLDER: 'NEW_FOLDER'
+}
 
 const FoldersApp = props => {
-    // const { configMenu, menuCommand } = props
+    const { configMenu, menuCommand } = props
     const fs = useFileSystem()
+    // const createFile = useMemo(() => fs.createFile, [fs.createFile])
     const [currentFolderId, setCurrentFolderId] = useState("/") // open in root
     const [currentFiles, setCurrentFiles] = useState(fs.getChildren(currentFolderId))
+    
+    // To Handle The Menu Commands
+    // The useCMDHandler hook takes 2 args
+    // 1. cmd to watch
+    // 2. handler function
+    useCMDHandler(menuCommand, cmd => {
+
+        if(cmd === COMMANDS.NEW_FILE) {
+            console.log('Create new file')
+            const cnt = Math.floor(Math.random()*999) 
+            fs.createFile(`File_${cnt}`, currentFolderId)
+        }
+        else if(cmd === COMMANDS.NEW_FOLDER) {
+            console.log('Create new folder')
+            const cnt = Math.floor(Math.random()*999) 
+            fs.createDir(`Folder_${cnt}`, currentFolderId)
+        }
+
+        refresh()
+    })
+
+
+    // const cmdRef = useRef('')
     
     const trimNDot = (s, n) => s.length > n ? (s.substring(0,n) + '...') : s
 
@@ -37,37 +62,34 @@ const FoldersApp = props => {
     }
 
     // Configure the menu
+    useEffect(() => {
+        configMenu({
+            menu: {
+                File: { 
+                    2: { name: 'New File', command: COMMANDS.NEW_FILE },
+                    3: { name: 'New Folder', command: COMMANDS.NEW_FOLDER },
+                }
+            }
+        })
+    }, 
+    [configMenu])
+
+    // // Watch the menuCommand
+    // // Whenever user clicks on the menu, it will get triggered
     // useEffect(() => {
-    //     configMenu({
-    //         menu: {
-    //             File: { 
-    //                 2: { name: 'New File', command: COMMANDS.NEW_FILE },
-    //                 3: { name: 'New Folder', command: COMMANDS.NEW_FOLDER },
-    //             }
+    //     // already handled value?
+    //     if(menuCommand !== cmdRef.current) {
+    //         if(menuCommand === COMMANDS.NEW_FILE) {
+    //             console.log('Create new file')
+    //             const cnt = Math.floor(Math.random()*999) 
+    //             fs.createFile(`File_${cnt}`, currentFolderId)
     //         }
-    //     })
-    // }, 
-    // [configMenu])
 
-    // const createNewFile = useCallback(() => {
-    //     const name = prompt('Enter name for the new file...')
-    //     fs.createFile(name, currentFolderId)
+    //         cmdRef.current = menuCommand
+    //     }
+        
     // }, 
-    // [fs, currentFolderId])
-
-    // const createNewFolder = useCallback(() => {
-    //     const name = prompt('Enter name for the new folder...')
-    //     fs.createFolder(name, currentFolderId)
-    // }, 
-    // [fs, currentFolderId])
-
-    // Watch the menuCommand
-    // Whenever user clicks on the menu, it will get triggered
-    // useEffect(() => {
-    //     if(menuCommand === COMMANDS.NEW_FILE) createNewFile()
-    //     else if(menuCommand === COMMANDS.NEW_FOLDER) createNewFolder()
-    // }, 
-    // [menuCommand, createNewFile, createNewFolder])
+    // [menuCommand, currentFolderId, fs])
 
     return (
         <div className={styles.root}>

@@ -1,11 +1,13 @@
 import { useSelector, useDispatch } from "react-redux"
 import { create } from "./filesSlice"
 import { FILE_TYPE } from "../../const/FILE_CONST"
+import { useCallback } from "react"
+
 export const useFileSystem = () => {
     const _files = useSelector(state => state.files)
     const dispatch = useDispatch()
     
-    const createFile = (name, parentId, owner) => _create(_files, dispatch, name, parentId, FILE_TYPE.FILE, owner)
+    const createFile = useCallback((name, parentId, owner) => _create(_files, dispatch, name, parentId, FILE_TYPE.FILE, owner), [dispatch, _files])
     const createDir = (name, parentId, owner) => _create(_files, dispatch, name, parentId, FILE_TYPE.FOLDER, owner)
     const createFolder = createDir
     const getParentId = fileID => _getParentId(_files, fileID)
