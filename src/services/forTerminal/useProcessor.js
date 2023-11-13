@@ -5,13 +5,13 @@
  * it will return the result
  */
 import { useFsCommands } from "./commandScripts/useFsCommands"
-
+import { splitter } from "../utils"
 
 export function useProcessor(ctx) {
     const fsCommands = useFsCommands()
     
     return function process(line) {
-        let args = line.trim().split(/\s+/)
+        let args = splitter(line) // line.trim().split(/\s+/)
         let cmd = args[0]
         console.log(args)
 
