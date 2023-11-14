@@ -75,7 +75,7 @@ const TerminalApp = props => {
             }
             else {
                 // PROCESS THE COMMAND
-                console.log(ctxRef.current)
+                // console.log(ctxRef.current)
                 const result = process(currentCmd, ctxRef.current) // result = { msg, code, ctx }
 
                 const newHistoryTxt = historyTxt 

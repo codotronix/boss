@@ -167,7 +167,7 @@ const WinFrame = props => {
 
         // else merge
         else {
-            console.log('called...')
+            // console.log('called...')
             // if there is an incoming menu
             // merge it
             if(MenuConfig.menu) {
@@ -188,7 +188,7 @@ const WinFrame = props => {
                         }
                     }
 
-                    console.log(newMenu)
+                    // console.log(newMenu)
                     return newMenu
                 })
             }
@@ -221,15 +221,27 @@ const WinFrame = props => {
                 <div className={styles.btns}>
                     { 
                         runtimeInfo.winSize !== WINDOW_SIZES.MAXIMIZED &&
-                        <i className="fa-regular fa-square" onClick={maximize}></i>
+                        <button type='button' onClick={maximize} title="Maximize" className={styles.mizeBtn}>
+                            <i className="fa-regular fa-square"></i>
+                        </button>
+                        
                     }
                     {
                         (runtimeInfo.winSize === WINDOW_SIZES.MAXIMIZED || 
                             runtimeInfo.winSize === WINDOW_SIZES.MINIMIZED) && 
-                            <i className="fa-solid fa-down-left-and-up-right-to-center" onClick={unmaximize}></i>
+                            <button type='button' onClick={unmaximize} title="Un-Maximize" className={styles.mizeBtn}>
+                                <i className="fa-solid fa-down-left-and-up-right-to-center"></i>
+                            </button>
+                            
                     }
-                    <i className="fa-solid fa-window-minimize" onClick={minimize}></i>
-                    <i className="fa-solid fa-xmark" onClick={close}></i>
+                    <button type='button' onClick={minimize} title="Minimize" className={styles.mizeBtn}>
+                        <i className="fa-solid fa-window-minimize"></i>
+                    </button>
+                    
+                    <button type='button' onClick={close} title="Close" className={styles.mizeBtn}>
+                        <i className="fa-solid fa-xmark"></i>
+                    </button>
+                    
                 </div>
             </div>
             

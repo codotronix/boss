@@ -44,7 +44,12 @@
     background: var(--winframe-menu-hover-light-bg);
     cursor: grabbing;
 }
-.namebar .btns i {
+.namebar .btns .mizeBtn {
+    background: transparent;
+    color: #eee;
+    border: none;
+}
+.namebar .btns .mizeBtn i {
     height: 24px;
     width: 30px;
     display: inline-flex;

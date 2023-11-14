@@ -25,12 +25,12 @@ const FoldersApp = props => {
     useCMDHandler(menuCommand, cmd => {
 
         if(cmd === COMMANDS.NEW_FILE) {
-            console.log('Create new file')
+            // console.log('Create new file')
             const cnt = Math.floor(Math.random()*999) 
             fs.createFile(`File_${cnt}`, currentFolderId)
         }
         else if(cmd === COMMANDS.NEW_FOLDER) {
-            console.log('Create new folder')
+            // console.log('Create new folder')
             const cnt = Math.floor(Math.random()*999) 
             fs.createDir(`Folder_${cnt}`, currentFolderId)
         }
