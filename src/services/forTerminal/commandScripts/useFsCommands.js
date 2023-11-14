@@ -58,7 +58,7 @@ export function useFsCommands () {
 
         let fileInfo = fs.getFileInfo(path)
 
-        console.log(fileInfo)
+        // console.log(fileInfo)
         if(fileInfo && fileInfo.fileType === FILE_TYPE.FOLDER) {
             ctx.currentFolderId = fileInfo.id 
         }
@@ -68,7 +68,7 @@ export function useFsCommands () {
             ]
         }
 
-        console.log(ctx)
+        // console.log(ctx)
         return [
             '', 0
         ]

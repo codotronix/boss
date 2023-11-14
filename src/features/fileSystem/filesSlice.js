@@ -5,8 +5,7 @@ import ls from "../../services/localStorage";
 import { isFileNameValid } from "../../services/utils";
 const KEY_FILE_TREE = 'BOSS/FILE-TREE'
 
-// Initially there will be only THE-ROOT (/)
-const initialState = ls.get(KEY_FILE_TREE) || {
+export const initFileTree = {
     "/": {
         id: "/",
         name: "/",
@@ -29,6 +28,8 @@ const initialState = ls.get(KEY_FILE_TREE) || {
         content: "Hello Boss.\nThis is a text file"
     }
 } 
+// Initially there will be only THE-ROOT (/)
+const initialState = ls.get(KEY_FILE_TREE) || initFileTree
 
 ls.set(KEY_FILE_TREE, initialState)
 

@@ -6,7 +6,7 @@ import { store } from '../store/store'
 // import {TranslationProvider} from 'my-i18n-lib'
 // import defaultStrings from 'i18n/en-x-default'
 
-const AllTheProviders = ({children}) => {
+export const AllTheProviders = ({children}) => {
   return (
     // <ThemeProvider theme="light">
     //   <TranslationProvider messages={defaultStrings}>
