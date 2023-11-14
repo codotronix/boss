@@ -5,14 +5,6 @@ const App = () => {
 
   return (
     <div className="App">
-
-      {/* <Suspense fallback="Loading ...">
-        <BCalc />
-      </Suspense> */}
-
-      {/* <WelcomeApp /> */}
-
-      {/* <WinFrame /> */}
       <AppsContainer />
       <Dock />
     </div>
