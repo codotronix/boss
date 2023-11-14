@@ -33,9 +33,14 @@ const MinimizedAppsViewer = props => {
                     minimizedApps.length > 0 && 
                     <span className={styles.minimizeCount}>{minimizedApps.length}</span>
                 }
-                <i className={clsx("fa-solid fa-bars", dockIconStyles.ico)} 
+                <button 
+                    type="button" 
+                    className={dockIconStyles.root}
+                    title="toggle minimized apps"
                     onClick={() => setMinimizeListVisible(!minimizeListVisible)}
-                ></i>
+                >
+                    <i className={clsx("fa-solid fa-bars", dockIconStyles.ico)} ></i>
+                </button>
             </div>
         </div>
     )

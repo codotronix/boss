@@ -25,6 +25,7 @@
     "build": "craco build",
     "test": "craco test",
     "deploy": "craco build && gh-pages -d build",
+    "coverage": "react-scripts test --coverage --watchAll=false",
     "test-codecov": "react-scripts test --coverage --watchAll=false && codecov"
   },
   "eslintConfig": {
