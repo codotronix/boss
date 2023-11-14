@@ -199,6 +199,7 @@ const WinFrame = props => {
     return (
         <div 
             className={clsx(
+                'WinFrame',
                 styles.root, 
                 (runtimeInfo.winSize===WINDOW_SIZES.MINIMIZED) && styles.minimized, 
                 (runtimeInfo.winSize===WINDOW_SIZES.DEFAULT) && styles.defaultSized
@@ -206,6 +207,7 @@ const WinFrame = props => {
             style={{ ...winStyles, zIndex: runtimeInfo.zIndex }}
             onClick={raiseWindowOnTop}
             ref={thisWinRef}
+            title={ appName || 'Application Window' }
         >
 
             <div 
