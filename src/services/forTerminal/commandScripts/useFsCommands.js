@@ -13,7 +13,7 @@ export function useFsCommands () {
     // list all files in current working directory
     function ls (ctx, args) {
         const files = fs.getChildrenNames(ctx.currentFolderId)
-        return [files, 0]
+        return [files.join(', '), 0]
     }
 
     // Return the present working directory

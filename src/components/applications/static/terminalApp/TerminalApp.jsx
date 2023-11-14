@@ -13,7 +13,7 @@ const TerminalApp = props => {
     const [cmdHistoryIndex, setCmdHistoryIndex] = useState(0)
     const currentLineRef = useRef()
     const ctxRef = useRef({})   // context for current terminal
-    const process = useProcessor(ctxRef.current)
+    const { process } = useProcessor(ctxRef.current)
     // const fileSystem = useFileSystem()
 
     // const updatePrompt = useCallback(() => {

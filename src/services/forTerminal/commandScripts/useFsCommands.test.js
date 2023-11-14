@@ -17,6 +17,7 @@ describe('Test useFsCommands hook', () => {
         const children = Object.values(initFileTree)
                                 .filter(f => f.parentId===ctx.currentFolderId)
                                 .map(f => f.name)
+                                .join(', ')
         expect(ls(ctx)).toEqual([children, 0])
     })
 
