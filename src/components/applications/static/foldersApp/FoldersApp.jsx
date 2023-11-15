@@ -3,7 +3,7 @@ import { useState, useEffect } from "react"
 import { useFileSystem } from "../../../../features/fileSystem/useFileSystem"
 import styles from './FoldersApp.module.css'
 import { FILE_TYPE } from "../../../../const/FILE_CONST"
-import { useCMDHandler } from "../../../common/winframe/useCMDHandler"
+// import { useCMDHandler } from "../../../common/winframe/useCMDHandler"
 import File from "./file/File"
 // import clsx from 'clsx'
 
@@ -13,7 +13,7 @@ const COMMANDS = {
 }
 
 const FoldersApp = props => {
-    const { configMenu, menuCommand } = props
+    const { configMenu, menuCommand, useCMDHandler=()=>{} } = props
     const fs = useFileSystem()
     const [currentFolderId, setCurrentFolderId] = useState("/") // open in root
     const [currentFiles, setCurrentFiles] = useState(fs.getChildren(currentFolderId))
@@ -51,7 +51,18 @@ const FoldersApp = props => {
         // TODO: Open it with appropriate app
     }
 
-    const refresh = () => setCurrentFiles(fs.getChildren(currentFolderId))
+    const refresh = () => {
+        // Set to blank
+        // and then set to actual
+        // Otherwise, renaming might not reflect always
+        // when rename is not done due to a name conflict 
+        // and thus the object remains same in the store.
+        // This is a way to force update
+        setCurrentFiles([])
+        setTimeout(() => {
+            setCurrentFiles(fs.getChildren(currentFolderId))
+        }, 0)
+    }
     
     const goToParentFolder = () => {
         const parentId = fs.getParentId(currentFolderId)
@@ -90,7 +101,7 @@ const FoldersApp = props => {
                 <div className={styles.inner}>
                     {
                         currentFiles && currentFiles.map(f => 
-                            <File key={f.id} file={f} open={open} />
+                            <File key={f.id} file={f} open={open} refresh={refresh} />
                         )
                     }
                 </div>

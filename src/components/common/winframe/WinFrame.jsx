@@ -7,6 +7,7 @@ import useDrag from './useDrag'
 import { WINDOW_SIZES } from '../../../const/WINDOW'
 import Menubar from './Menubar'
 import { DEFAULT_MENU, MENU_COMMANDS } from './MENU_CONST'
+import { useCMDHandler } from './useCMDHandler'
 
 const NON_BODY_HEIGHTS = 50
 
@@ -258,6 +259,7 @@ const WinFrame = props => {
                         {...appProps} 
                         configMenu={configMenu}
                         menuCommand={menuCommand}
+                        useCMDHandler={useCMDHandler}
                     />
                 </Suspense>
             </div>

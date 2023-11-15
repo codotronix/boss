@@ -55,12 +55,23 @@ On each submenu, name is the string to be shown to the user and command is an un
 const { menuCommand } = props
 ```
 
-- Import `useCMDHandler` hook from `/common/winframe/useCMDHandler`
+- Destructure `useCMDHandler` hook from props. It will be supplied by the parent WinFrame that loads this app.
+[NOTE: Don't forget to safeguard your standalone app by providing a default value, because if it is running standalone obviously these props will not be available.]
+```
+/* 
+Notice the default value, an anonymous blank function, () => {} 
+*/
+
+const { useCMDHandler=()=>{} } = props
+```
 
 - This `useCMDHandler` hook takes in 2 arguments, the `menuCommand` to watch and a handler function to callback whenever a new menuCommand is recieved
 
 ```
-useCMDHandler (menuCommand, cmd => {
+useCMDHandler (menuCommand, menuCommandHandlerFn)
+
+// The function to handle the commands
+function menuCommandHandlerFn (cmd) {
     if(cmd === COMMANDS.NEW_FILE) {
         console.log('Create new file')
         // Code to create New File
@@ -73,7 +84,7 @@ useCMDHandler (menuCommand, cmd => {
 
     // More if-else or switch case ladders
     // for each submenu command to handle
-})
+}
 ```
 
 

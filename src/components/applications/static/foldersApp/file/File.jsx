@@ -6,7 +6,7 @@ import { useFileSystem } from '../../../../../features/fileSystem/useFileSystem'
 // import { trimNDot } from '../../../../../services/utils'
 
 const File = props => {
-    const { file, open } = props
+    const { file, open, refresh } = props
     const [name, setName] = useState('')
     const fs = useFileSystem()
 
@@ -25,6 +25,7 @@ const File = props => {
         // if the file name has changed
         if(name !== file.name) {
             fs.rename(file.id, name)
+            refresh()
         }
     }
 
