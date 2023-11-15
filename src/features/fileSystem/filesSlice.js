@@ -2,18 +2,34 @@ import { createSlice } from "@reduxjs/toolkit";
 import { File } from "./File";
 import { FILE_TYPE } from "../../const/FILE_CONST";
 import ls from "../../services/localStorage";
+import { isFileNameValid } from "../../services/utils";
 const KEY_FILE_TREE = 'BOSS/FILE-TREE'
 
-// Initially there will be only THE-ROOT (/)
-const initialState = ls.get(KEY_FILE_TREE) || {
+export const initFileTree = {
     "/": {
         id: "/",
         name: "/",
         fileType: FILE_TYPE.FOLDER, 
         parentId: null,
+        children: ['documents', 'file0']
+    },
+    "documents": {
+        id: "documents",
+        name: "Documents",
+        fileType: FILE_TYPE.FOLDER, 
+        parentId: '/',
         children: []
+    },
+    "file0": {
+        id: "file0",
+        name: "Hello Boss",
+        fileType: FILE_TYPE.FILE, 
+        parentId: '/',
+        content: "Hello Boss.\nThis is a text file"
     }
 } 
+// Initially there will be only THE-ROOT (/)
+const initialState = ls.get(KEY_FILE_TREE) || initFileTree
 
 ls.set(KEY_FILE_TREE, initialState)
 
@@ -32,10 +48,17 @@ export const filesSlice = createSlice({
             ls.set(KEY_FILE_TREE, newState)
             return newState
         },
+        // rename a file/fodler
+        rename: (state, action) => {
+            const { fileId, newName } = action.payload 
+            const newState = _rename(state, fileId, newName)
+            ls.set(KEY_FILE_TREE, newState)
+            return newState
+        }
     }
 })
 
-export const { create } = filesSlice.actions
+export const { create, rename } = filesSlice.actions
 export default filesSlice.reducer
 
 
@@ -51,6 +74,10 @@ export default filesSlice.reducer
  * @returns 
  */
 export function _create(state, name, parentId, fileType, owner) {
+    // File name invalid?
+    if(!name.trim() || !isFileNameValid(name)) {
+        return state
+    }
     // Invalid parentId
     // Or parentId is not a folder
     if(!(parentId in state) || state[parentId].fileType !== FILE_TYPE.FOLDER) {
@@ -80,5 +107,35 @@ export function _create(state, name, parentId, fileType, owner) {
     }
 
     // return this new state
+    return newState
+}
+
+export function _rename(state, fileId, newName) {
+    // File name invalid?
+    if(!newName.trim() || !isFileNameValid(newName)) {
+        return state
+    }
+    // Invalid fileId
+    if(!(fileId in state)) {
+        return state
+    }
+
+    // Check for duplicate file names
+    // Amongst the Siblings
+    const parentId = state[fileId].parentId
+    if(state[parentId].children.map(fid => state[fid].name).includes(newName)) {
+        return state
+    }
+
+    // Create a new State
+    // with the name changed for the given fileId
+    const newState = {
+        ...state,
+        [fileId]: {
+            ...state[fileId],
+            name: newName
+        }
+    }
+
     return newState
 }

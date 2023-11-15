@@ -1,16 +1,45 @@
 import withWinFrame from "../../withWinFrame"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useFileSystem } from "../../../../features/fileSystem/useFileSystem"
 import styles from './FoldersApp.module.css'
 import { FILE_TYPE } from "../../../../const/FILE_CONST"
+import { useCMDHandler } from "../../../common/winframe/useCMDHandler"
+import File from "./file/File"
 // import clsx from 'clsx'
 
+const COMMANDS = {
+    NEW_FILE: 'NEW_FILE',
+    NEW_FOLDER: 'NEW_FOLDER'
+}
+
 const FoldersApp = props => {
+    const { configMenu, menuCommand } = props
     const fs = useFileSystem()
     const [currentFolderId, setCurrentFolderId] = useState("/") // open in root
     const [currentFiles, setCurrentFiles] = useState(fs.getChildren(currentFolderId))
     
-    const trimNDot = (s, n) => s.length > n ? (s.substring(0,n) + '...') : s
+    // To Handle The Menu Commands
+    // The useCMDHandler hook takes 2 args
+    // 1. cmd to watch
+    // 2. handler function
+    useCMDHandler(menuCommand, cmd => {
+
+        if(cmd === COMMANDS.NEW_FILE) {
+            // console.log('Create new file')
+            const cnt = Math.floor(Math.random()*999) 
+            fs.createFile(`File_${cnt}`, currentFolderId)
+        }
+        else if(cmd === COMMANDS.NEW_FOLDER) {
+            // console.log('Create new folder')
+            const cnt = Math.floor(Math.random()*999) 
+            fs.createDir(`Folder_${cnt}`, currentFolderId)
+        }
+
+        refresh()
+    })
+
+
+    // const cmdRef = useRef('')
 
     const open = (fId, fileType) => {
         // If it's a folder, get inside
@@ -30,6 +59,19 @@ const FoldersApp = props => {
         setCurrentFiles(fs.getChildren(parentId))
     }
 
+    // Configure the menu
+    useEffect(() => {
+        configMenu({
+            menu: {
+                File: { 
+                    2: { name: 'New File', command: COMMANDS.NEW_FILE },
+                    3: { name: 'New Folder', command: COMMANDS.NEW_FOLDER },
+                }
+            }
+        })
+    }, 
+    [configMenu])
+
     return (
         <div className={styles.root}>
 
@@ -39,7 +81,7 @@ const FoldersApp = props => {
                 </div>
                 <div className={styles.btns}>
                     <i className="fa-solid fa-rotate-right" onClick={refresh}></i>
-                    <i class="fa-solid fa-arrow-up" onClick={goToParentFolder}></i>
+                    <i className="fa-solid fa-arrow-up" onClick={goToParentFolder}></i>
                 </div>
                 
             </div>
@@ -48,15 +90,8 @@ const FoldersApp = props => {
                 <div className={styles.inner}>
                     {
                         currentFiles && currentFiles.map(f => 
-                        <div key={f.id} className={styles.fbox} onDoubleClick={() => open(f.id, f.fileType)}>
-                            <span className={styles.ffIco}>
-                                { f.fileType === FILE_TYPE.FILE && <i className="fa-solid fa-file-lines"></i> }
-                                { f.fileType === FILE_TYPE.FOLDER && <i class="fa-regular fa-folder-open"></i> }
-                            </span>
-                            <div className={styles.fname}>
-                                {trimNDot(f.name, 100)}
-                            </div>
-                        </div>)
+                            <File key={f.id} file={f} open={open} />
+                        )
                     }
                 </div>
             </div>

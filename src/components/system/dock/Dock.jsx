@@ -17,7 +17,7 @@ const Dock = props => {
     }
 
     return (
-        <div className={styles.root} style={{ zIndex }} onClick={onClick}>
+        <div id="thedock" className={styles.root} style={{ zIndex }} onClick={onClick}>
 
             <div className={styles.inner}>
                 <div className={styles.scrollable_holder}>

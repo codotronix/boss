@@ -1,10 +1,3 @@
-:root {
-    --winframe-namebar-bg: rgb(0 0 0 / 90%);
-    --winframe-namebar-fg: #eee;
-    --winframe-menubar-bg: rgb(38 37 37 / 90%);
-    --winframe-menubar-fg: #eee;
-    --winframe-menu-hover-light-bg: rgb(255 255 255 / 25%)
-}
 .root {
     position: absolute;
     /* border: 1px solid var(--winframe-namebar-bg); */
@@ -51,7 +44,12 @@
     background: var(--winframe-menu-hover-light-bg);
     cursor: grabbing;
 }
-.namebar .btns i {
+.namebar .btns .mizeBtn {
+    background: transparent;
+    color: #eee;
+    border: none;
+}
+.namebar .btns .mizeBtn i {
     height: 24px;
     width: 30px;
     display: inline-flex;
@@ -66,8 +64,9 @@
     color: var(--winframe-menubar-fg);
     justify-content: left;
     font-size: 13px;
+    z-index: 1;
+    position: relative;
 }
-
 .menu {
     margin-left: 10px;
     position: relative;

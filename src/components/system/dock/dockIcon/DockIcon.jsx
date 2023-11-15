@@ -8,9 +8,9 @@ const DockIcon = props => {
     const runtime = useRuntime()
     
     return (
-        <div className={styles.root} onClick={() => runtime.run(appId)} title={name}>
+        <button type="button" className={styles.root} onClick={() => runtime.run(appId)} title={name}>
             <i className={clsx(iconClass, styles.ico)} />
-        </div>
+        </button>
     )
 }
 

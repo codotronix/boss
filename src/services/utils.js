@@ -1,3 +1,10 @@
+
+export const trimNDot = (s, n) => s.length > n ? (s.substring(0,n) + '...') : s
+
+export const isFileNameValid = fileName => {
+    const VALID_FILENAME_REGEX = /^[a-zA-Z0-9-._ ]{1,}$/
+    return VALID_FILENAME_REGEX.test(fileName)
+}
 /**
  * Splits a string accross space 
  * but keeps Double-Quoted strings intact

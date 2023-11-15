@@ -83,7 +83,7 @@ export const procsSlice = createSlice({
         },
         // maxi-mize, mini-mize, unmaxi-mize
         mizeApp: (state, action) => {
-            console.log('mizeApp', action)
+            // console.log('mizeApp', action)
             const { runtimeId, winSize } = action.payload
             const runtimeObj = state[runtimeId]
             const appDetail = APPS_DETAILS[runtimeObj.appId]
@@ -103,7 +103,7 @@ export const procsSlice = createSlice({
             }
             else {
                 // log this exceptional attempt to 
-                console.log('The display type of this app is ', appDetail.displayType)
+                // console.log('The display type of this app is ', appDetail.displayType)
             }
             return state
         },

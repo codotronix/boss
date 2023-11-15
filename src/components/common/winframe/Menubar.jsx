@@ -20,7 +20,7 @@ const Menubar = props => {
                     <ul className={styles.subMenu}>
                     {   
                         // Loop over the Submenu
-                        menu[m].map(sm => 
+                        Object.values(menu[m]).map(sm => 
                         <li key={sm.command} onClick={() => handleMenuCommand(sm.command)} >
                             { sm.name }
                         </li>)

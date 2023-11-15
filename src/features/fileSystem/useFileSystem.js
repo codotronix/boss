@@ -1,12 +1,16 @@
 import { useSelector, useDispatch } from "react-redux"
-import { create } from "./filesSlice"
+import { create, rename } from "./filesSlice"
 import { FILE_TYPE } from "../../const/FILE_CONST"
+import { useCallback } from "react"
+import { isFileNameValid } from "../../services/utils"
+
 export const useFileSystem = () => {
     const _files = useSelector(state => state.files)
     const dispatch = useDispatch()
     
-    const createFile = (name, parentId, owner) => _create(_files, dispatch, name, parentId, FILE_TYPE.FILE, owner)
+    const createFile = useCallback((name, parentId, owner) => _create(_files, dispatch, name, parentId, FILE_TYPE.FILE, owner), [dispatch, _files])
     const createDir = (name, parentId, owner) => _create(_files, dispatch, name, parentId, FILE_TYPE.FOLDER, owner)
+    const rename = (fileId, newName) => _rename(_files, dispatch, newName, fileId)
     const createFolder = createDir
     const getParentId = fileID => _getParentId(_files, fileID)
     const getChildren = parentId => _getChildren(_files, parentId)
@@ -21,11 +25,16 @@ export const useFileSystem = () => {
 
     return {
         createFile, createDir, createFolder, getParentId, getChildren, getChildrenNames, 
-        getPathTill, getFileInfo
+        getPathTill, getFileInfo, rename
     }
 }
 
 function _create (_files, dispatch, name, parentId, fileType, owner) {
+    // File name invalid?
+    if(!name.trim() || !isFileNameValid(name)) {
+        return `Invalid name ${name}`
+    }
+
     // Invalid parentId
     // Or parentId is not a folder
     if(!(parentId in _files) || _files[parentId].fileType !== FILE_TYPE.FOLDER) {
@@ -38,6 +47,27 @@ function _create (_files, dispatch, name, parentId, fileType, owner) {
     }
 
     dispatch(create({ name, parentId, fileType, owner }))
+    return ''
+}
+
+function _rename(_files, dispatch, newName, fileId) {
+    // File name invalid?
+    if(!newName.trim() || !isFileNameValid(newName)) {
+        return `Invalid name ${newName}`
+    }
+    // Invalid fileId
+    if(!(fileId in _files)) {
+        return `File ID (${fileId}) not valid`
+    }
+
+    // Check for duplicate file names
+    // Amongst the Siblings
+    const parentId = _files[fileId].parentId
+    if(_files[parentId].children.map(fid => _files[fid].name).includes(newName)) {
+        return `File/folder name "${newName}" already exists`
+    }
+
+    dispatch(rename({ fileId, newName }))
     return ''
 }
 

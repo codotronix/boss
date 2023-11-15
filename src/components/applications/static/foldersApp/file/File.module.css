@@ -1,0 +1,26 @@
+.file {
+    height: 100px;
+    /* border: 1px solid #eee; */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 9px;
+}
+.file:hover {
+    box-shadow: 0px 0px 7px 0px #e3e1e1;
+}
+.file .ffIco {
+    font-size: 40px;
+    color: yellowgreen;
+    margin-bottom: 7px;
+}
+.file .fname {
+    padding: 2px 5px;
+    width: 100%;
+    text-align: center;
+    background: transparent;
+    color: #eee;
+    border: none;
+    outline: none;
+}

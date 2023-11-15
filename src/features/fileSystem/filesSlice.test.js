@@ -117,6 +117,46 @@ describe('Test new file creation', () => {
         expect(newState['dirA'].children.length).toBe(3)
     })
 
+    it('Should do nothing if file name is blank', () => {
+        let newState = _create(state2, '', 'dirA', FILE_TYPE.FILE, '')
+        expect(newState).toStrictEqual(state2)
+    })
+
+    it('File name should not have special characters', () => {
+        let newState = _create(state2, 'file123!', 'dirA', FILE_TYPE.FILE, '')
+        expect(newState).toStrictEqual(state2)
+
+        newState = _create(state2, 'file123@', 'dirA', FILE_TYPE.FILE, '')
+        expect(newState).toStrictEqual(state2)
+
+        newState = _create(state2, 'file123#', 'dirA', FILE_TYPE.FILE, '')
+        expect(newState).toStrictEqual(state2)
+
+        newState = _create(state2, 'file123$', 'dirA', FILE_TYPE.FILE, '')
+        expect(newState).toStrictEqual(state2)
+
+        newState = _create(state2, 'file123^', 'dirA', FILE_TYPE.FILE, '')
+        expect(newState).toStrictEqual(state2)
+
+        newState = _create(state2, 'file123&', 'dirA', FILE_TYPE.FILE, '')
+        expect(newState).toStrictEqual(state2)
+
+        newState = _create(state2, 'file123*', 'dirA', FILE_TYPE.FILE, '')
+        expect(newState).toStrictEqual(state2)
+
+        newState = _create(state2, 'file123>', 'dirA', FILE_TYPE.FILE, '')
+        expect(newState).toStrictEqual(state2)
+
+        newState = _create(state2, 'file123<', 'dirA', FILE_TYPE.FILE, '')
+        expect(newState).toStrictEqual(state2)
+
+        newState = _create(state2, 'file123/', 'dirA', FILE_TYPE.FILE, '')
+        expect(newState).toStrictEqual(state2)
+
+        newState = _create(state2, 'file123\\', 'dirA', FILE_TYPE.FILE, '')
+        expect(newState).toStrictEqual(state2)
+    })
+
     it('Should do nothing if folder Id invalid', () => {
         // create a file inside a non existent directory
         let newState = _create(state2, 'File X', 'dirA-Non-Existent', FILE_TYPE.FILE, '')

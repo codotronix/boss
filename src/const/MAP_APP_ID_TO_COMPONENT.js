@@ -1,4 +1,4 @@
-import { WelcomeApp, BCalc, AppsViewerApp, TimerApp, SettingsApp, TerminalApp, FoldersApp
+import { WelcomeApp, BCalc, AppsViewerApp, TimerApp, SettingsApp, TerminalApp, FoldersApp, BinApp
 } from '../components/applications'
 
 export const MAP_APP_ID_TO_COMPONENT = {
@@ -6,6 +6,7 @@ export const MAP_APP_ID_TO_COMPONENT = {
     'settings': SettingsApp,
     "terminal": TerminalApp,
     "folders": FoldersApp,
+    "bin": BinApp,
     'welcomeapp': WelcomeApp,
     'bcalc': BCalc,
     'timer': TimerApp,

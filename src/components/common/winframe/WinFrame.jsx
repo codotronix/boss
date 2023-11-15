@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, Suspense } from 'react'
+import { useState, useEffect, useRef, Suspense, useCallback } from 'react'
 import clsx from 'clsx'
 import styles from './WinFrame.module.css'
 import { APPS_DETAILS } from '../../../const/APPS_DETAILS'
@@ -125,6 +125,11 @@ const WinFrame = props => {
             default:
                 setMenuCommand(cmd)
         }
+
+        // reset command
+        setTimeout(() => {
+            setMenuCommand('')
+        }, 0)
     }
 
     const raiseWindowOnTop = () => runtime.raiseWindow(runtimeInfo.runtimeId)
@@ -147,20 +152,54 @@ const WinFrame = props => {
 
     /**
      * 
-     * @param {Object} MenuConfig | { hideMenu: boolean, menu: { id1: subMenuArr1, id: subMenuArr2 }
+     * @param {Object} MenuConfig | { 
+     *  hideMenu: boolean, 
+     *  replace?: boolean, // default is false, i.e. merge
+     *  menu: { id1: subMenuArr1, id: subMenuArr2 }
      */
-    const configMenu = MenuConfig => {
+    const configMenu = useCallback(MenuConfig => {
         // hide the menu?
         if(MenuConfig.hideMenu) setMenu(null)
-        // else merge the menu
-        else {
-
+        
+        else if(MenuConfig.replace) {
+            setMenu(MenuConfig.menu)
         }
-    }
+
+        // else merge
+        else {
+            // console.log('called...')
+            // if there is an incoming menu
+            // merge it
+            if(MenuConfig.menu) {
+                setMenu(menu => {
+                    let newMenu = {
+                        ...menu
+                    }
+    
+                    for(let m in MenuConfig.menu) {
+                        // if that menu already exists
+                        // merge
+                        if(m in newMenu) {
+                            newMenu[m] = {...newMenu[m], ...MenuConfig.menu[m]}
+                        }
+                        // else just copy it
+                        else {
+                            newMenu[m] = MenuConfig.menu[m]
+                        }
+                    }
+
+                    // console.log(newMenu)
+                    return newMenu
+                })
+            }
+        }
+    }, 
+    [])
 
     return (
         <div 
             className={clsx(
+                'WinFrame',
                 styles.root, 
                 (runtimeInfo.winSize===WINDOW_SIZES.MINIMIZED) && styles.minimized, 
                 (runtimeInfo.winSize===WINDOW_SIZES.DEFAULT) && styles.defaultSized
@@ -168,6 +207,7 @@ const WinFrame = props => {
             style={{ ...winStyles, zIndex: runtimeInfo.zIndex }}
             onClick={raiseWindowOnTop}
             ref={thisWinRef}
+            title={ appName || 'Application Window' }
         >
 
             <div 
@@ -181,15 +221,27 @@ const WinFrame = props => {
                 <div className={styles.btns}>
                     { 
                         runtimeInfo.winSize !== WINDOW_SIZES.MAXIMIZED &&
-                        <i className="fa-regular fa-square" onClick={maximize}></i>
+                        <button type='button' onClick={maximize} title="Maximize" className={styles.mizeBtn}>
+                            <i className="fa-regular fa-square"></i>
+                        </button>
+                        
                     }
                     {
                         (runtimeInfo.winSize === WINDOW_SIZES.MAXIMIZED || 
                             runtimeInfo.winSize === WINDOW_SIZES.MINIMIZED) && 
-                            <i className="fa-solid fa-down-left-and-up-right-to-center" onClick={unmaximize}></i>
+                            <button type='button' onClick={unmaximize} title="Un-Maximize" className={styles.mizeBtn}>
+                                <i className="fa-solid fa-down-left-and-up-right-to-center"></i>
+                            </button>
+                            
                     }
-                    <i className="fa-solid fa-window-minimize" onClick={minimize}></i>
-                    <i className="fa-solid fa-xmark" onClick={close}></i>
+                    <button type='button' onClick={minimize} title="Minimize" className={styles.mizeBtn}>
+                        <i className="fa-solid fa-window-minimize"></i>
+                    </button>
+                    
+                    <button type='button' onClick={close} title="Close" className={styles.mizeBtn}>
+                        <i className="fa-solid fa-xmark"></i>
+                    </button>
+                    
                 </div>
             </div>
             

@@ -5,9 +5,8 @@ import TimerApp from "./static/timerApp/TimerApp";
 import SettingsApp from "./static/settingsApp/SettingsApp";
 import TerminalApp from "./static/terminalApp/TerminalApp";
 import FoldersApp from "./static/foldersApp/FoldersApp";
+import BinApp from "./static/binApp/BinApp";
 export {
-    AppsViewerApp, SettingsApp, TerminalApp, FoldersApp,
-    BCalc,
-    WelcomeApp,
-    TimerApp,
+    AppsViewerApp, SettingsApp, TerminalApp, FoldersApp, BinApp,
+    BCalc, WelcomeApp, TimerApp,
 }
