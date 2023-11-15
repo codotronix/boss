@@ -6,7 +6,7 @@ import { useFileSystem } from '../../../../../features/fileSystem/useFileSystem'
 // import { trimNDot } from '../../../../../services/utils'
 
 const File = props => {
-    const { file, open, refresh } = props
+    const { file, open, existingFileNames } = props
     const [name, setName] = useState('')
     const fs = useFileSystem()
 
@@ -22,10 +22,14 @@ const File = props => {
     }
 
     const saveNewFileName = () => {
-        // if the file name has changed
-        if(name !== file.name) {
+        // Collision? Reset to existing name
+        if(existingFileNames.includes(name)) {
+            setName(file.name)
+        }
+        // else if the file name has changed
+        // and not colliding with the existing names
+        else {
             fs.rename(file.id, name)
-            refresh()
         }
     }
 
@@ -33,17 +37,24 @@ const File = props => {
         <div 
             className={styles.file} 
             onDoubleClick={() => open(file.id, file.fileType)}
+            title={file.name}
         >
-            <span className={styles.ffIco}>
-                { file.fileType === FILE_TYPE.FILE && <i className="fa-solid fa-file-lines"></i> }
-                { file.fileType === FILE_TYPE.FOLDER && <i className="fa-regular fa-folder-open"></i> }
-            </span>
+            <div className={styles.fileIcoBtnHolder}>
+                <button type="button" title={file.name}>
+                    <span className={styles.ffIco}>
+                        { file.fileType === FILE_TYPE.FILE && <i className="fa-solid fa-file-lines"></i> }
+                        { file.fileType === FILE_TYPE.FOLDER && <i className="fa-regular fa-folder-open"></i> }
+                    </span>
+                </button>
+            </div>
+            
             <input 
                 className={styles.fname} 
                 type="text" 
                 value={name} 
                 onChange={onNameChange} 
                 onBlur={saveNewFileName}
+                title={file.name}
             />
         </div>
     )

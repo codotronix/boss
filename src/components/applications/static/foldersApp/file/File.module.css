@@ -23,4 +23,13 @@
     color: #eee;
     border: none;
     outline: none;
+    text-overflow: ellipsis;
+}
+.fileIcoBtnHolder {
+    width: 100%;
+}
+.fileIcoBtnHolder button {
+    background: transparent;
+    width: 100%;
+    border: none;
 }

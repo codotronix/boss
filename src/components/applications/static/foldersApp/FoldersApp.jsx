@@ -101,7 +101,12 @@ const FoldersApp = props => {
                 <div className={styles.inner}>
                     {
                         currentFiles && currentFiles.map(f => 
-                            <File key={f.id} file={f} open={open} refresh={refresh} />
+                            <File 
+                                key={f.id} file={f} 
+                                open={open} 
+                                refresh={refresh} 
+                                existingFileNames={currentFiles.map(f => f.name)}
+                            />
                         )
                     }
                 </div>
