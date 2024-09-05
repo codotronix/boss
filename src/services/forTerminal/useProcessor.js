@@ -4,14 +4,16 @@
  * and the ctx of the previous interaction,
  * it will return the result
  */
-import { useRun, useFsCommands } from "./commandScripts"
+import { useRun, useFsCommands, help } from "./commandScripts"
 import { splitter } from "../utils"
 
 export function useProcessor(ctx) {
     const fsCommands = useFsCommands()
     const run = useRun()
     
-    const process = line => _process(line, ctx, {run, fsCommands})
+    const process = line => _process(line, ctx, {
+        help, run, ...fsCommands
+    })
     
     return { process }
 }

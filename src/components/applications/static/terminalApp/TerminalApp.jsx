@@ -7,7 +7,7 @@ import { colorify } from "../../../../services/forTerminal/formatter"
 
 const TerminalApp = props => {
     const [prompt] = useState('$ > ')   // setPrompt is removed as it is ununsed
-    const [historyTxt, setHistoryTxt] = useState(colorify('Welcome to the B.O.S.S. terminal', 'lightyellow'))
+    const [historyTxt, setHistoryTxt] = useState(colorify('Welcome to the B.O.S.S. terminal \n(Type `help` to know the available commands)', 'lightyellow'))
     const [currentLine, setCurrentLine] = useState(prompt)
     const [cmdHistory, setCmdHistory] = useState([])
     const [cmdHistoryIndex, setCmdHistoryIndex] = useState(0)

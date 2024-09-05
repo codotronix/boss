@@ -1,7 +1,11 @@
 /**
  * BOSS Terminal command 'run'.
  * It will try to run the app, 
- * And pass the args to it
+ * And pass the args to it.
+ * @param {object} ctx 
+ * @param {string[]} args 
+ * @returns {string} message
+ * @returns {number} code
  */
 
 import useRuntime from "../../../features/procs/useRuntime";
