@@ -34,6 +34,19 @@ export const procsSlice = createSlice({
             // Check if already running
             const runningInstancesCount = Object.values(state).filter(a => a.appId === appId).length
             const appDetail = APPS_DETAILS[appId]
+
+            // Invalid ID ?
+            if(!appDetail) {
+                if(args) {
+                    // find the ctx object in args 
+                    // if present update it
+                    if(typeof(args[0]) === 'object' && args[0].ctx) {
+                        args[0].ctx.error = 'Invalid App ID'
+                    }
+                }
+                return state
+            }
+
             const allowedInstances = appDetail.allowedInstances
             
             if(runningInstancesCount === 0 || !allowedInstances || allowedInstances > runningInstancesCount) {

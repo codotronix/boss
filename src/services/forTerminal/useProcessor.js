@@ -4,18 +4,19 @@
  * and the ctx of the previous interaction,
  * it will return the result
  */
-import { useFsCommands } from "./commandScripts/useFsCommands"
+import { useRun, useFsCommands } from "./commandScripts"
 import { splitter } from "../utils"
 
 export function useProcessor(ctx) {
     const fsCommands = useFsCommands()
+    const run = useRun()
     
-    const process = line => _process(line, ctx, fsCommands)
+    const process = line => _process(line, ctx, {run, fsCommands})
     
     return { process }
 }
 
-function _process(line, ctx, ...commandBanks) {
+function _process(line, ctx, ...commandsBank) {
     let args = splitter(line) // line.trim().split(/\s+/)
     let cmd = args[0]
     // console.log(args)
@@ -23,7 +24,8 @@ function _process(line, ctx, ...commandBanks) {
     // Let's create a basket of Commands
     // TODO: CHECK for Naming Collision among Commands
     let allCommands = {}
-    for(let cmdBank of commandBanks) {
+
+    for(let cmdBank of commandsBank) {
         allCommands = { ...allCommands, ...cmdBank }
     }
 
