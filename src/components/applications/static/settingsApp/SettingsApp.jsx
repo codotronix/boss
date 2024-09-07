@@ -33,11 +33,13 @@ const SettingsApp = props => {
 
                 {/* Mid Column / Main area */}
                 <section className={styles.mid}>
-                    {menuItems.map(item => (
-                        <div key={item.id} className={clsx(selected !== item.id && 'hidden')}>
-                            {item.component()}
-                        </div>
-                    ))}
+                    <section className={styles.mid_inner}>
+                        {menuItems.map(item => (
+                            <div key={item.id} className={clsx(selected !== item.id && 'hidden')}>
+                                {item.component()}
+                            </div>
+                        ))}
+                    </section>
                 </section>
             </div>
         </div>
