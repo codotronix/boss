@@ -19,17 +19,14 @@ This is a TO-DO list for the B.O.S.S development
 
 ## Settings
 
-- [ ] Change wallpaper
+- [x] Change wallpaper -- *Completed on 2024-09-07*
 - [ ] Change fonts
 - [ ] Change font size
 
 
 ## Terminal
 
-- [ ] `help` command should display all the available commands and all the ways to know more, say, `command_name --help` to know more
-- [ ] `appName` should open the app or show appropriate error msg
-- [ ] `open` command should provide intellisense with the list of app names to open
-- [ ] `appName args` should delegate control to the requested app, along with array of arguments
+- [x] `help` command should display all the options to get help -- *Completed on 2024-09-06*
 - [ ] BSS - BShellScript: create and assign variables
 
 
