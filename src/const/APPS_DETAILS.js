@@ -12,7 +12,7 @@ export const APPS_DETAILS = {
         docked: true,
         displayType: APP_DISPLAY_TYPE.WINDOW,
         allowedInstances: 1,
-        keywords: ['apps', 'all apps']
+        keywords: 'apps, all apps'
     },
     "folders": {
         appId: "folders",
@@ -20,7 +20,7 @@ export const APPS_DETAILS = {
         iconClass: "fa-regular fa-folder-open",
         docked: true,
         displayType: APP_DISPLAY_TYPE.WINDOW,
-        keywords: ['finder', 'files', 'folders', 'explorer']
+        keywords: 'finder, files, folders, explorer'
     },
     "settings": {
         appId: "settings",
@@ -41,7 +41,7 @@ export const APPS_DETAILS = {
         name: "B-Calc",
         iconClass: "fa-solid fa-calculator",
         displayType: APP_DISPLAY_TYPE.WINDOW,
-        keywords: ['bcalc', 'calc', 'calculator', 'math']
+        keywords: 'bcalc, calc, calculator, math'
     },
     "terminal": {
         appId: "terminal",
@@ -49,7 +49,7 @@ export const APPS_DETAILS = {
         iconClass: "fa-solid fa-terminal",
         docked: true,
         displayType: APP_DISPLAY_TYPE.WINDOW,
-        keywords: ['terminal', 'cmd', 'command line', 'command-line', 'dos', 'emulator', 'shell']
+        keywords: 'terminal, cmd, command line, command-line, dos, emulator, shell'
     },
     "timer": {
         appId: "timer",

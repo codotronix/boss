@@ -4,13 +4,14 @@ import styles from "./AppsViewerApp.module.css"
 import clsx from "clsx"
 import { useEffect, useState } from "react";
 import useRuntime from "../../../../features/procs/useRuntime";
-
+import TypeToFilter from "../../../common/type-to-filter/TypeToFilter";
 
 const AppsViewerApp = props => {
     const { configMenu, runtimeInfo } = props
     // Filter out AppsView 
     const [apps] = useState(Object.values(APPS_DETAILS).filter(a => a.appId!== runtimeInfo.appId) )
     const runtime = useRuntime()
+    const [filteredApps, setFilteredApps] = useState(apps)
 
     useEffect(() => {
         // Disable menu by calling the configMenu
@@ -31,9 +32,14 @@ const AppsViewerApp = props => {
 
     return (
         <div className={styles.root}>
+            <TypeToFilter
+                allItems={apps}
+                filterKeys={['name', 'keywords']}
+                setFilteredItems={setFilteredApps}
+            />
             <div className={styles.inner}>
             {
-                apps.map(a => 
+                filteredApps.map(a => 
                 <div 
                     key={a.appId} className={clsx(styles.app, 'flex-c')}
                     // onClick={() => runApp(a.appId)}
