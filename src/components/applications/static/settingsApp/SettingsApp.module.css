@@ -1,6 +1,11 @@
 .root {
     min-height: 100%;
     height: 100%;
+
+    --sidepanel-width: 200px;
+    --sidepanel-width-closed: 40px;
+    --sidepanel-bgcolor: #333;
+    --sidepanel-transition: all 500ms ease;
 }
 
 .container {
@@ -9,26 +14,61 @@
 }
 
 .left {
-    background-color: #333;
+    background-color: var(--sidepanel-bgcolor);
     color: #fff;
-    padding: 10px 0;
+    padding: 0;
     position: absolute;
     left: 0;
-    top: 0;
+    top: 40px;
     bottom: 0;
     width: 200px;
+    max-width: 200px;
     overflow-y: auto;
+    transition: var(--sidepanel-transition);
+}
+
+.btn_panel {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: var(--sidepanel-bgcolor);
+    width: var(--sidepanel-width);
+    max-width: var(--sidepanel-width);
+    height: var(--sidepanel-width-closed);
+    transition: var(--sidepanel-transition);
+}
+
+.toggle_btn {
+    position: absolute;
+    top: 4px;
+    right: 7px;
+    color: #fff;
+    cursor: pointer;
+    background: transparent;
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+    outline: none;
+    border: none;
+    transition: var(--sidepanel-transition);
 }
 
 .left_inner {
     padding: 0;
     margin: 0;
+    opacity: 1;
+    transition: var(--sidepanel-transition);
 }
 
 .left li {
     list-style-type: none;
-    padding: 10px 15px;
+    height: var(--sidepanel-width-closed);
     user-select: none;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    padding: 0 10px;
 }
 .left li:hover {
     background-color: rgba(255, 255, 255, 0.1);
@@ -42,4 +82,27 @@
     margin-left: 215px;
     height: 100%;
     overflow-y: auto;
+}
+
+.menu_closed .left {
+    width: var(--sidepanel-width-closed);
+    max-width: var(--sidepanel-width-closed);
+    overflow: hidden;
+}
+
+.menu_closed .left_inner {
+    opacity: 0;
+}
+
+.menu_closed .btn_panel {
+    width: var(--sidepanel-width-closed);
+    max-width: var(--sidepanel-width-closed);
+}
+
+.menu_closed .toggle_btn {
+    transform: rotate(180deg);
+}
+
+.menu_closed .mid {
+    margin-left: 55px;
 }

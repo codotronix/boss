@@ -9,7 +9,7 @@ const SettingsApp = props => {
     const { configMenu } = props
     const { menuItems } = SettingsConfig
     const [selected, setSelected] = useState(menuItems[0].id)
-    
+    const [isMenuClosed, setIsMenuClosed] = useState(false)
 
     useEffect(() => {
         // Disable menu by calling the configMenu
@@ -19,7 +19,16 @@ const SettingsApp = props => {
 
     return (
         <div className={styles.root}>
-            <div className={styles.container}>
+            <div className={clsx(styles.container, isMenuClosed && styles.menu_closed)}>
+
+                {/* The Menu Toggle Button */}
+                <div className={styles.btn_panel}>
+                    <button className={styles.toggle_btn} onClick={() => setIsMenuClosed(!isMenuClosed)}>
+                        <i className="fa-solid fa-arrow-left-long"></i>
+                    </button>
+                </div>
+                
+
                 {/* Left Column */}
                 <section className={styles.left}>
                     <ul className={styles.left_inner}>
