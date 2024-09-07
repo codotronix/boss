@@ -1,5 +1,5 @@
 .root {
-    background: rgba(0 0 0 / 90%);
+    /* background: var(--winframe-bg); */
     min-height: 100%;
     min-width: 100%;
     color: #eee;

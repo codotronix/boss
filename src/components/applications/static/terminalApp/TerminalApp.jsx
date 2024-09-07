@@ -80,7 +80,7 @@ const TerminalApp = props => {
 
                 const newHistoryTxt = historyTxt 
                                     + colorify(currentLine, 'lightgreen')
-                                    + colorify(result.msg, 'lightskyblue')
+                                    + colorify(result.msg, 'white')
                 setHistoryTxt(newHistoryTxt)
             }
             

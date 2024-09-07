@@ -113,8 +113,8 @@
 }
 
 .body {
-    background: rgb(255 255 255 / 90%);
-    color: #000;
+    background: var(--winframe-bg);
+    color: #fff;
     overflow: auto;
 }
 

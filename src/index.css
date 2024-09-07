@@ -5,12 +5,13 @@
   font-size: inherit;
 }
 :root {
+  --winframe-bg: rgb(0 22 57 / 95%);
   --winframe-namebar-bg: rgb(0 0 0 / 90%);
   --winframe-namebar-fg: #eee;
   --winframe-menubar-bg: rgb(38 37 37 / 99%);
   --winframe-menubar-fg: #eee;
-  --winframe-menu-hover-light-bg: rgb(255 255 255 / 25%);
-  --winframe-menu-hover-dark-bg: rgb(0 0 0 / 10%);
+  --winframe-menu-hover-dark-bg: rgb(255 255 255 / 10%);
+  --winframe-menu-hover-light-bg: rgb(0 0 0 / 10%);
 }
 body {
   margin: 0;
