@@ -27,6 +27,7 @@ export const APPS_DETAILS = {
         name: "Settings",
         iconClass: "fa-solid fa-gear",
         docked: true,
+        displayType: APP_DISPLAY_TYPE.WINDOW,
         allowedInstances: 1
     },
     "welcomeapp": {
