@@ -6,8 +6,8 @@
 }
 :root {
   --winframe-bg: rgb(0 22 57 / 95%);
-  --winframe-namebar-bg: rgb(0 0 0 / 90%);
-  --winframe-namebar-fg: #eee;
+  --winframe-titlebar-bg: rgb(0 0 0 / 90%);
+  --winframe-titlebar-fg: #eee;
   --winframe-menubar-bg: rgb(38 37 37 / 99%);
   --winframe-menubar-fg: #eee;
   --winframe-menu-hover-dark-bg: rgb(255 255 255 / 10%);

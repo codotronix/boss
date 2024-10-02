@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, Suspense } from 'react'
+import { useRef, Suspense } from 'react'
 import clsx from 'clsx'
 import styles from './WinFrame.module.css'
 import { APPS_DETAILS } from '../../../const/APPS_DETAILS'
@@ -9,26 +9,6 @@ import { WINDOW_SIZES } from '../../../const/WINDOW'
 import Menubar from './Menubar'
 
 const NON_BODY_HEIGHTS = 25
-
-const getDefaultWinStyles = (winSize) => {
-    if(winSize === WINDOW_SIZES.MAXIMIZED) {
-        return () => ({
-            width: window.innerWidth,
-            height: window.innerHeight
-        })()
-    }
-    else {
-        return {
-            width: Math.max( 300, Math.floor(window.innerWidth * .7) ),
-            height: 300 - NON_BODY_HEIGHTS
-        }
-    }
-}
-
-const getMaximizedStyles = () => ({
-    width: window.innerWidth,
-    height: window.innerHeight
-})
 
 const LoadingScreen = ({ appName }) => {
     return (
@@ -66,6 +46,11 @@ const getRandomInitPosition = () => ({
     x: 10 + Math.floor(Math.random()*100),
 })
 
+const getInitSize = () => ({
+    x: Math.max(window.innerWidth - 300, 300),
+    y: Math.max(window.innerHeight - 200, 400),
+})
+
 
 const WinFrame = props => {
     // const { render } = props
@@ -73,62 +58,22 @@ const WinFrame = props => {
     const { runtimeInfo } = appProps
     const appName = APPS_DETAILS[runtimeInfo.appId].name
     const runtime = useRuntime()
-    // persist value in useRef
-    const initStyleRef = useRef(getDefaultWinStyles(WINDOW_SIZES.DEFAULT))
 
     const initPosRef = useRef(getRandomInitPosition())
-    const initSizeRef = useRef({ x: Math.max(window.innerWidth - 300, 300), y: Math.max(window.innerHeight - 200, 400) })
-    // console.log(initStyleRef)
-    const [winStyles, setWinStyles] = useState(initStyleRef.current)
+    const initSizeRef = useRef(getInitSize())
     
     const dragRef = useRef()
     const resizeRef = useRef()
 
     // use the useDragV2 custom hook for Dragging and repositioning
     const [ position, setPosition ] = useDragV2(dragRef.current, initPosRef.current)
-    const [ size, setSize ] = useDragV2(resizeRef.current, initSizeRef.current)
-
-    // Update styles based on Window Maximize / Minimize / Default
-    useEffect(() => {
-        // if(isDragging) return
-        let newWinStyle = {...initStyleRef.current}
-        if(runtimeInfo.winSize === WINDOW_SIZES.MAXIMIZED) {
-            newWinStyle = getMaximizedStyles()
-        }
-
-        if(runtimeInfo.winSize === WINDOW_SIZES.MINIMIZED) {
-            newWinStyle = {
-                ...newWinStyle,
-                transform: 'scale(0)'
-            }
-        }
-
-        setWinStyles(newWinStyle)
-    }, 
-    [runtimeInfo.winSize])
+    const [ size ] = useDragV2(resizeRef.current, initSizeRef.current)
 
     const raiseWindowOnTop = () => runtime.raiseWindow(runtimeInfo.runtimeId)
 
-    const maximize = () => {
-        runtime.mize(runtimeInfo.runtimeId, WINDOW_SIZES.MAXIMIZED)
-        setPosition({ x: 0, y: 0 })
-        // store prev position and size, 
-        // because we need it to unmaximize
-        // initSizeRef.current = size
-        // initPosRef.current = position
-        // set the new size
-        // setSize({ x: window.innerWidth, y: window.innerHeight })
-    }
-
-    const minimize = () => {
-        runtime.mize(runtimeInfo.runtimeId, WINDOW_SIZES.MINIMIZED)
-    }
-
-    const unmaximize = () => {
-        runtime.mize(runtimeInfo.runtimeId, WINDOW_SIZES.DEFAULT)
-        // setSize(initSizeRef.current)
-        // setPosition(initPosRef.current)
-    }
+    const maximize = () => runtime.mize(runtimeInfo.runtimeId, WINDOW_SIZES.MAXIMIZED)
+    const minimize = () => runtime.mize(runtimeInfo.runtimeId, WINDOW_SIZES.MINIMIZED)
+    const unmaximize = () => runtime.mize(runtimeInfo.runtimeId, WINDOW_SIZES.DEFAULT)
     
     const close = () => {
         // const r = window.confirm("Do you really want to close ?")
@@ -160,11 +105,14 @@ const WinFrame = props => {
             title={ appName || 'Application Window' }
         >
 
-            <div 
-                className={clsx(styles.bar, styles.namebar)}
-                ref={dragRef}
-            >
-                <div>{ appName || 'Application' }</div>
+            {/* Title Bar */}
+            <div className={clsx(styles.bar, styles.titlebar)}>
+                <div className={styles.apptitle}>
+                    { appName || 'Application' }
+                </div>
+                {/* Just a transparent place to hold and drag -- Hide it when Maximized */}
+                <div className={styles.dragHangle} ref={dragRef}></div>
+
                 <div className={styles.btns}>
                     { 
                         runtimeInfo.winSize !== WINDOW_SIZES.MAXIMIZED &&
@@ -191,11 +139,9 @@ const WinFrame = props => {
                     
                 </div>
             </div>
-            
-            {/* <Menubar menu={menu} handleMenuCommand={handleMenuCommand} /> */}
 
             {/* THE BODY */}
-            <div style={{ height: (size.y - NON_BODY_HEIGHTS) }} className={styles.body}>
+            <div className={styles.body}>
                 {/* 
                     // Suspense Components could be remotely loaded 
                     // via Webpack Module Federation - Micro-frontend
@@ -210,14 +156,17 @@ const WinFrame = props => {
                 </Suspense>
             </div>
             
-            <i 
-                className={clsx("fa-solid fa-arrow-up-right-dots", styles.repositionHandle)}
-                // draggable="true"
-                // onDrag={e => onResize(e.pageX, e.pageY)}
-                // onDragStart={e => onResizeStart(e.pageX, e.pageY)}
-                // onDragEnd={e => onResizeEnd(e.pageX, e.pageY)}
-                ref={resizeRef}
-            ></i>
+            {/* The Status Bar At the Bottom */}
+            <div className={styles.statusbar}>
+                <i 
+                    className={clsx("fa-solid fa-arrow-up-right-dots", styles.repositionHandle)}
+                    // draggable="true"
+                    // onDrag={e => onResize(e.pageX, e.pageY)}
+                    // onDragStart={e => onResizeStart(e.pageX, e.pageY)}
+                    // onDragEnd={e => onResizeEnd(e.pageX, e.pageY)}
+                    ref={resizeRef}
+                ></i>
+            </div>
         </div>
     )
 }
