@@ -3,7 +3,7 @@ import clsx from 'clsx'
 import { useState } from 'react'
 
 const Menubar = props => {
-    const { menu, handleMenuCommand } = props
+    const { menu } = props
     const [ visibleSubMenuId, setVisibleSubMenuId ] = useState('')
 
     const toggleSubMenu = id => {
@@ -11,18 +11,24 @@ const Menubar = props => {
         else setVisibleSubMenuId(id)
     }
 
+    // Handle the click and hide the sub menu
+    const handleAndHide = (fn) => {
+        fn()
+        setVisibleSubMenuId('')
+    }
+
     return(
         <div className={clsx(styles.bar, styles.menubar)}>
             {
-                menu && Object.keys(menu).map(m => 
-                <div key={m} className={clsx(styles.menu, visibleSubMenuId===m && styles.visible )}>
-                    <span className={styles.menuName} onClick={() => toggleSubMenu(m)}>{ m }</span>
+                menu && Object.entries(menu).map(([menuName, menuVal]) => 
+                <div key={menuName} className={clsx(styles.menu, visibleSubMenuId===menuName && styles.visible )}>
+                    <span className={styles.menuName} onClick={() => toggleSubMenu(menuName)}>{ menuName }</span>
                     <ul className={styles.subMenu}>
                     {   
                         // Loop over the Submenu
-                        Object.values(menu[m]).map(sm => 
-                        <li key={sm.command} onClick={() => handleMenuCommand(sm.command)} >
-                            { sm.name }
+                        Object.entries(menuVal).map(([subMenuName, subMenuVal]) => 
+                        <li key={subMenuName} onClick={() => handleAndHide(subMenuVal.handleClick)} >
+                            { subMenuName }
                         </li>)
                     }
                     </ul>

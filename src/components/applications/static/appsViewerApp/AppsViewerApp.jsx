@@ -2,23 +2,16 @@ import { APPS_DETAILS } from "../../../../const/APPS_DETAILS";
 import withWinFrame from "../../withWinFrame";
 import styles from "./AppsViewerApp.module.css"
 import clsx from "clsx"
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import useRuntime from "../../../../features/procs/useRuntime";
 import TypeToFilter from "../../../common/type-to-filter/TypeToFilter";
 
 const AppsViewerApp = props => {
-    const { configMenu, runtimeInfo } = props
+    const { runtimeInfo, renderMenu, onClose, onNew } = props
     // Filter out AppsView 
     const [apps] = useState(Object.values(APPS_DETAILS).filter(a => a.appId!== runtimeInfo.appId) )
     const runtime = useRuntime()
     const [filteredApps, setFilteredApps] = useState(apps)
-
-    useEffect(() => {
-        // Disable menu by calling the configMenu
-        configMenu({ hideMenu: true })
-    },
-    [configMenu])
-    
 
     const runApp = appId => {
         // Delay the load / load asyncronously
@@ -30,8 +23,26 @@ const AppsViewerApp = props => {
         }, 0)
     }
 
+    const createMenu = () => {
+        return renderMenu({
+            File: {
+                "New": { handleClick: onNew },
+                "SubMenu 2": { handleClick: () => console.log('SubMenu 2') },
+                "Quit": { handleClick: onClose },
+            },
+            Edit: {
+                "Copy": { handleClick: () => console.log('Copy') },
+                "Cut": { handleClick: () => console.log('Cut') },
+                "Paste": { handleClick: () => console.log('Paste') },
+            }
+        })
+    }
+
     return (
+        <>
+        { createMenu() }
         <div className={styles.root}>
+            
             <TypeToFilter
                 allItems={apps}
                 filterKeys={['name', 'keywords']}
@@ -55,6 +66,7 @@ const AppsViewerApp = props => {
             }
             </div>
         </div>
+        </>
     )
 }
 

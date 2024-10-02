@@ -2,103 +2,35 @@
 
 This document explains how to work with the menubar and menu 
 
-## Index
-- [Configure the menu](#configure-menu-with-configmenu)
-- [Add menus and submenus](#add-menu-items-and-submenu-items)
-- [Handle click on Submenus](#handle-submenu-click)
+## How to Add Menu Bar to your App
 
+- Desctructure essential functions from props. They will be passed to your app component whenever it is loaded by the WinFrame
+`const { renderMenu, onClose, onNew  } = props`
 
-## Configure Menu with `configMenu`
-
-- Take out `configMenu` from the props
-```
-const { configMenu } = props
-```
-
-
-## Add Menu Items and Submenu Items
-
-- When the App Component loads, in the useEffect add new menu items, here is an example
-```
-// Configure the menu
-useEffect(() => {
-    configMenu({
-        replace?: boolean // default is merge, i.e. replace: false
-        menu: {
-            File: { 
-                2: { name: 'New File', command: COMMANDS.NEW_FILE },
-                3: { name: 'New Folder', command: COMMANDS.NEW_FOLDER },
-            },
-            View: {
-                1: { name: 'List View', command: 'List View' },
-                2: { name: 'Grid View', command: 'Grid View' },
-                3: { name: 'Icon View', command: 'Icon View' },
-            }
-        }
-    })
-}, 
-[configMenu])
-```
-
-On each submenu, name is the string to be shown to the user and command is an unique string that will be passed as `menuCommand` prop to the App whenever user clicks on that menu
-
-- if `replace` is set to true, it will replace the default menu provided by WinFrame, i.e. File menu with submenu `New Window` and `Close Window`
-
-
-
-## Handle Submenu Click
-
-- When user clicks on a submenu, the corresponding command (a string) will be passed to the App Component via `menuCommand`. Let's see how to handle it.
-
-- Take out `menuCommand` from props.
-```
-const { menuCommand } = props
-```
-
-- Destructure `useCMDHandler` hook from props. It will be supplied by the parent WinFrame that loads this app.
-[NOTE: Don't forget to safeguard your standalone app by providing a default value, because if it is running standalone obviously these props will not be available.]
-```
-/* 
-Notice the default value, an anonymous blank function, () => {} 
-*/
-
-const { useCMDHandler=()=>{} } = props
-```
-
-- This `useCMDHandler` hook takes in 2 arguments, the `menuCommand` to watch and a handler function to callback whenever a new menuCommand is recieved
-
-```
-useCMDHandler (menuCommand, menuCommandHandlerFn)
-
-// The function to handle the commands
-function menuCommandHandlerFn (cmd) {
-    if(cmd === COMMANDS.NEW_FILE) {
-        console.log('Create new file')
-        // Code to create New File
+- Create a menu object with the following structure
+```javascript
+const menu = {
+    File: {
+        "New": { handleClick: onNew },
+        "SubMenu 2": { handleClick: Your_Fn },
+        "SubMenu 3": { handleClick: Your_Fn  },
+        "Quit": { handleClick: onClose },
+    },
+    "Menu 2": {
+        "Copy": { handleClick: Your_Fn  },
+        "Cut": { handleClick: Your_Fn  },
+        "Paste": { handleClick: Your_Fn },
     }
-    else if(cmd === COMMANDS.NEW_FOLDER) {
-        console.log('Create new folder')
-        const cnt = Math.floor(Math.random()*999) 
-        fs.createDir(`Folder_${cnt}`, currentFolderId)
-    }
-
-    // More if-else or switch case ladders
-    // for each submenu command to handle
 }
 ```
 
-
-## Hide Menu
-
-If your app does not need to show the menuubar, just hide it using the following
-
+- Pass the menu object to the renderMenu function and it will return the menu bar
+```jsx
+<>
+    { renderMenu(menu) }
+    <div>
+        Your App Code Here ...
+    </div>
+</>
 ```
-const { configMenu } = props
-
-useEffect(() => {
-    // Disable menu by calling the configMenu
-    configMenu({ hideMenu: true })
-},
-[configMenu])
-```
-
+- Do not do any of these if your App does not need a menu bar

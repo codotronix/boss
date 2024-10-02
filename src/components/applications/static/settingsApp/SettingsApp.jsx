@@ -1,23 +1,16 @@
 import { useState } from "react"
 import withWinFrame from "../../withWinFrame"
-import { useEffect } from "react"
 import styles from "./SettingsApp.module.css"
 import { SettingsConfig } from "./SettingsConfig"
 import clsx from "clsx"
 import TypeToFilter from "../../../common/type-to-filter/TypeToFilter"
 
 const SettingsApp = props => {
-    const { configMenu } = props
+    // const { rendeMenu } = props
     const { menuItems } = SettingsConfig
     const [selected, setSelected] = useState(menuItems[0].id)
     const [isMenuClosed, setIsMenuClosed] = useState(false)
     const [filteredMenuItems, setFilteredMenuItems] = useState(menuItems)
-
-    useEffect(() => {
-        // Disable menu by calling the configMenu
-        configMenu({ hideMenu: true })
-    },
-    [configMenu])
 
     return (
         <div className={styles.root}>

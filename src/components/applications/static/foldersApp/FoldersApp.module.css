@@ -2,6 +2,7 @@
     min-height: 100%;
     background: #000;
     color: #eee;
+    /* padding: 10px; */
 }
 .locationBar {
     position: relative;
@@ -9,11 +10,11 @@
 }
 .locationBar .loc {
     padding: 7px 15px;
-    border: 1px solid #eee;
+    border-bottom: 1px solid #666;
     border-radius: 4px;
     font-family: 'Courier New', Courier, monospace;
     /* font-size: 15px; */
-    height: 35px;
+    height: 30px;
 }
 .locationBar .btns {
     position: absolute;
@@ -21,9 +22,7 @@
     right: 0;
 }
 .locationBar .btns i {
-    padding: 9px;
-    border-radius: 4px;
-    border: 1px solid #eee;
+    padding: 7px 9px;
 }
 .inner {
     display: grid;

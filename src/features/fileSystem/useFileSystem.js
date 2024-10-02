@@ -13,7 +13,7 @@ export const useFileSystem = () => {
     const rename = (fileId, newName) => _rename(_files, dispatch, newName, fileId)
     const createFolder = createDir
     const getParentId = fileID => _getParentId(_files, fileID)
-    const getChildren = parentId => _getChildren(_files, parentId)
+    const getChildren = useCallback(parentId => _getChildren(_files, parentId), [_files])
     const getChildrenNames = parentId => _getChildrenNames(_files, parentId)
     /**
      * Get path names till the given file id
@@ -24,7 +24,7 @@ export const useFileSystem = () => {
     const getFileInfo = absPath => _getFileInfo(_files, absPath)
 
     return {
-        createFile, createDir, createFolder, getParentId, getChildren, getChildrenNames, 
+        allFiles: _files, createFile, createDir, createFolder, getParentId, getChildren, getChildrenNames, 
         getPathTill, getFileInfo, rename
     }
 }

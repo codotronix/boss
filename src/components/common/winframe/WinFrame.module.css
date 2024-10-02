@@ -65,7 +65,12 @@
     justify-content: left;
     font-size: 13px;
     z-index: 1;
-    position: relative;
+    position: absolute;
+    left: 0;
+    right: 0;
+}
+.menubar + * {
+    margin-top: 25px;
 }
 .menu {
     margin-left: 10px;

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, Suspense, useCallback } from 'react'
+import { useState, useEffect, useRef, Suspense } from 'react'
 import clsx from 'clsx'
 import styles from './WinFrame.module.css'
 import { APPS_DETAILS } from '../../../const/APPS_DETAILS'
@@ -6,10 +6,8 @@ import useRuntime from '../../../features/procs/useRuntime'
 import useDrag from './useDrag'
 import { WINDOW_SIZES } from '../../../const/WINDOW'
 import Menubar from './Menubar'
-import { DEFAULT_MENU, MENU_COMMANDS } from './MENU_CONST'
-import { useCMDHandler } from './useCMDHandler'
 
-const NON_BODY_HEIGHTS = 50
+const NON_BODY_HEIGHTS = 25
 
 const getWinStyles = (winSize) => {
     if(winSize === WINDOW_SIZES.MAXIMIZED) {
@@ -25,7 +23,7 @@ const getWinStyles = (winSize) => {
             top: 10 + Math.floor(Math.random()*200),
             left: 10 + Math.floor(Math.random()*100),
             width: Math.max( 300, Math.floor(window.innerWidth * .7) ),
-            height: 300 + NON_BODY_HEIGHTS
+            height: 300 - NON_BODY_HEIGHTS
         }
     }
 }
@@ -45,6 +43,29 @@ const LoadingScreen = ({ appName }) => {
     )
 }
 
+/**
+ * This will render the Menu Component
+ * @param {*} menu - This will have the following structure
+ * 
+    {
+        File: {
+            "New": { handleClick: Fn },
+            "SubMenu 2": { handleClick: Fn },
+            "Quit": { handleClick: Fn },
+        },
+        Edit: {
+            "Copy": { handleClick: Fn },
+            "Cut": { handleClick: Fn },
+            "Paste": { handleClick: Fn },
+        }
+    }
+ */
+const renderMenu = (menu) => {
+    return (
+        <Menubar menu={menu} />
+    )
+}
+
 const WinFrame = props => {
     // const { render } = props
     const { appProps, AppComponent } = props
@@ -56,8 +77,6 @@ const WinFrame = props => {
     // console.log(initStyleRef)
     const [winStyles, setWinStyles] = useState(initStyleRef.current)
     const thisWinRef = useRef()
-    const [menu, setMenu] = useState(DEFAULT_MENU)
-    const [menuCommand, setMenuCommand] = useState('')
 
     // use the useDrag custom hook for Dragging and repositioning
     const { posDiff, onDragStart: _onDragStart, onDrag, onDragEnd } = useDrag(thisWinRef.current)
@@ -113,26 +132,6 @@ const WinFrame = props => {
     }, 
     [sizeDiff])
 
-    const handleMenuCommand = cmd => {
-        switch(cmd) {
-            case MENU_COMMANDS.NEW_WINDOW:
-                window.setTimeout(() => {
-                    runtime.run(runtimeInfo.appId)
-                }, 0)
-                break
-            case MENU_COMMANDS.CLOSE_WINDOW:
-                runtime.terminate(runtimeInfo.runtimeId)
-                break
-            default:
-                setMenuCommand(cmd)
-        }
-
-        // reset command
-        setTimeout(() => {
-            setMenuCommand('')
-        }, 0)
-    }
-
     const raiseWindowOnTop = () => runtime.raiseWindow(runtimeInfo.runtimeId)
 
     const onDragStart = (left, top, e) => {
@@ -151,51 +150,9 @@ const WinFrame = props => {
         // }
     }
 
-    /**
-     * 
-     * @param {Object} MenuConfig | { 
-     *  hideMenu: boolean, 
-     *  replace?: boolean, // default is false, i.e. merge
-     *  menu: { id1: subMenuArr1, id: subMenuArr2 }
-     */
-    const configMenu = useCallback(MenuConfig => {
-        // hide the menu?
-        if(MenuConfig.hideMenu) setMenu(null)
-        
-        else if(MenuConfig.replace) {
-            setMenu(MenuConfig.menu)
-        }
-
-        // else merge
-        else {
-            // console.log('called...')
-            // if there is an incoming menu
-            // merge it
-            if(MenuConfig.menu) {
-                setMenu(menu => {
-                    let newMenu = {
-                        ...menu
-                    }
-    
-                    for(let m in MenuConfig.menu) {
-                        // if that menu already exists
-                        // merge
-                        if(m in newMenu) {
-                            newMenu[m] = {...newMenu[m], ...MenuConfig.menu[m]}
-                        }
-                        // else just copy it
-                        else {
-                            newMenu[m] = MenuConfig.menu[m]
-                        }
-                    }
-
-                    // console.log(newMenu)
-                    return newMenu
-                })
-            }
-        }
-    }, 
-    [])
+    const openNewWindow = () => {
+        runtime.run(runtimeInfo.appId)
+    }
 
     return (
         <div 
@@ -246,7 +203,7 @@ const WinFrame = props => {
                 </div>
             </div>
             
-            <Menubar menu={menu} handleMenuCommand={handleMenuCommand} />
+            {/* <Menubar menu={menu} handleMenuCommand={handleMenuCommand} /> */}
 
             {/* THE BODY */}
             <div style={{ height: (winStyles.height - NON_BODY_HEIGHTS) }} className={styles.body}>
@@ -256,10 +213,10 @@ const WinFrame = props => {
                  */}
                 <Suspense fallback={<LoadingScreen appName={appName} />}>
                     <AppComponent 
-                        {...appProps} 
-                        configMenu={configMenu}
-                        menuCommand={menuCommand}
-                        useCMDHandler={useCMDHandler}
+                        {...appProps}
+                        renderMenu={renderMenu}
+                        onClose={close}
+                        onNew={openNewWindow}
                     />
                 </Suspense>
             </div>
