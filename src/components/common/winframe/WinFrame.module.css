@@ -1,4 +1,5 @@
 .root {
+    /* position: relative; */
     position: absolute;
     /* border: 1px solid var(--winframe-namebar-bg); */
     /* box-shadow: 1px 2px 6px 1px #000; */
@@ -13,10 +14,17 @@
     max-height: 100vh;
     box-shadow: 1px 2px 6px 1px #000;
 }
-/* .defaultSized {
-    
-    
-} */
+.minimized {
+    transform: scale(0) !important;
+    transform-origin: bottom right;
+}
+.maximized {
+    top: 0;
+    left: 0;
+    width: 100vw !important;
+    height: 100vh !important;
+}
+
 .bar {
     height: 25px;
     display: flex;
@@ -28,6 +36,7 @@
     background-color: var(--winframe-namebar-bg);
     color: var(--winframe-namebar-fg);
     position: relative;
+    user-select: none;
     /* display: flex;
     justify-content: space-between; */
 }
@@ -141,5 +150,5 @@
     /* transform: rotate(-45deg); */
     font-size: 18px;
     color: rgb(128 128 128 / 56%);
-    cursor: se-resize;
+    cursor: se-resize !important;
 }

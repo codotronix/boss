@@ -3,25 +3,22 @@ import clsx from 'clsx'
 import styles from './WinFrame.module.css'
 import { APPS_DETAILS } from '../../../const/APPS_DETAILS'
 import useRuntime from '../../../features/procs/useRuntime'
-import useDrag from './useDrag'
+// import useDrag from './useDrag'
+import useDragV2 from './useDragV2'
 import { WINDOW_SIZES } from '../../../const/WINDOW'
 import Menubar from './Menubar'
 
 const NON_BODY_HEIGHTS = 25
 
-const getWinStyles = (winSize) => {
+const getDefaultWinStyles = (winSize) => {
     if(winSize === WINDOW_SIZES.MAXIMIZED) {
         return () => ({
-            top: 0,
-            left: 0,
             width: window.innerWidth,
             height: window.innerHeight
         })()
     }
     else {
         return {
-            top: 10 + Math.floor(Math.random()*200),
-            left: 10 + Math.floor(Math.random()*100),
             width: Math.max( 300, Math.floor(window.innerWidth * .7) ),
             height: 300 - NON_BODY_HEIGHTS
         }
@@ -29,8 +26,6 @@ const getWinStyles = (winSize) => {
 }
 
 const getMaximizedStyles = () => ({
-    top: 0,
-    left: 0,
     width: window.innerWidth,
     height: window.innerHeight
 })
@@ -66,6 +61,12 @@ const renderMenu = (menu) => {
     )
 }
 
+const getRandomInitPosition = () => ({
+    y: 10 + Math.floor(Math.random()*200),
+    x: 10 + Math.floor(Math.random()*100),
+})
+
+
 const WinFrame = props => {
     // const { render } = props
     const { appProps, AppComponent } = props
@@ -73,20 +74,19 @@ const WinFrame = props => {
     const appName = APPS_DETAILS[runtimeInfo.appId].name
     const runtime = useRuntime()
     // persist value in useRef
-    const initStyleRef = useRef(getWinStyles(WINDOW_SIZES.DEFAULT))
+    const initStyleRef = useRef(getDefaultWinStyles(WINDOW_SIZES.DEFAULT))
+
+    const initPosRef = useRef(getRandomInitPosition())
+    const initSizeRef = useRef({ x: Math.max(window.innerWidth - 300, 300), y: Math.max(window.innerHeight - 200, 400) })
     // console.log(initStyleRef)
     const [winStyles, setWinStyles] = useState(initStyleRef.current)
-    const thisWinRef = useRef()
+    
+    const dragRef = useRef()
+    const resizeRef = useRef()
 
-    // use the useDrag custom hook for Dragging and repositioning
-    const { posDiff, onDragStart: _onDragStart, onDrag, onDragEnd } = useDrag(thisWinRef.current)
-
-    // use the useDrag custom hook for Resizing WinFrame
-    // alias all the names to avoid conflict with the normal drag to reposition
-    const { posDiff: sizeDiff, 
-            onDragStart: onResizeStart, 
-            onDrag: onResize, 
-            onDragEnd: onResizeEnd } = useDrag()
+    // use the useDragV2 custom hook for Dragging and repositioning
+    const [ position, setPosition ] = useDragV2(dragRef.current, initPosRef.current)
+    const [ size, setSize ] = useDragV2(resizeRef.current, initSizeRef.current)
 
     // Update styles based on Window Maximize / Minimize / Default
     useEffect(() => {
@@ -99,8 +99,6 @@ const WinFrame = props => {
         if(runtimeInfo.winSize === WINDOW_SIZES.MINIMIZED) {
             newWinStyle = {
                 ...newWinStyle,
-                top: window.innerHeight - 100,
-                left: 200,
                 transform: 'scale(0)'
             }
         }
@@ -109,39 +107,28 @@ const WinFrame = props => {
     }, 
     [runtimeInfo.winSize])
 
-    // Whenever there is a positionDiff due to dargging
-    useEffect(() => {
-        // update the new position
-        setWinStyles(s => ({
-            ...s, 
-            left: s.left + posDiff.leftDiff,
-            top: s.top + posDiff.topDiff
-        }))
-    }, 
-    [posDiff])
-
-
-    // Whenever WinFrame is resized using the resize handle at bottom right
-    useEffect(() => {
-        // update the new position
-        setWinStyles(s => ({
-            ...s, 
-            width: s.width + sizeDiff.leftDiff,
-            height: s.height + sizeDiff.topDiff
-        }))
-    }, 
-    [sizeDiff])
-
     const raiseWindowOnTop = () => runtime.raiseWindow(runtimeInfo.runtimeId)
 
-    const onDragStart = (left, top, e) => {
-        _onDragStart(left, top, e)
-        raiseWindowOnTop()
+    const maximize = () => {
+        runtime.mize(runtimeInfo.runtimeId, WINDOW_SIZES.MAXIMIZED)
+        setPosition({ x: 0, y: 0 })
+        // store prev position and size, 
+        // because we need it to unmaximize
+        // initSizeRef.current = size
+        // initPosRef.current = position
+        // set the new size
+        // setSize({ x: window.innerWidth, y: window.innerHeight })
     }
 
-    const maximize = () => runtime.mize(runtimeInfo.runtimeId, WINDOW_SIZES.MAXIMIZED)
-    const minimize = () => runtime.mize(runtimeInfo.runtimeId, WINDOW_SIZES.MINIMIZED)
-    const unmaximize = () => runtime.mize(runtimeInfo.runtimeId, WINDOW_SIZES.DEFAULT)
+    const minimize = () => {
+        runtime.mize(runtimeInfo.runtimeId, WINDOW_SIZES.MINIMIZED)
+    }
+
+    const unmaximize = () => {
+        runtime.mize(runtimeInfo.runtimeId, WINDOW_SIZES.DEFAULT)
+        // setSize(initSizeRef.current)
+        // setPosition(initPosRef.current)
+    }
     
     const close = () => {
         // const r = window.confirm("Do you really want to close ?")
@@ -160,20 +147,22 @@ const WinFrame = props => {
                 'WinFrame',
                 styles.root, 
                 (runtimeInfo.winSize===WINDOW_SIZES.MINIMIZED) && styles.minimized, 
-                (runtimeInfo.winSize===WINDOW_SIZES.DEFAULT) && styles.defaultSized
+                (runtimeInfo.winSize===WINDOW_SIZES.DEFAULT) && styles.defaultSized,
+                (runtimeInfo.winSize===WINDOW_SIZES.MAXIMIZED) && styles.maximized,
                 )}
-            style={{ ...winStyles, zIndex: runtimeInfo.zIndex }}
+            style={{ 
+                height: size.y, 
+                width: size.x, 
+                zIndex: runtimeInfo.zIndex, 
+                transform: `translate(${position.x}px, ${position.y}px)` 
+            }}
             onClick={raiseWindowOnTop}
-            ref={thisWinRef}
             title={ appName || 'Application Window' }
         >
 
             <div 
                 className={clsx(styles.bar, styles.namebar)}
-                draggable="true"
-                onDrag={e => onDrag(e.pageX, e.pageY)}
-                onDragStart={e => onDragStart(e.pageX, e.pageY, e)}
-                onDragEnd={e => onDragEnd(e.pageX, e.pageY)}
+                ref={dragRef}
             >
                 <div>{ appName || 'Application' }</div>
                 <div className={styles.btns}>
@@ -206,7 +195,7 @@ const WinFrame = props => {
             {/* <Menubar menu={menu} handleMenuCommand={handleMenuCommand} /> */}
 
             {/* THE BODY */}
-            <div style={{ height: (winStyles.height - NON_BODY_HEIGHTS) }} className={styles.body}>
+            <div style={{ height: (size.y - NON_BODY_HEIGHTS) }} className={styles.body}>
                 {/* 
                     // Suspense Components could be remotely loaded 
                     // via Webpack Module Federation - Micro-frontend
@@ -223,10 +212,11 @@ const WinFrame = props => {
             
             <i 
                 className={clsx("fa-solid fa-arrow-up-right-dots", styles.repositionHandle)}
-                draggable="true"
-                onDrag={e => onResize(e.pageX, e.pageY)}
-                onDragStart={e => onResizeStart(e.pageX, e.pageY)}
-                onDragEnd={e => onResizeEnd(e.pageX, e.pageY)}
+                // draggable="true"
+                // onDrag={e => onResize(e.pageX, e.pageY)}
+                // onDragStart={e => onResizeStart(e.pageX, e.pageY)}
+                // onDragEnd={e => onResizeEnd(e.pageX, e.pageY)}
+                ref={resizeRef}
             ></i>
         </div>
     )
