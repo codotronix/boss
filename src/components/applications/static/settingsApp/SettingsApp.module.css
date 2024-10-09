@@ -106,3 +106,10 @@
 .menu_closed .mid {
     margin-left: 55px;
 }
+.filter {
+    opacity: 1;
+    transition: var(--sidepanel-transition);
+}
+.menu_closed .filter {
+    opacity: 0;
+}

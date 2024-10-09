@@ -8,7 +8,7 @@ import useDragV2 from './useDragV2'
 import { WINDOW_SIZES } from '../../../const/WINDOW'
 import Menubar from './Menubar'
 
-const NON_BODY_HEIGHTS = 25
+// const NON_BODY_HEIGHTS = 25
 
 const LoadingScreen = ({ appName }) => {
     return (
@@ -66,7 +66,7 @@ const WinFrame = props => {
     const resizeRef = useRef()
 
     // use the useDragV2 custom hook for Dragging and repositioning
-    const [ position, setPosition ] = useDragV2(dragRef.current, initPosRef.current)
+    const [ position ] = useDragV2(dragRef.current, initPosRef.current)
     const [ size ] = useDragV2(resizeRef.current, initSizeRef.current)
 
     const raiseWindowOnTop = () => runtime.raiseWindow(runtimeInfo.runtimeId)

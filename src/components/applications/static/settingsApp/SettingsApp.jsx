@@ -30,6 +30,7 @@ const SettingsApp = props => {
                         allItems={menuItems}
                         filterKeys={['name']}
                         setFilteredItems={setFilteredMenuItems}
+                        className={styles.filter}
                     />
                     <ul className={styles.left_inner}>
                         {filteredMenuItems.map(item => (

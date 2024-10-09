@@ -10,7 +10,7 @@ import useFilter from "./useFilter"
  * @returns 
  */
 const TypeToFilter = props => {
-    const { allItems, filterKeys, setFilteredItems } = props
+    const { allItems, filterKeys, setFilteredItems, className='' } = props
     const [ filteredItems, filterTxt, onChangeFilterTxt ] = useFilter(allItems, filterKeys)
 
     // Whenever filtered item changes, notify the parent
@@ -20,7 +20,7 @@ const TypeToFilter = props => {
     [filteredItems, setFilteredItems])
 
     return(
-        <div style={{marginBottom: '15px'}}>
+        <div style={{marginBottom: '15px'}} className={className}>
             <input 
                 type="text" 
                 value={filterTxt} 
