@@ -1,6 +1,5 @@
 import clsx from 'clsx'
 import styled from 'styled-components'
-import styles from './MinimizedAppsList.module.css'
 import { APPS_DETAILS } from '../../../../../const/APPS_DETAILS'
 import { WINDOW_SIZES } from '../../../../../const/WINDOW'
 import useRuntime from '../../../../../features/procs/useRuntime'
@@ -32,7 +31,7 @@ const StyledMinimizedAppsList = styled.div`
         bottom: auto;
     }
 
-    .inner {
+    .inner_list {
         padding: 0;
         margin: 0;
         list-style: none;
@@ -83,8 +82,8 @@ const MinimizedAppsList = props => {
     }
 
     return (
-        <StyledMinimizedAppsList className={clsx(styles.root, !visible && 'hidden', className)}>
-            <ul className={styles.inner}>
+        <StyledMinimizedAppsList className={clsx(!visible && 'hidden', className)}>
+            <ul className="inner_list">
                 { 
                     (!minimizedApps || minimizedApps.length === 0) && 
                     <li className='p-10'>No minimized apps</li>
@@ -93,13 +92,13 @@ const MinimizedAppsList = props => {
                     minimizedApps && minimizedApps.map(a => 
                     <li key={a.runtimeId}>
                         <span 
-                            className={styles.appName}
+                            className="appName"
                             onClick={() => onAppClick(a.runtimeId)}
                         >
                             { APPS_DETAILS[a.appId].name }
                         </span>
                         <i 
-                            className={clsx("fa-solid fa-xmark", styles.closeIco)}
+                            className="fa-solid fa-xmark closeIco"
                             title='Close App'
                             onClick={() => onAppClose(a.runtimeId)}
                         ></i>
