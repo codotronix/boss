@@ -1,11 +1,74 @@
 import clsx from 'clsx'
+import styled from 'styled-components'
 import styles from './MinimizedAppsList.module.css'
 import { APPS_DETAILS } from '../../../../../const/APPS_DETAILS'
 import { WINDOW_SIZES } from '../../../../../const/WINDOW'
 import useRuntime from '../../../../../features/procs/useRuntime'
 
+const StyledMinimizedAppsList = styled.div`
+    position: absolute;
+    bottom: 75px;
+    right: -12px;
+    background: #000;
+    color: #1b8ffa;
+    border-radius: 9px;
+    user-select: none;
+    overflow: auto;
+
+    &.left {
+        left: 80px;
+        right: auto;
+        bottom: 0;
+    }
+
+    &.right {
+        right: 80px;
+        left: auto;
+        bottom: 0;
+    }
+
+    &.top {
+        top: 75px;
+        bottom: auto;
+    }
+
+    .inner {
+        padding: 0;
+        margin: 0;
+        list-style: none;
+        min-width: 200px;
+
+        li {
+            display: grid;
+            grid-template-columns: 1fr 35px;
+
+            .appName {
+                padding: 10px 20px;
+
+                &:hover {
+                    background: rgb(255 255 255 / 12%);
+                }
+            }
+
+            & > * {
+                display: flex;
+                align-items: center;
+            }
+
+            .closeIco {
+                justify-content: center;
+
+                &:hover {
+                    color: red;
+                    background: rgb(255 255 255 / 12%);
+                }
+            }
+        }
+    }
+`
+
 const MinimizedAppsList = props => {
-    const { visible, setVisible, minimizedApps } = props
+    const { visible, setVisible, minimizedApps, className } = props
     const runtime = useRuntime()
 
     const onAppClick = (runtimeId) => {
@@ -20,7 +83,7 @@ const MinimizedAppsList = props => {
     }
 
     return (
-        <div className={clsx(styles.root, !visible && 'hidden')}>
+        <StyledMinimizedAppsList className={clsx(styles.root, !visible && 'hidden', className)}>
             <ul className={styles.inner}>
                 { 
                     (!minimizedApps || minimizedApps.length === 0) && 
@@ -43,7 +106,7 @@ const MinimizedAppsList = props => {
                     </li>)
                 }
             </ul>
-        </div>
+        </StyledMinimizedAppsList>
     )
 }
 

@@ -20,7 +20,7 @@ const StyledDockSettings = styled.div`
 const DockSettings = () => {
     const dispatch = useDispatch()
     const dockPosition = useSelector(state => state.settings.dock.position)
-    console.log(dockPosition)
+    // console.log(dockPosition)
 
     return (
         <StyledDockSettings>
