@@ -1,4 +1,5 @@
 import { useRef, Suspense } from 'react'
+import { useSelector } from 'react-redux'
 import clsx from 'clsx'
 import styles from './WinFrame.module.css'
 import { APPS_DETAILS } from '../../../const/APPS_DETAILS'
@@ -55,6 +56,7 @@ const getInitSize = () => ({
 const WinFrame = props => {
     // const { render } = props
     const { appProps, AppComponent } = props
+    const closeBtnPosition = useSelector(state => state.settings.window.closeBtnPosition)
     const { runtimeInfo } = appProps
     const appName = APPS_DETAILS[runtimeInfo.appId].name
     const runtime = useRuntime()
@@ -106,7 +108,7 @@ const WinFrame = props => {
         >
 
             {/* Title Bar */}
-            <div className={clsx(styles.bar, styles.titlebar)}>
+            <div className={clsx(styles.bar, styles.titlebar, styles[closeBtnPosition])}>
                 <div className={styles.apptitle}>
                     { appName || 'Application' }
                 </div>

@@ -3,3 +3,8 @@ export const WINDOW_SIZES = {
     MAXIMIZED: 'maxized_window',
     MINIMIZED: 'minimized_window',
 }
+
+export const CLOSE_BTN_POSITION = {
+    LEFT: 'left',
+    RIGHT: 'right',
+}
