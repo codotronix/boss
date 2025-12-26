@@ -1,0 +1,41 @@
+*,
+*::after,
+*::before {
+  box-sizing: border-box;
+  font-size: inherit;
+}
+:root {
+  --winframe-bg: rgb(0 22 57 / 95%);
+  --winframe-titlebar-bg: rgb(0 0 0 / 90%);
+  --winframe-titlebar-fg: #eee;
+  --winframe-menubar-bg: rgb(38 37 37 / 99%);
+  --winframe-menubar-fg: #eee;
+  --winframe-menu-hover-dark-bg: rgb(255 255 255 / 10%);
+  --winframe-menu-hover-light-bg: rgb(0 0 0 / 10%);
+}
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* background: url() 0 0 #222; */
+  overflow: hidden;
+  font-size: 16px;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.hidden { display: none !important; }
+.p-10 { padding: 10px !important; }
+.transparent-bg { background-color: transparent !important; }
+.flex-c {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
