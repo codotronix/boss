@@ -10,13 +10,23 @@ import {
   Button,
 } from "@/components/common/ui";
 
-export const LockScreen = () => {
+export interface LockScreenProps {
+  onUnlock: () => void;
+}
+
+export const LockScreen = ({ onUnlock }: LockScreenProps) => {
   const [password, setPassword] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // Handle authentication logic here
     console.log("Password submitted:", password);
+    if (password === "guest1234") {
+      onUnlock();
+    } else {
+      alert("Incorrect password. Please try again.");
+    }
+    setPassword("");
   };
 
   return (
