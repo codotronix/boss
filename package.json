@@ -6,8 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "deploy": "gh-pages -d all-builds -b gh-pages",
-    "custom-deploy": "node custom-deploy.js",
-    "deploy-skip-build": "node custom-deploy.js --skip-build",
+    "build-and-deploy": "node custom-deploy.js",
+    "deploy-all": "node custom-deploy.js --skip-build",
     "go": "node custom-deploy.js --skip-build"
   },
   "keywords": [
