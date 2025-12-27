@@ -1,8 +1,4 @@
-// import { useState } from "react";
-import "./App.css";
-// import { Button } from "@/components/ui/button";
-import { LockScreen } from "@/components/system";
-import { Counter } from "@/components/Counter";
+import { LockScreen, Desktop } from "@/components/system";
 import { useAppSelector, useAppDispatch } from "@/store/hooks";
 import { unlockSystem } from "./store/slices/systemSlice";
 
@@ -17,14 +13,7 @@ function App() {
   if (!isSystemUnLocked) {
     return <LockScreen onUnlock={handleUnlockSystem} />;
   }
-  return (
-    <div>
-      {/* Redux Counter Demo - you can remove this later */}
-      <div className="p-4">
-        <Counter />
-      </div>
-    </div>
-  );
+  return <Desktop />;
 }
 
 export default App;
