@@ -1,5 +1,5 @@
 export const WallpaperConfig = {
-    root: "/boss/v1/assets/img/wallpapers/",
+    root: "/boss/v0/assets/img/wallpapers/",
     wallpapers: [
         { path: 'ai-generated-8293344_1280.jpg' },
         { path: 'ai-generated-8327632_1280.jpg' },

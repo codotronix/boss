@@ -5,8 +5,8 @@ module.exports = {
     webpack: {
         configure: {
             output: {
-                publicPath: "https://codotronix.github.io/boss/v1/",
-                // publicPath: "http://localhost:3000/boss/v1/",
+                publicPath: "https://codotronix.github.io/boss/v0/",
+                // publicPath: "http://localhost:3000/boss/v0/",
             },
             entry: './src/index.js',
             plugins: [

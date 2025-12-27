@@ -2,8 +2,8 @@
   "name": "boss",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://codotronix.github.io/boss/v1/",
-  "_homepage": "/boss/v1/",
+  "homepage": "https://codotronix.github.io/boss/v0/",
+  "_homepage": "/boss/v0/",
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.7",
     "@testing-library/jest-dom": "^5.17.0",

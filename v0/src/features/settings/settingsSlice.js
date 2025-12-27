@@ -3,7 +3,7 @@ import { DOCK_POSITION } from "../../const/DOCK";
 import { CLOSE_BTN_POSITION } from "../../const/WINDOW";
 
 const initialState = {
-    wallpaper: "/boss/v1/assets/img/wallpapers/ai-generated-8293344_1280.jpg",
+    wallpaper: "/boss/v0/assets/img/wallpapers/ai-generated-8293344_1280.jpg",
     dock: {
         position: DOCK_POSITION.BOTTOM,
     },
