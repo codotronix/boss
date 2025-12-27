@@ -171,20 +171,32 @@ function copyVersionBuilds(versionDirs) {
   
   for (const versionDir of versionDirs) {
     const buildPath = path.join(ROOT_DIR, versionDir, 'build');
+    const distPath = path.join(ROOT_DIR, versionDir, 'dist');
     const destinationPath = path.join(ALL_BUILDS_DIR, versionDir);
     
+    let sourcePath = null;
+    let sourceType = null;
+    
     if (directoryExists(buildPath)) {
-      log(`Copying ${versionDir}/build to all-builds/${versionDir}...`);
-      copyDirectory(buildPath, destinationPath);
-      logSuccess(`Copied ${versionDir} build`);
+      sourcePath = buildPath;
+      sourceType = 'build';
+    } else if (directoryExists(distPath)) {
+      sourcePath = distPath;
+      sourceType = 'dist';
+    }
+    
+    if (sourcePath) {
+      log(`Copying ${versionDir}/${sourceType} to all-builds/${versionDir}...`);
+      copyDirectory(sourcePath, destinationPath);
+      logSuccess(`Copied ${versionDir} ${sourceType} folder`);
       copiedVersions++;
     } else {
-      logWarning(`No build folder found for ${versionDir}`);
+      logWarning(`No build or dist folder found for ${versionDir}`);
     }
   }
   
   if (copiedVersions === 0) {
-    logError('No build folders found to copy');
+    logError('No build or dist folders found to copy');
     process.exit(1);
   }
   

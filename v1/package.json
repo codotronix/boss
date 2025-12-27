@@ -3,6 +3,8 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "homepage": "https://codotronix.github.io/boss/v1/",
+  "_homepage": "/boss/v1/",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
