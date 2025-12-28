@@ -113,6 +113,10 @@
   --sidebar-ring: oklch(0.556 0 0);
 }
 
+.bg-default {
+  @apply bg-linear-to-br from-blue-400 to-blue-800 dark:from-blue-900 dark:to-black;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

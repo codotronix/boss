@@ -44,7 +44,7 @@ export const LockScreen = ({ onUnlock }: LockScreenProps) => {
             <FieldGroup>
               <Field>
                 <FieldLabel htmlFor="password">Password</FieldLabel>
-                <FieldDescription className="text-left">
+                <FieldDescription className="text-left text-white/70">
                   Password for guest is &quot;guest1234&quot;
                 </FieldDescription>
                 <Input
@@ -53,6 +53,7 @@ export const LockScreen = ({ onUnlock }: LockScreenProps) => {
                   placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  className="text-white placeholder:text-white/50"
                 />
               </Field>
               <Button type="submit">Sign in</Button>
