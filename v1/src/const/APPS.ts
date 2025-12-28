@@ -1,3 +1,5 @@
+import { WINDOW_SIZES } from "./WINFRAME";
+
 export const APP_DISPLAY_TYPE = {
   WINDOW: "app_display_type_window",
   CONSOLE: "app_display_type_console",
@@ -21,6 +23,12 @@ export interface IInstalledApp {
 export interface IRunningApp {
   runId: string;
   appId: string;
+  windowSize: (typeof WINDOW_SIZES)[keyof typeof WINDOW_SIZES];
+  prevWindowSize: (typeof WINDOW_SIZES)[keyof typeof WINDOW_SIZES];
+  x: number;
+  y: number;
+  height: number;
+  width: number;
 }
 
 export interface IAppComponentBaseProps {

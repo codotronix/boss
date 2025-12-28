@@ -8,7 +8,7 @@ export interface DockedAppProps {
 export const DockedApp = ({ iconClass, name, onClick }: DockedAppProps) => {
   return (
     <button
-      className="mx-4 flex flex-col items-center justify-center text-blue-800 hover:opacity-70 cursor-pointer"
+      className="mx-4 flex flex-col items-center justify-center text-blue-700 hover:opacity-70 cursor-pointer"
       title={name}
       onClick={onClick}
     >

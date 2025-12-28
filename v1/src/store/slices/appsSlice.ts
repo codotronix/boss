@@ -4,6 +4,7 @@ import {
   type IRunningApp,
   DEFAULT_APPS,
 } from "@/const/APPS";
+import { WINDOW_SIZES } from "@/const/WINFRAME";
 
 export interface AppsState {
   installedApps: { [appId: string]: IInstalledApp };
@@ -23,10 +24,12 @@ export const appsSlice = createSlice({
       const app = action.payload;
       state.installedApps[app.appId] = app;
     },
+
     uninstallApp: (state, action: { payload: { appId: string } }) => {
       const { appId } = action.payload;
       delete state.installedApps[appId];
     },
+
     runApp: (state, action: { payload: { appId: string } }) => {
       const { appId } = action.payload;
 
@@ -45,15 +48,55 @@ export const appsSlice = createSlice({
       }
 
       const runId = `${appId}-${Date.now()}`;
-      const runningApp = { runId, appId };
+      const width = Math.min(800, window.innerWidth);
+      const height = Math.min(600, window.innerHeight);
+      const x = Math.floor(Math.random() * (window.innerWidth - width));
+      const y = Math.floor(Math.random() * (window.innerHeight - height));
+      const runningApp = {
+        runId,
+        appId,
+        windowSize: WINDOW_SIZES.SCALED,
+        prevWindowSize: WINDOW_SIZES.SCALED,
+        x,
+        y,
+        height,
+        width,
+      };
       state.runningApps[runningApp.runId] = runningApp;
     },
+
     closeApp: (state, action: { payload: { runId: string } }) => {
       const { runId } = action.payload;
       delete state.runningApps[runId];
     },
+
+    mizeApp: (
+      state,
+      action: { payload: { runId: string; windowSize: string } }
+    ) => {
+      const { runId, windowSize } = action.payload;
+      // check if windowSize is valid
+      if (!Object.values(WINDOW_SIZES).includes(windowSize)) {
+        return;
+      }
+
+      // if minimizing, store previous size
+      if (windowSize === WINDOW_SIZES.MINIMIZED) {
+        state.runningApps[runId].prevWindowSize =
+          state.runningApps[runId].windowSize;
+      }
+
+      // if restoring from minimized, revert to previous size
+      if (windowSize === WINDOW_SIZES.RESTORE) {
+        state.runningApps[runId].windowSize =
+          state.runningApps[runId].prevWindowSize;
+      } else {
+        state.runningApps[runId].windowSize = windowSize;
+      }
+    },
   },
 });
 
-export const { installApp, uninstallApp, runApp, closeApp } = appsSlice.actions;
+export const { installApp, uninstallApp, runApp, closeApp, mizeApp } =
+  appsSlice.actions;
 export default appsSlice.reducer;
