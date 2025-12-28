@@ -9,7 +9,7 @@ export interface IInstalledApp {
   name: string;
   iconClass: string;
   allowedInstances?: number;
-  docked?: boolean;
+  isDocked?: boolean;
   displayType: (typeof APP_DISPLAY_TYPE)[keyof typeof APP_DISPLAY_TYPE];
   keywords?: string;
   //   version: string;
@@ -18,12 +18,12 @@ export interface IInstalledApp {
   //   installDate: Date;
 }
 
-export const APPS_DETAILS: { [appId: string]: IInstalledApp } = {
+export const DEFAULT_APPS: { [appId: string]: IInstalledApp } = {
   appsviewer: {
     appId: "appsviewer",
     name: "Apps",
     iconClass: "fa-solid fa-cubes-stacked",
-    docked: true,
+    isDocked: true,
     displayType: APP_DISPLAY_TYPE.WINDOW,
     allowedInstances: 1,
     keywords: "apps, all apps",
@@ -32,7 +32,7 @@ export const APPS_DETAILS: { [appId: string]: IInstalledApp } = {
     appId: "folders",
     name: "Folders",
     iconClass: "fa-regular fa-folder-open",
-    docked: true,
+    isDocked: true,
     displayType: APP_DISPLAY_TYPE.WINDOW,
     keywords: "finder, files, folders, explorer",
   },
@@ -40,7 +40,7 @@ export const APPS_DETAILS: { [appId: string]: IInstalledApp } = {
     appId: "settings",
     name: "Settings",
     iconClass: "fa-solid fa-gear",
-    docked: true,
+    isDocked: true,
     displayType: APP_DISPLAY_TYPE.WINDOW,
     allowedInstances: 1,
   },
@@ -61,7 +61,7 @@ export const APPS_DETAILS: { [appId: string]: IInstalledApp } = {
     appId: "terminal",
     name: "Terminal",
     iconClass: "fa-solid fa-terminal",
-    docked: true,
+    isDocked: true,
     displayType: APP_DISPLAY_TYPE.WINDOW,
     keywords: "terminal, cmd, command line, command-line, dos, emulator, shell",
   },
@@ -70,13 +70,13 @@ export const APPS_DETAILS: { [appId: string]: IInstalledApp } = {
     name: "Timer",
     iconClass: "fa-solid fa-stopwatch-20",
     displayType: APP_DISPLAY_TYPE.WINDOW,
-    // docked: true
+    // isDocked: true
   },
   bin: {
     appId: "bin",
     name: "Bin",
     iconClass: "fa-solid fa-trash",
-    docked: true,
+    isDocked: true,
     displayType: APP_DISPLAY_TYPE.WINDOW,
   },
   bnotes: {
