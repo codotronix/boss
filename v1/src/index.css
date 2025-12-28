@@ -117,6 +117,10 @@
   @apply bg-linear-to-br from-blue-400 to-blue-800 dark:from-blue-900 dark:to-black;
 }
 
+.fixed-fullscreen {
+  @apply fixed left-0 right-0 top-0 bottom-0;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

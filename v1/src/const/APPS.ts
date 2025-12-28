@@ -18,6 +18,15 @@ export interface IInstalledApp {
   //   installDate: Date;
 }
 
+export interface IRunningApp {
+  runId: string;
+  appId: string;
+}
+
+export interface IAppComponentBaseProps {
+  runningApp: IRunningApp;
+}
+
 export const DEFAULT_APPS: { [appId: string]: IInstalledApp } = {
   appsviewer: {
     appId: "appsviewer",

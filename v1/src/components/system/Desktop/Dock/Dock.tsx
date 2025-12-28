@@ -1,15 +1,19 @@
 import { cn } from "@/lib/utils";
-import { useAppSelector } from "@/store/hooks";
+import { useAppSelector, useAppDispatch } from "@/store/hooks";
+import { runApp } from "@/store/slices/appsSlice";
 import { DockedApp } from "./DockedApp";
 
 export const Dock = () => {
   const windowWidth = window.innerWidth;
+  const dispatch = useAppDispatch();
   const installedApps = useAppSelector((state) => state.apps.installedApps);
   const dockedApps = Object.values(installedApps).filter((app) => app.isDocked);
 
+  // Handle click on a docked app
   const handleClick = (appId: string) => {
     // Logic to open the application window
     console.log(`Open app with ID: ${appId}`);
+    dispatch(runApp({ appId }));
   };
 
   return (
@@ -20,7 +24,7 @@ export const Dock = () => {
       )}
     >
       {/* Docked Apps */}
-      <div className="absolute left-2.5 right-26 overflow-auto">
+      <div className="flex absolute left-2.5 right-26 overflow-auto">
         <div className="flex flex-row items-center justify-center">
           {dockedApps.map((app) => (
             <DockedApp
