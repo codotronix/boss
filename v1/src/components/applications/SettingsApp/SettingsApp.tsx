@@ -1,3 +1,5 @@
+import { ComingSoon } from "@/components/common/ComingSoon";
+
 export const SettingsApp = () => {
-  return <div>Settings Application</div>;
+  return <ComingSoon appName="SettingsApp" />;
 };

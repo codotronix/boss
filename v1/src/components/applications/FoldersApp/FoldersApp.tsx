@@ -1,3 +1,5 @@
+import { ComingSoon } from "@/components/common/ComingSoon";
+
 export const FoldersApp = () => {
-  return <div>Folders Application</div>;
+  return <ComingSoon appName="FoldersApp" />;
 };

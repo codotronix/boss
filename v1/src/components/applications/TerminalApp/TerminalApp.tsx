@@ -1,3 +1,5 @@
+import { ComingSoon } from "@/components/common/ComingSoon";
+
 export const TerminalApp = () => {
-  return <div>Terminal Application</div>;
+  return <ComingSoon appName="TerminalApp" />;
 };

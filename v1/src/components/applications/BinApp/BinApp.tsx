@@ -1,3 +1,4 @@
+import { ComingSoon } from "@/components/common/ComingSoon";
 export const BinApp = () => {
-  return <div>Bin Application</div>;
+  return <ComingSoon appName="BinApp" />;
 };

@@ -1,3 +1,5 @@
+import { ComingSoon } from "@/components/common/ComingSoon";
+
 export const WelcomeApp = () => {
-  return <div>Welcome to the Application!</div>;
+  return <ComingSoon appName="WelcomeApp" />;
 };

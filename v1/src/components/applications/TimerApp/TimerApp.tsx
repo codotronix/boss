@@ -1,3 +1,4 @@
+import { ComingSoon } from "@/components/common/ComingSoon";
 export const TimerApp = () => {
-  return <div>Timer Application</div>;
+  return <ComingSoon appName="TimerApp" />;
 };
