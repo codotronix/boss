@@ -25,7 +25,7 @@ const WinFrame = ({ children, runningApp }: WinFrameProps) => {
     // dispatch closeApp action after a closing animation
     setTimeout(() => {
       dispatch(closeApp({ runId: runningApp.runId }));
-    }, 1000);
+    }, 700);
   };
 
   const onMaximize = () => {
@@ -46,7 +46,7 @@ const WinFrame = ({ children, runningApp }: WinFrameProps) => {
         mizeApp({ runId: runningApp.runId, windowSize: WINDOW_SIZES.MINIMIZED })
       );
       setIsMinimizing(false);
-    }, 1000);
+    }, 700);
   };
 
   // from maximixed to scalable / resizable window
@@ -81,7 +81,7 @@ const WinFrame = ({ children, runningApp }: WinFrameProps) => {
   return (
     <div
       className={cn(
-        "winframe fixed-fullscreen bg-background shadow-lg opacity-90 transition-all duration-500 ease-in-out",
+        "winframe fixed-fullscreen bg-background shadow-lg opacity-90 transition-all duration-300 ease-in-out",
         isClosing && "scale-0 opacity-0",
         isMinimizing && "scale-0 origin-bottom"
       )}

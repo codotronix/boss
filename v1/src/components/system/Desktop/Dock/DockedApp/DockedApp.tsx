@@ -4,11 +4,20 @@ export interface DockedAppProps {
   iconClass: string;
   name: string;
   onClick: () => void;
+  className?: string;
 }
-export const DockedApp = ({ iconClass, name, onClick }: DockedAppProps) => {
+export const DockedApp = ({
+  iconClass,
+  name,
+  onClick,
+  className,
+}: DockedAppProps) => {
   return (
     <button
-      className="mx-4 flex flex-col items-center justify-center text-blue-700 hover:opacity-70 cursor-pointer"
+      className={cn(
+        "mx-4 flex flex-col items-center justify-center text-blue-700 hover:opacity-70 cursor-pointer",
+        className
+      )}
       title={name}
       onClick={onClick}
     >
