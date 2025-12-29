@@ -15,14 +15,14 @@ export const DockedApp = ({
   return (
     <button
       className={cn(
-        "mx-4 flex flex-col items-center justify-center text-blue-700 hover:opacity-70 cursor-pointer",
+        "mx-4 flex flex-col items-center justify-center text-blue-100 hover:text-blue-300 cursor-pointer",
         className
       )}
       title={name}
       onClick={onClick}
     >
       <i className={cn(iconClass, "text-3xl")}></i>
-      <span className="text-xs text-black mt-1">{name}</span>
+      <span className="text-xs mt-1">{name}</span>
     </button>
   );
 };

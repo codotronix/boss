@@ -16,6 +16,12 @@ const initialState: AppsState = {
   runningApps: {},
 };
 
+export const getHighestZIndex = (runningApps: {
+  [runId: string]: IRunningApp;
+}) => {
+  return Math.max(0, ...Object.values(runningApps).map((app) => app.zIndex));
+};
+
 export const appsSlice = createSlice({
   name: "apps",
   initialState,
@@ -52,6 +58,7 @@ export const appsSlice = createSlice({
       const height = Math.min(600, window.innerHeight);
       const x = Math.floor(Math.random() * (window.innerWidth - width));
       const y = Math.floor(Math.random() * (window.innerHeight - height));
+      const zIndex = getHighestZIndex(state.runningApps) + 1;
       const runningApp = {
         runId,
         appId,
@@ -61,6 +68,7 @@ export const appsSlice = createSlice({
         y,
         height,
         width,
+        zIndex,
       };
       state.runningApps[runningApp.runId] = runningApp;
     },
@@ -93,10 +101,28 @@ export const appsSlice = createSlice({
       } else {
         state.runningApps[runId].windowSize = windowSize;
       }
+
+      // bring to front
+      state.runningApps[runId].zIndex = getHighestZIndex(state.runningApps) + 1;
+    },
+
+    bringAppToFront: (state, action: { payload: { runId: string } }) => {
+      const { runId } = action.payload;
+      const heighestZIndex = getHighestZIndex(state.runningApps);
+
+      // No action needed if already on top
+      if (state.runningApps[runId].zIndex === heighestZIndex) return;
+      state.runningApps[runId].zIndex = heighestZIndex + 1;
     },
   },
 });
 
-export const { installApp, uninstallApp, runApp, closeApp, mizeApp } =
-  appsSlice.actions;
+export const {
+  installApp,
+  uninstallApp,
+  runApp,
+  closeApp,
+  mizeApp,
+  bringAppToFront,
+} = appsSlice.actions;
 export default appsSlice.reducer;

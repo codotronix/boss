@@ -1,7 +1,7 @@
 import { type ReactNode, useState } from "react";
 import { type IAppComponentBaseProps } from "@/const/APPS";
 import { useAppSelector, useAppDispatch } from "@/store/hooks";
-import { closeApp, mizeApp } from "@/store/slices/appsSlice";
+import { closeApp, mizeApp, bringAppToFront } from "@/store/slices/appsSlice";
 import { cn } from "@/lib/utils";
 import { WINDOW_SIZES } from "@/const/WINFRAME";
 
@@ -57,11 +57,18 @@ const WinFrame = ({ children, runningApp }: WinFrameProps) => {
     );
   };
 
+  // bring to front
+  const handleFocus = () => {
+    console.log(`Bring app to front with run ID: ${runningApp.runId}`);
+    dispatch(bringAppToFront({ runId: runningApp.runId }));
+  };
+
   const getDynamicStyles = (windowSize: string) => {
-    let styles = {};
+    let styles: React.CSSProperties = { zIndex: runningApp.zIndex };
     if (windowSize === WINDOW_SIZES.SCALED) {
       const { x, y, width, height } = runningApp;
       styles = {
+        ...styles,
         left: x,
         top: y,
         width,
@@ -69,6 +76,7 @@ const WinFrame = ({ children, runningApp }: WinFrameProps) => {
       };
     } else if (windowSize === WINDOW_SIZES.MAXIMIZED) {
       styles = {
+        ...styles,
         left: 0,
         top: 0,
         right: 0,
@@ -81,11 +89,12 @@ const WinFrame = ({ children, runningApp }: WinFrameProps) => {
   return (
     <div
       className={cn(
-        "winframe fixed-fullscreen bg-background shadow-lg opacity-90 transition-all duration-300 ease-in-out",
+        "winframe fixed-fullscreen bg-background shadow-lg opacity-95 transition-all duration-300 ease-in-out",
         isClosing && "scale-0 opacity-0",
         isMinimizing && "scale-0 origin-bottom"
       )}
       style={getDynamicStyles(runningApp.windowSize)}
+      onMouseDown={handleFocus}
     >
       {/* The titlebar */}
       <div className="winframe-titlebar text-sm h-7 bg-blue-600 text-white flex items-center justify-between px-3 select-none">

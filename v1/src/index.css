@@ -114,7 +114,7 @@
 }
 
 .bg-default {
-  @apply bg-linear-to-br from-blue-400 to-blue-800 dark:from-blue-900 dark:to-black;
+  @apply bg-linear-to-b from-blue-400 to-blue-800 dark:from-blue-800 dark:to-black;
 }
 
 .fixed-fullscreen {

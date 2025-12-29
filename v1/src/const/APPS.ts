@@ -29,6 +29,7 @@ export interface IRunningApp {
   y: number;
   height: number;
   width: number;
+  zIndex: number;
 }
 
 export interface IAppComponentBaseProps {
