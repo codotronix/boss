@@ -1,7 +1,14 @@
-import { type ReactNode, useState } from "react";
+import { type ReactNode, useState, useRef } from "react";
+import Draggable from "react-draggable";
+import { debounce } from "lodash";
 import { type IAppComponentBaseProps } from "@/const/APPS";
 import { useAppSelector, useAppDispatch } from "@/store/hooks";
-import { closeApp, mizeApp, bringAppToFront } from "@/store/slices/appsSlice";
+import {
+  closeApp,
+  mizeApp,
+  bringAppToFront,
+  updateRunningApp,
+} from "@/store/slices/appsSlice";
 import { cn } from "@/lib/utils";
 import { WINDOW_SIZES } from "@/const/WINFRAME";
 
@@ -15,11 +22,14 @@ interface WinFrameProps extends IAppComponentBaseProps {
 const WinFrame = ({ children, runningApp }: WinFrameProps) => {
   const installedApps = useAppSelector((state) => state.apps.installedApps);
   const appInfo = runningApp ? installedApps[runningApp.appId] : undefined;
+  const { x, y, width, height } = runningApp;
   const dispatch = useAppDispatch();
+  const winFrameRef = useRef(null);
   const [isClosing, setIsClosing] = useState(false);
   const [isMinimizing, setIsMinimizing] = useState(false);
 
-  const handleClose = () => {
+  const handleClose = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
     console.log(`Close app with run ID: ${runningApp.runId}`);
     setIsClosing(true);
     // dispatch closeApp action after a closing animation
@@ -28,7 +38,8 @@ const WinFrame = ({ children, runningApp }: WinFrameProps) => {
     }, 700);
   };
 
-  const onMaximize = () => {
+  const onMaximize = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
     console.log(`Maximize app with run ID: ${runningApp.runId}`);
     // dispatch maximize action
     dispatch(
@@ -36,7 +47,8 @@ const WinFrame = ({ children, runningApp }: WinFrameProps) => {
     );
   };
 
-  const onMinimize = () => {
+  const onMinimize = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
     console.log(`Minimize app with run ID: ${runningApp.runId}`);
 
     // give some time for minimizing animation
@@ -66,19 +78,16 @@ const WinFrame = ({ children, runningApp }: WinFrameProps) => {
   const getDynamicStyles = (windowSize: string) => {
     let styles: React.CSSProperties = { zIndex: runningApp.zIndex };
     if (windowSize === WINDOW_SIZES.SCALED) {
-      const { x, y, width, height } = runningApp;
       styles = {
         ...styles,
-        left: x,
-        top: y,
+        transform: `translate(${x}px, ${y}px)`,
         width,
         height,
       };
     } else if (windowSize === WINDOW_SIZES.MAXIMIZED) {
       styles = {
         ...styles,
-        left: 0,
-        top: 0,
+        transform: `translate(0, 0)`,
         right: 0,
         bottom: 0,
       };
@@ -86,57 +95,90 @@ const WinFrame = ({ children, runningApp }: WinFrameProps) => {
     return styles;
   };
 
+  const updateDragToRedux = debounce((_event: any, data: any) => {
+    console.log(
+      `Dragging app with run ID: ${runningApp.runId} to x: ${data.x}, y: ${data.y}`
+    );
+    // update x and y in redux store
+    dispatch(
+      updateRunningApp({
+        runId: runningApp.runId,
+        updates: { x: data.x, y: data.y },
+      })
+    );
+  }, 200);
+
   return (
-    <div
-      className={cn(
-        "winframe fixed-fullscreen bg-background shadow-lg opacity-95 transition-all duration-300 ease-in-out",
-        isClosing && "scale-0 opacity-0",
-        isMinimizing && "scale-0 origin-bottom"
-      )}
-      style={getDynamicStyles(runningApp.windowSize)}
-      onMouseDown={handleFocus}
+    <Draggable
+      nodeRef={winFrameRef}
+      handle=".winframe-titlebar"
+      // bounds="parent"
+      disabled={runningApp.windowSize !== WINDOW_SIZES.SCALED}
+      defaultPosition={{ x, y }}
+      onDrag={updateDragToRedux}
     >
-      {/* The titlebar */}
-      <div className="winframe-titlebar text-sm h-7 bg-blue-600 text-white flex items-center justify-between px-3 select-none">
-        <div className="winframe-title">
-          {appInfo ? appInfo.name : "My Application"}
-        </div>
-        <div className="winframe-controls flex space-x-3">
-          <button className="winframe-btn minimize" onClick={onMinimize}>
-            <i className="fa-solid fa-window-minimize"></i>
-          </button>
-
-          {runningApp.windowSize !== WINDOW_SIZES.MAXIMIZED && (
-            <button className="winframe-btn maximize" onClick={onMaximize}>
-              <i className="fa-solid fa-expand"></i>
+      <div
+        className={cn(
+          "winframe fixed-fullscreen bg-background shadow-lg opacity-95 transition-all duration-300 ease-in-out left-0 top-0 origin-bottom",
+          isClosing && "scale-0 opacity-0",
+          isMinimizing && "scale-0"
+        )}
+        style={getDynamicStyles(runningApp.windowSize)}
+        // onMouseDown={handleFocus}
+        onClick={handleFocus}
+        ref={winFrameRef}
+      >
+        {/* The titlebar */}
+        <div className="winframe-titlebar text-sm h-7 bg-blue-600 text-white flex items-center justify-between px-3 select-none">
+          <div className="winframe-title">
+            {appInfo ? appInfo.name : "My Application"}
+          </div>
+          <div className="winframe-controls flex space-x-1">
+            <button
+              className="winframe-btn minimize hover:bg-white/10 h-7 w-8"
+              onClick={onMinimize}
+            >
+              <i className="fa-solid fa-window-minimize"></i>
             </button>
-          )}
 
-          {runningApp.windowSize !== WINDOW_SIZES.SCALED && (
-            <button className="winframe-btn scalable" onClick={makeScalable}>
-              <i className="fa-solid fa-compress"></i>
+            {runningApp.windowSize !== WINDOW_SIZES.MAXIMIZED && (
+              <button
+                className="winframe-btn maximize hover:bg-white/10 h-7 w-8"
+                onClick={onMaximize}
+              >
+                <i className="fa-solid fa-expand"></i>
+              </button>
+            )}
+
+            {runningApp.windowSize !== WINDOW_SIZES.SCALED && (
+              <button
+                className="winframe-btn scalable hover:bg-white/10 h-7 w-8"
+                onClick={makeScalable}
+              >
+                <i className="fa-solid fa-compress"></i>
+              </button>
+            )}
+
+            <button
+              className="winframe-btn close active:scale-95 hover:bg-white/10 h-7 w-8"
+              onClick={handleClose}
+            >
+              <i className="fa-solid fa-xmark"></i>
             </button>
-          )}
-
-          <button
-            className="winframe-btn close active:scale-95"
-            onClick={handleClose}
-          >
-            <i className="fa-solid fa-xmark"></i>
-          </button>
+          </div>
         </div>
-      </div>
 
-      {/* menubar */}
-      <div className="winframe-menubar h-6 text-sm bg-blue-500 text-white flex items-center px-3 select-none">
-        <div className="winframe-menu-item mr-4 cursor-pointer">File</div>
-        <div className="winframe-menu-item mr-4 cursor-pointer">Edit</div>
-        <div className="winframe-menu-item mr-4 cursor-pointer">View</div>
-        <div className="winframe-menu-item mr-4 cursor-pointer">Help</div>
-      </div>
+        {/* menubar */}
+        <div className="winframe-menubar h-6 text-sm bg-blue-500 text-white flex items-center px-3 select-none">
+          <div className="winframe-menu-item mr-4 cursor-pointer">File</div>
+          <div className="winframe-menu-item mr-4 cursor-pointer">Edit</div>
+          <div className="winframe-menu-item mr-4 cursor-pointer">View</div>
+          <div className="winframe-menu-item mr-4 cursor-pointer">Help</div>
+        </div>
 
-      <div className="winframe-content">{children}</div>
-    </div>
+        <div className="winframe-content">{children}</div>
+      </div>
+    </Draggable>
   );
 };
 

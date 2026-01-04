@@ -6,7 +6,7 @@ import { WINDOW_SIZES } from "@/const/WINFRAME";
 export const AppsRuntimeContainer = () => {
   const runningApps = useAppSelector((state) => state.apps.runningApps);
   return (
-    <div>
+    <div id="apps-runtime-container">
       {Object.values(runningApps)
         .filter(
           (runningApp) => runningApp.windowSize !== WINDOW_SIZES.MINIMIZED

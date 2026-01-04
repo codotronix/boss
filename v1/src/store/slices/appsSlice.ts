@@ -114,6 +114,17 @@ export const appsSlice = createSlice({
       if (state.runningApps[runId].zIndex === heighestZIndex) return;
       state.runningApps[runId].zIndex = heighestZIndex + 1;
     },
+
+    updateRunningApp: (
+      state,
+      action: { payload: { runId: string; updates: Partial<IRunningApp> } }
+    ) => {
+      const { runId, updates } = action.payload;
+      state.runningApps[runId] = {
+        ...state.runningApps[runId],
+        ...updates,
+      };
+    },
   },
 });
 
@@ -124,5 +135,6 @@ export const {
   closeApp,
   mizeApp,
   bringAppToFront,
+  updateRunningApp,
 } = appsSlice.actions;
 export default appsSlice.reducer;
