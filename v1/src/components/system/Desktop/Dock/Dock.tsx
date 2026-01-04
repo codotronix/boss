@@ -63,7 +63,7 @@ export const Dock = () => {
       style={{ zIndex: dockZindex }}
     >
       {/* Docked Apps */}
-      <div className="flex absolute left-2.5 right-26 overflow-auto">
+      <div className="flex justify-center absolute left-2.5 right-26 overflow-auto">
         <div className="flex flex-row items-center justify-center">
           {dockedApps.map((app) => (
             <DockedApp
