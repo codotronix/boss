@@ -6,7 +6,23 @@ export const AppsViewerApp = () => {
   const installedApps = useAppSelector((state) => state.apps.installedApps);
   const dispatch = useAppDispatch();
 
-  const handleClick = (appId: string) => {
+  // Handle double-click or Enter/Space key to open app
+  const handleDoubleClick = (
+    e:
+      | React.MouseEvent<HTMLButtonElement>
+      | React.KeyboardEvent<HTMLButtonElement>,
+    appId: string
+  ) => {
+    e.stopPropagation();
+    // if key event, ensure it's Enter or Space
+    if (
+      "key" in e &&
+      e.type === "keyup" &&
+      e.key !== "Enter" &&
+      e.key !== " "
+    ) {
+      return;
+    }
     // Logic to open the application window
     console.log(`Open app with ID: ${appId}`);
     dispatch(runApp({ appId }));
@@ -19,7 +35,8 @@ export const AppsViewerApp = () => {
           <button
             key={app.appId}
             className="p-4 text-center rounded-lg text-blue-800 hover:bg-blue-200 transition-colors active:scale-95"
-            onClick={() => handleClick(app.appId)}
+            onDoubleClick={(e) => handleDoubleClick(e, app.appId)}
+            onKeyUp={(e) => handleDoubleClick(e, app.appId)}
           >
             <i className={`${app.iconClass} text-3xl mr-2`}></i>
             <div className="mt-3">{app.name}</div>

@@ -1,3 +1,4 @@
+import type { MenuConfig } from "@/components/system/WinFrame/types";
 import { WINDOW_SIZES } from "./WINFRAME";
 
 export const APP_DISPLAY_TYPE = {
@@ -14,6 +15,7 @@ export interface IInstalledApp {
   isDocked?: boolean;
   displayType: (typeof APP_DISPLAY_TYPE)[keyof typeof APP_DISPLAY_TYPE];
   keywords?: string;
+  remotePath?: string;
   //   version: string;
   //   description?: string;
   //   author?: string;
@@ -34,6 +36,8 @@ export interface IRunningApp {
 
 export interface IAppComponentBaseProps {
   runningApp: IRunningApp;
+  menuConfig: MenuConfig;
+  configMenu: (menuConfig: MenuConfig) => void;
 }
 
 export const DEFAULT_APPS: { [appId: string]: IInstalledApp } = {
@@ -62,12 +66,12 @@ export const DEFAULT_APPS: { [appId: string]: IInstalledApp } = {
     displayType: APP_DISPLAY_TYPE.WINDOW,
     allowedInstances: 1,
   },
-  welcomeapp: {
-    appId: "welcomeapp",
-    name: "Welcome",
-    iconClass: "fa-solid fa-face-smile",
-    displayType: APP_DISPLAY_TYPE.WINDOW,
-  },
+  // welcomeapp: {
+  //   appId: "welcomeapp",
+  //   name: "Welcome",
+  //   iconClass: "fa-solid fa-face-smile",
+  //   displayType: APP_DISPLAY_TYPE.WINDOW,
+  // },
   bcalc: {
     appId: "bcalc",
     name: "B-Calc",

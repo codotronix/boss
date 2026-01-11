@@ -26,6 +26,17 @@ export const appsSlice = createSlice({
   name: "apps",
   initialState,
   reducers: {
+    registerApps: (
+      state,
+      action: { payload: { [appId: string]: IInstalledApp } }
+    ) => {
+      const apps = action.payload;
+      state.installedApps = {
+        ...state.installedApps,
+        ...apps,
+      };
+    },
+
     installApp: (state, action: { payload: IInstalledApp }) => {
       const app = action.payload;
       state.installedApps[app.appId] = app;
@@ -129,6 +140,7 @@ export const appsSlice = createSlice({
 });
 
 export const {
+  registerApps,
   installApp,
   uninstallApp,
   runApp,

@@ -1,18 +1,12 @@
-import { type ReactNode, useState, useRef } from "react";
+import { useState, type ReactNode } from "react";
 import Draggable from "react-draggable";
 import { Resizable } from "react-resizable";
 import "react-resizable/css/styles.css";
-import { debounce } from "lodash";
-import { type IAppComponentBaseProps } from "@/const/APPS";
-import { useAppSelector, useAppDispatch } from "@/store/hooks";
-import {
-  closeApp,
-  mizeApp,
-  bringAppToFront,
-  updateRunningApp,
-} from "@/store/slices/appsSlice";
+import { type IAppComponentBaseProps, type IRunningApp } from "@/const/APPS";
 import { cn } from "@/lib/utils";
 import { WINDOW_SIZES } from "@/const/WINFRAME";
+import { useWFInternal } from "./useWFInternal";
+import { type MenuConfig } from "./types.d";
 
 interface WinFrameProps extends IAppComponentBaseProps {
   children: ReactNode;
@@ -21,154 +15,24 @@ interface WinFrameProps extends IAppComponentBaseProps {
 // The WinFrame component
 // But this should not be used directly
 // Instead, use the withWinFrame HOC defined after this component
-const WinFrame = ({ children, runningApp }: WinFrameProps) => {
-  const installedApps = useAppSelector((state) => state.apps.installedApps);
-  const appInfo = runningApp ? installedApps[runningApp.appId] : undefined;
-  const [position, setPosition] = useState({
-    x: runningApp.x,
-    y: runningApp.y,
-  });
-  const [size, setSize] = useState({
-    width: runningApp.width,
-    height: runningApp.height,
-  });
-  const [isClosing, setIsClosing] = useState(false);
-  const [isMinimizing, setIsMinimizing] = useState(false);
-  // const { x, y, width, height } = runningApp;
-  const dispatch = useAppDispatch();
-  const winFrameRef = useRef(null);
-  // const prevPosition = useRef(position);
-
-  // Checking mounting and unmounting for debugging
-  // useEffect(() => {
-  //   console.log(`WinFrame mounted for runId: ${runningApp.runId}`);
-  //   return () => {
-  //     console.log(`WinFrame unmounted for runId: ${runningApp.runId}`);
-  //   };
-  // }, []);
-
-  const handleClose = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation();
-    console.log(`Close app with run ID: ${runningApp.runId}`);
-    setIsClosing(true);
-    // dispatch closeApp action after a closing animation
-    setTimeout(() => {
-      dispatch(closeApp({ runId: runningApp.runId }));
-    }, 700);
-  };
-
-  const onMaximize = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation();
-    console.log(`Maximize app with run ID: ${runningApp.runId}`);
-    // dispatch maximize action
-    dispatch(
-      mizeApp({ runId: runningApp.runId, windowSize: WINDOW_SIZES.MAXIMIZED })
-    );
-  };
-
-  const onMinimize = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation();
-    console.log(`Minimize app with run ID: ${runningApp.runId}`);
-
-    // give some time for minimizing animation
-    setIsMinimizing(true);
-
-    // dispatch everything after the animation
-    setTimeout(() => {
-      // update the size and position back to the runningApp in redux
-      // so that when we restore, it comes back to the same position and size
-      dispatch(
-        updateRunningApp({
-          runId: runningApp.runId,
-          updates: {
-            x: position.x,
-            y: position.y,
-            width: size.width,
-            height: size.height,
-          },
-        })
-      );
-
-      // dispatch minimize action
-      dispatch(
-        mizeApp({
-          runId: runningApp.runId,
-          windowSize: WINDOW_SIZES.MINIMIZED,
-        })
-      );
-    }, 700);
-  };
-
-  // from maximixed to scalable / resizable window
-  const makeScalable = () => {
-    console.log(`Restore app with run ID: ${runningApp.runId}`);
-    dispatch(
-      mizeApp({ runId: runningApp.runId, windowSize: WINDOW_SIZES.SCALED })
-    );
-  };
-
-  // bring to front
-  const handleFocus = () => {
-    console.log(`Bring app to front with run ID: ${runningApp.runId}`);
-    dispatch(bringAppToFront({ runId: runningApp.runId }));
-  };
-
-  const getDynamicStyles = (windowSize: string) => {
-    let styles: React.CSSProperties = { zIndex: runningApp.zIndex };
-    // const { x, y } = position;
-    const { width, height } = size;
-    if (windowSize === WINDOW_SIZES.SCALED) {
-      styles = {
-        ...styles,
-        // transform: `translate(${x}px, ${y}px)`,
-        width,
-        height,
-      };
-    } else if (windowSize === WINDOW_SIZES.MAXIMIZED) {
-      styles = {
-        ...styles,
-        transform: `none !important`,
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-      };
-    }
-    console.log("Dynamic styles:", styles);
-    return styles;
-  };
-
-  const handleDrag = (_event: any, data: any) => {
-    console.log(
-      `Dragging app with run ID: ${runningApp.runId} to x: ${data.x}, y: ${data.y}`
-    );
-    setPosition({ x: data.x, y: data.y });
-  };
-
-  const handleResize = (_event: any, data: any) => {
-    // only allow resizing in scaled window
-    if (runningApp.windowSize !== WINDOW_SIZES.SCALED) {
-      return;
-    }
-    console.log(
-      `Resizing app with run ID: ${runningApp.runId} to width: ${data.size.width}, height: ${data.size.height}`
-    );
-    setSize({ width: data.size.width, height: data.size.height });
-  };
-
-  const handleDragStop = debounce((_event: any, data: any) => {
-    console.log(
-      `Drag stopped for app with run ID: ${runningApp.runId} at x: ${data.x}, y: ${data.y}`
-    );
-    setPosition({ x: data.x, y: data.y });
-    // update the position in the redux store
-    dispatch(
-      updateRunningApp({
-        runId: runningApp.runId,
-        updates: { x: data.x, y: data.y },
-      })
-    );
-  }, 200);
+const WinFrame = ({ children, runningApp, menuConfig }: WinFrameProps) => {
+  const {
+    appInfo,
+    winFrameRef,
+    position,
+    size,
+    isClosing,
+    isMinimizing,
+    handleClose,
+    onMaximize,
+    onMinimize,
+    makeScalable,
+    handleFocus,
+    getDynamicStyles,
+    handleDrag,
+    handleResize,
+    handleDragStop,
+  } = useWFInternal(runningApp);
 
   return (
     <Draggable
@@ -242,10 +106,27 @@ const WinFrame = ({ children, runningApp }: WinFrameProps) => {
 
           {/* menubar */}
           <div className="winframe-menubar h-6 text-sm bg-blue-500 text-white flex items-center px-3 select-none">
-            <div className="winframe-menu-item mr-4 cursor-pointer">File</div>
-            <div className="winframe-menu-item mr-4 cursor-pointer">Edit</div>
-            <div className="winframe-menu-item mr-4 cursor-pointer">View</div>
-            <div className="winframe-menu-item mr-4 cursor-pointer">Help</div>
+            {Object.values(menuConfig).map((menuItem) => (
+              <div
+                key={menuItem.label}
+                className="winframe-menu-item mr-4 cursor-pointer group"
+                onClick={menuItem.onClick}
+              >
+                {menuItem.label}
+                {/* Submenu can be implemented here if needed */}
+                <div className="winframe-submenu absolute bg-white text-black shadow-lg rounded hidden group-hover:block">
+                  {menuItem.subMenu?.map((subItem) => (
+                    <div
+                      key={subItem.label}
+                      className="winframe-submenu-item min-w-30 px-4 py-1 hover:bg-blue-500 hover:text-white cursor-pointer"
+                      onClick={subItem.onClick}
+                    >
+                      {subItem.label}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
           </div>
 
           <div className="winframe-content">{children}</div>
@@ -261,9 +142,50 @@ export function withWinFrame(
   WrappedComponent: React.ComponentType<IAppComponentBaseProps>
 ) {
   return (props: React.ComponentProps<typeof WrappedComponent>) => {
+    const menuConfigDefault: MenuConfig = {
+      file: {
+        label: "file",
+        subMenu: [
+          {
+            label: "new",
+            onClick: () => {
+              console.log("New action triggered");
+            },
+          },
+          {
+            label: "quit",
+            onClick: () => {
+              console.log("Quit action triggered");
+            },
+          },
+        ],
+      },
+      help: {
+        label: "help",
+        subMenu: [
+          {
+            label: "documentation",
+            onClick: () => {
+              console.log("Documentation action triggered");
+            },
+          },
+        ],
+      },
+    };
+
+    const [menuConfig, setMenuConfig] = useState<MenuConfig>(menuConfigDefault);
+
+    const configMenu = (menuConfig: MenuConfig) => {
+      setMenuConfig(menuConfig);
+    };
+
     return (
-      <WinFrame {...props}>
-        <WrappedComponent {...props} />
+      <WinFrame {...props} menuConfig={menuConfig} configMenu={configMenu}>
+        <WrappedComponent
+          {...props}
+          menuConfig={menuConfig}
+          configMenu={configMenu}
+        />
       </WinFrame>
     );
   };
