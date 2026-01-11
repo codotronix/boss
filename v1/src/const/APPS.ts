@@ -15,7 +15,9 @@ export interface IInstalledApp {
   isDocked?: boolean;
   displayType: (typeof APP_DISPLAY_TYPE)[keyof typeof APP_DISPLAY_TYPE];
   keywords?: string;
-  remotePath?: string;
+  remoteName?: string;
+  remoteUrl?: string;
+  remoteImportPath?: string;
   //   version: string;
   //   description?: string;
   //   author?: string;

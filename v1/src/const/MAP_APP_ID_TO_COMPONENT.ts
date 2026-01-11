@@ -6,7 +6,6 @@ import {
   SettingsApp,
   TerminalApp,
   TimerApp,
-  WelcomeApp,
 } from "../components/applications";
 
 export const MAP_APP_ID_TO_COMPONENT = {
@@ -17,5 +16,4 @@ export const MAP_APP_ID_TO_COMPONENT = {
   settings: SettingsApp,
   terminal: TerminalApp,
   timer: TimerApp,
-  welcomeapp: WelcomeApp,
 };

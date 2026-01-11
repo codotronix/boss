@@ -4,6 +4,8 @@
     "name": "Welcome",
     "iconClass": "fa-solid fa-face-smile",
     "displayType": "app_display_type_window",
-    "remotePath": "boss_welcome/Welcome"
+    "remoteName": "boss_welcome",
+    "remoteUrl": "http://localhost:5001/assets/remoteEntry.js",
+    "remoteImportPath": "./Welcome"
   }
 }

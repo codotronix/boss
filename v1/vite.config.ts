@@ -12,9 +12,7 @@ export default defineConfig({
     tailwindcss(),
     federation({
       name: "host_app",
-      remotes: {
-        boss_welcome: "http://localhost:5001/assets/remoteEntry.js",
-      },
+      remotes: {},
       shared: ["react", "react-dom", "react-redux", "@reduxjs/toolkit"],
     }),
   ],

@@ -1,14 +1,15 @@
-import { useState, type ReactNode } from "react";
+import { useState, useCallback, type ReactNode } from "react";
 import Draggable from "react-draggable";
 import { Resizable } from "react-resizable";
 import "react-resizable/css/styles.css";
-import { type IAppComponentBaseProps, type IRunningApp } from "@/const/APPS";
+// import { type IAppComponentBaseProps, type IRunningApp } from "@/const/APPS";
 import { cn } from "@/lib/utils";
 import { WINDOW_SIZES } from "@/const/WINFRAME";
 import { useWFInternal } from "./useWFInternal";
 import { type MenuConfig } from "./types.d";
+import { type IDynamicAppProps } from "@/components/system/Desktop/AppsRuntimeContainer/DynamicApp";
 
-interface WinFrameProps extends IAppComponentBaseProps {
+interface WinFrameProps extends IDynamicAppProps {
   children: ReactNode;
 }
 
@@ -139,7 +140,7 @@ const WinFrame = ({ children, runningApp, menuConfig }: WinFrameProps) => {
 // HOC to wrap an app component with WinFrame
 // Usage: export const MyAppWithFrame = withWinFrame(MyAppComponent);
 export function withWinFrame(
-  WrappedComponent: React.ComponentType<IAppComponentBaseProps>
+  WrappedComponent: React.ComponentType<IDynamicAppProps>
 ) {
   return (props: React.ComponentProps<typeof WrappedComponent>) => {
     const menuConfigDefault: MenuConfig = {
@@ -175,9 +176,9 @@ export function withWinFrame(
 
     const [menuConfig, setMenuConfig] = useState<MenuConfig>(menuConfigDefault);
 
-    const configMenu = (menuConfig: MenuConfig) => {
+    const configMenu = useCallback((menuConfig: MenuConfig) => {
       setMenuConfig(menuConfig);
-    };
+    }, []);
 
     return (
       <WinFrame {...props} menuConfig={menuConfig} configMenu={configMenu}>
